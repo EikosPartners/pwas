@@ -3,9 +3,9 @@
     <h1>GRID</h1>
     <ag-grid-vue
       id='Grid'
-      style='width: 100%; height: 100%'
+      style='width: 100%; height: 500px'
       class='ag-theme-balham'
-      :columnDefs='gridCols'
+      :columnDefs='columns'
       :rowData='data'
       :enableSorting='true'
       :enableFilter='true'
@@ -24,7 +24,7 @@ export default {
     AgGridVue
   },
   computed: {
-    ...mapGetters([])
+    ...mapGetters(["data", "columns"])
   },
   methods: {
     onGridReady(params) {
