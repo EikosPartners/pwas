@@ -5,12 +5,15 @@
 </template>
 
 <script>
-import axios from "axios";
+import { mapActions } from "vuex";
 
 export default {
   name: "app",
-  mounted() {
-    axios.get("http://localhost:9000").then(response => console.log(response));
+  methods: {
+    ...mapActions(["fetchData"])
+  },
+  created() {
+    this.fetchData();
   }
 };
 </script>
