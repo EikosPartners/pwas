@@ -7,8 +7,15 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
-  created() {}
+  mounted() {
+    this.initializeData();
+  },
+  methods: {
+    ...mapActions(['initializeData'])
+  }
 };
 </script>
 

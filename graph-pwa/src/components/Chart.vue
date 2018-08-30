@@ -1,15 +1,20 @@
 <template>
-    <div>
-        <p>chart</p>
+    <div >
+        <line-chart title="hello" :dataModel="data"></line-chart>
     </div>
 </template>
 
 <script>
-import { D3BarChart } from 'jscatalyst';
+import { D3LineChart } from 'jscatalyst';
+import { mapGetters } from 'vuex';
 
 export default {
+  name: 'Chart',
   components: {
-    barChart: D3BarChart
+    lineChart: D3LineChart
+  },
+  computed: {
+    ...mapGetters(['data'])
   }
 };
 </script>
