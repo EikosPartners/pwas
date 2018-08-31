@@ -30,7 +30,8 @@
     "node-sass": "^4.9.0",
     "sass-loader": "^7.0.1",
     "vue-template-compiler": "^2.5.17",
-    "workbox-build": "^3.4.1"
+    "workbox-build": "^3.4.1",
+    "workbox-webpack-plugin": "^3.4.1"
   },
   "eslintConfig": {
     "root": true,
