@@ -1,18 +1,15 @@
 <template>
-  <div>
-    <h1>GRID</h1>
-    <ag-grid-vue
-      id='Grid'
-      style='width: 100%; height: 500px'
-      class='ag-theme-balham'
-      :columnDefs='columns'
-      :rowData='data'
-      :enableSorting='true'
-      :enableFilter='true'
-      :gridReady='onGridReady'
-      rowSelection='multiple'
-    ></ag-grid-vue>
-  </div>
+  <ag-grid-vue
+    id='Grid'
+    style='width: 100%; height: 500px'
+    class='ag-theme-balham'
+    :columnDefs='columns'
+    :rowData='data'
+    :enableSorting='true'
+    :enableFilter='true'
+    :gridReady='onGridReady'
+    rowSelection='multiple'
+  ></ag-grid-vue>
 </template>
 <script>
 import { mapGetters } from "vuex";
