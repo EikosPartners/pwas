@@ -10,8 +10,7 @@ export default new Vuex.Store({
   },
   mutations: {
     initializeData(state, payload) {
-      console.log('mut log', payload);
-      Object.assign(state.data, payload);
+      state.data = payload;
     }
   },
   actions: {
@@ -23,6 +22,18 @@ export default new Vuex.Store({
     }
   },
   getters: {
-    data: state => state.data
+    data: state => state.data,
+    //  Date / Value data
+    dataDV: state => {
+      const modifiedData = [];
+      state.data.forEach(datum => {
+        const temp = {
+          date: datum.date,
+          value: datum.volume
+        };
+        modifiedData.push(temp);
+      });
+      return modifiedData;
+    }
   }
 });
