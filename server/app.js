@@ -23,8 +23,8 @@ io.sockets.on("connection", function(socket) {
   console.log("Connection Established:", connectCount);
   // console.log(socket.conn)
   // console.log(socket.handshake)
-  socket.on("emitFilter", function(data) {
+  socket.on("filterByDate", function(data) {
     console.log(data);
-    io.emit("emitFilter", data);
+    io.emit("filterByDate", data);
   });
 });
