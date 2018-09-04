@@ -1,4 +1,5 @@
 <template>
+<div>
   <ag-grid-vue
     id='Grid'
     style='width: 100%; height: 500px'
@@ -10,6 +11,8 @@
     :gridReady='onGridReady'
     rowSelection='multiple'
   ></ag-grid-vue>
+  <button @click="removeQuickFilter()">Remove Filter</button>
+  </div>
 </template>
 <script>
 import { mapGetters } from "vuex";
