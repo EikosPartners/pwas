@@ -21,7 +21,6 @@ export default new Vuex.Store({
     fetchData({ commit }) {
       axios.get("http://localhost:9000").then(response => {
         commit("addData", response.data);
-        commit("generateColumns", response.data);
       });
     }
   }

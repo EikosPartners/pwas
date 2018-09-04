@@ -1,5 +1,6 @@
 <template>
    <heat-map
+      @jsc_click="sendFilter"
       :dataModel='data'
       title='D3 Heat Map'
       xaxis-label="date"
@@ -18,7 +19,17 @@ export default {
   computed: {
     ...mapGetters(["data"])
   },
-  methods: {}
+  methods: {
+    sendFilter(data) {
+      console.log(data.date);
+      let filterData = {};
+      filterData.source = "heatMap";
+      filterData.dataSource = "/";
+      filterData.data = data.date;
+      console.log(filterData);
+      this.bc.postMessage(filterData);
+    }
+  }
 };
 </script>
 <style>

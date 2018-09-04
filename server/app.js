@@ -14,3 +14,13 @@ app.use("/", index);
 let server = http.createServer(app);
 
 server.listen(9000);
+
+var io = require("socket.io").listen(server);
+var connectCount = 0;
+io.sockets.on("connection", function(socket) {
+  //send data to clienzt
+  console.log("Connection Established");
+  connectCount++;
+  // console.log(socket.conn)
+  // console.log(socket.handshake)
+});

@@ -5,17 +5,26 @@
 </template>
 
 <script>
-import { D3LineChart, D3HeatMap } from 'jscatalyst';
-import { mapGetters } from 'vuex';
+import { D3LineChart, D3HeatMap } from "jscatalyst";
+import { mapGetters } from "vuex";
 
 export default {
-  name: 'Chart',
+  name: "Chart",
   components: {
     lineChart: D3LineChart,
     heatMap: D3HeatMap
   },
   computed: {
-    ...mapGetters(['dataDV'])
+    ...mapGetters(["dataDV"])
+  },
+  created() {
+    this.bc = new BroadcastChannel("mainChannel");
+    this.bc.onmessage = event => {
+      console.log("heat", event.data);
+    };
+  },
+  beforeDestroy() {
+    this.bc.close();
   }
 };
 </script>
