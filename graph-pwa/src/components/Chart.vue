@@ -1,6 +1,6 @@
 <template>
     <div style="height: 400px">
-        <line-chart title="Line Chart" :dataModel="dataDV"/>
+        <line-chart @jsc_click="filterByDate" title="Line Chart" :dataModel="dataDV"/>
     </div>
 </template>
 
@@ -17,14 +17,35 @@ export default {
   computed: {
     ...mapGetters(["dataDV"])
   },
-  created() {
-    this.bc = new BroadcastChannel("mainChannel");
-    this.bc.onmessage = event => {
-      console.log("heat", event.data);
-    };
+  sockets: {
+    connect: function() {
+      console.log("socket connected");
+    }
   },
-  beforeDestroy() {
-    this.bc.close();
+  methods: {
+    filterByDate(data) {
+      let filter = {};
+      filter.source = "lineChart";
+      filter.dataSource = "/";
+      filter.data = this.formatDate(data.date);
+      this.emitFilter(filter);
+    },
+    emitFilter: function(data) {
+      this.$socket.emit("filterByDate", data);
+    },
+    formatDate(dateObj) {
+      let date = new Date(dateObj);
+      let month = date.getMonth() + 1;
+      let day = date.getDate();
+      let year = date.getFullYear();
+      if (day < 10) {
+        day = "0" + day;
+      }
+      if (month < 10) {
+        month = "0" + month;
+      }
+      return `${year}-${month}-${day}`;
+    }
   }
 };
 </script>

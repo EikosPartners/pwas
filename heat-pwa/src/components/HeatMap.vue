@@ -1,6 +1,6 @@
 <template>
    <heat-map
-      @jsc_click="sendFilter"
+      @jsc_click="filterByDate"
       :dataModel='data'
       title='D3 Heat Map'
       xaxis-label="date"
@@ -22,23 +22,16 @@ export default {
   sockets: {
     connect: function() {
       console.log("socket connected");
-    },
-    customEmit: function(val) {
-      console.log(
-        'this method was fired by the socket server. eg: io.emit("customEmit", data)'
-      );
     }
   },
   methods: {
-    sendFilter(data) {
-      let filterData = {};
-      filterData.source = "heatMap";
-      filterData.dataSource = "/";
-      filterData.data = data.date;
-      this.emitFilter(filterData);
-    },
-    emitFilter: function(val) {
-      this.$socket.emit("emitFilter", val);
+    filterByDate(data) {
+      let filter = {};
+      filter.source = "heatMap";
+      filter.dataSource = "/";
+      filter.data = data.date;
+      console.log(filter);
+      this.$socket.emit("filterByDate", filter);
     }
   }
 };

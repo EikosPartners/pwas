@@ -21,21 +21,5 @@ Vue.use(ThemePlugin, {
 new Vue({
   router,
   store,
-  sockets: {
-    connect: function() {
-      console.log("socket connected");
-    },
-    customEmit: function(val) {
-      console.log(
-        'this method was fired by the socket server. eg: io.emit("customEmit", data)'
-      );
-    }
-  },
-  methods: {
-    clickButton: function(val) {
-      // $socket is socket.io-client instance
-      this.$socket.emit("emit_method", val);
-    }
-  },
   render: h => h(App)
 }).$mount("#app");

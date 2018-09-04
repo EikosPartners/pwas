@@ -26,9 +26,9 @@ export default {
   sockets: {
     connect: function() {
       console.log("socket connected");
-      this.$options.sockets.emitFilter = data => {
-        console.log(data);
-        this.setQuickFilter(data.data);
+      this.$options.sockets.filterByDate = filter => {
+        console.log(filter);
+        this.setQuickFilter(filter.data);
       };
     }
   },
