@@ -23,6 +23,15 @@ export default {
   computed: {
     ...mapGetters(["data", "columns"])
   },
+  sockets: {
+    connect: function() {
+      console.log("socket connected");
+      this.$options.sockets.emitFilter = data => {
+        console.log(data);
+        this.setQuickFilter(data.data);
+      };
+    }
+  },
   methods: {
     onGridReady(params) {
       this.gridApi = params.api;
@@ -31,7 +40,7 @@ export default {
     },
     setQuickFilter(data) {
       if (this.gridApi) {
-        this.gridApi.setQuickFilter(data.date);
+        this.gridApi.setQuickFilter(data);
       }
     },
     removeQuickFilter() {

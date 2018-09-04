@@ -19,15 +19,26 @@ export default {
   computed: {
     ...mapGetters(["data"])
   },
+  sockets: {
+    connect: function() {
+      console.log("socket connected");
+    },
+    customEmit: function(val) {
+      console.log(
+        'this method was fired by the socket server. eg: io.emit("customEmit", data)'
+      );
+    }
+  },
   methods: {
     sendFilter(data) {
-      console.log(data.date);
       let filterData = {};
       filterData.source = "heatMap";
       filterData.dataSource = "/";
       filterData.data = data.date;
-      console.log(filterData);
-      this.bc.postMessage(filterData);
+      this.emitFilter(filterData);
+    },
+    emitFilter: function(val) {
+      this.$socket.emit("emitFilter", val);
     }
   }
 };

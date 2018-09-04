@@ -23,6 +23,8 @@ io.sockets.on("connection", function(socket) {
   console.log("Connection Established:", connectCount);
   // console.log(socket.conn)
   // console.log(socket.handshake)
-  let testData = { data: "test object" };
-  io.emit("test event", testData);
+  socket.on("emitFilter", function(data) {
+    console.log(data);
+    io.emit("emitFilter", data);
+  });
 });
