@@ -6,8 +6,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    data: [],
-    columns: []
+    data: []
   },
   getters: {
     data: state => state.data

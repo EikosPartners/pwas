@@ -6,7 +6,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    data: []
+    data: [],
+    columns: []
   },
   getters: {
     data: state => state.data
@@ -19,13 +20,13 @@ export default new Vuex.Store({
   actions: {
     fetchData({ commit }) {
       axios.get('http://localhost:9000').then(response => {
-        const heatData = response.data.map(item => {
+        const bubbleData = response.data.map(item => {
           return {
-            date: item.date,
-            volume: item.severity
+            x: item.date,
+            y: item.severity
           };
         });
-        commit('addData', heatData);
+        commit('addData', bubbleData);
       });
     }
   }
