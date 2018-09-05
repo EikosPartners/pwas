@@ -16,7 +16,6 @@ Vue.use(ThemePlugin, {
   store,
   themes: ['Blue', 'Pink', 'Green', 'Brown', 'Red', 'Grey']
 });
-
 new Vue({
   router,
   store,

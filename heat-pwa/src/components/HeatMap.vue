@@ -8,30 +8,30 @@
     ></heat-map>
 </template>
 <script>
-import { mapGetters } from "vuex";
-import { D3HeatMap } from "jscatalyst";
+import { mapGetters } from 'vuex';
+import { D3HeatMap } from 'jscatalyst';
 
 export default {
-  name: "",
+  name: 'HeatMap',
   components: {
     heatMap: D3HeatMap
   },
   computed: {
-    ...mapGetters(["data"])
+    ...mapGetters(['data'])
   },
   sockets: {
     connect: function() {
-      console.log("socket connected");
+      console.log('socket connected');
     }
   },
   methods: {
     filterByDate(data) {
       let filter = {};
-      filter.source = "heatMap";
-      filter.dataSource = "/";
+      filter.source = 'heatMap';
+      filter.dataSource = '/';
       filter.data = data.date;
       console.log(filter);
-      this.$socket.emit("filterByDate", filter);
+      this.$socket.emit('filterByDate', filter);
     }
   }
 };
