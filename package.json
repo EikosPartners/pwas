@@ -1,0 +1,18 @@
+{
+  "name": "pwas",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "bar-pwa": "cd bar-pwa && npm run serve",
+    "bubble-pwa": "cd bubble-pwa && npm run serve",
+    "graph-pwa": "cd graph-pwa && npm run serve",
+    "grid-pwa": "cd grid-pwa && npm run serve",
+    "heat-pwa": "cd heat-pwa && npm run serve",
+    "pie-pwa": "cd pie-pwa && npm run serve",
+    "server": "cd server && nodemon app.js"
+  },
+  "devDependencies": {
+    "concurrently": "^1.0.0",
+    "npm-run-all": "^4.1.3"
+  }
+}
