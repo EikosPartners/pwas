@@ -9,11 +9,32 @@
     "grid-pwa": "cd grid-pwa && npm run serve -- --port 8083",
     "heat-pwa": "cd heat-pwa && npm run serve -- --port 8084",
     "pie-pwa": "cd pie-pwa && npm run serve -- --port 8085",
-    "server": "cd server && node app.js",
-    "start-all": "npm-run-all --parallel --aggregate-output server bubble-pwa grid-pwa bar-pwa graph-pwa heat-pwa pie-pwa"
+    "server": "cd server && nodemon app.js",
+    "start-all": "npm-run-all --parallel --aggregate-output bubble-pwa grid-pwa bar-pwa graph-pwa heat-pwa pie-pwa",
+    "build-bar": "cd bar-pwa && npm run build",
+    "build-bubble": "cd bubble-pwa && npm run build",
+    "build-graph": "cd graph-pwa && npm run build",
+    "build-grid": "cd grid-pwa && npm run build",
+    "build-heat": "cd heat-pwa && npm run build",
+    "build-pie": "cd pie-pwa && npm run build",
+    "build-all": "npm-run-all --parallel --aggregate-output build-bar build-bubble build-graph build-grid build-heat build-pie",
+    "bar-pwa-prod": "cd bar-pwa && http-server dist/ p5000",
+    "bubble-pwa-prod": "cd bubble-pwa && http-server dist/ p5001",
+    "graph-pwa-prod": "cd graph-pwa && http-server dist/ p5002",
+    "grid-pwa-prod": "cd grid-pwa && http-server dist/ p5003",
+    "heat-pwa-prod": "cd heat-pwa && http-server dist/ p5004",
+    "pie-pwa-prod": "cd pie-pwa && http-server dist/ p5005",
+    "run-all-prod": "npm-run-all --parallel --aggregate-output bar-pwa-prod bubble-pwa-prod graph-pwa-prod grid-pwa-prod heat-pwa-prod pie-pwa-prod",
+    "install-bar-pwa": "cd bar-pwa && npm install",
+    "install-bubble-pwa": "cd bubble-pwa && npm install",
+    "install-graph-pwa": "cd graph-pwa && npm install",
+    "install-grid-pwa": "cd grid-pwa && npm install",
+    "install-heat-pwa": "cd heat-pwa && npm install",
+    "install-pie-pwa": "cd pie-pwa && npm install",
+    "install-server": "cd server && npm install",
+    "install-all": "npm-run-all --parallel --aggregate-output install-server install-bar-pwa install-bubble-pwa install-graph-pwa install-grid-pwa install-heat-pwa install-pie-pwa"
   },
   "devDependencies": {
-    "concurrently": "^1.0.0",
     "npm-run-all": "^4.1.3"
   }
 }
