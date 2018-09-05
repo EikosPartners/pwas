@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "bar-pwa": "cd bar-pwa && npm run serve",
-    "bubble-pwa": "cd bubble-pwa && npm run serve",
-    "graph-pwa": "cd graph-pwa && npm run serve",
-    "grid-pwa": "cd grid-pwa && npm run serve",
-    "heat-pwa": "cd heat-pwa && npm run serve",
-    "pie-pwa": "cd pie-pwa && npm run serve",
-    "server": "cd server && nodemon app.js"
+    "bar-pwa": "cd bar-pwa && npm run serve -- --port 8080",
+    "bubble-pwa": "cd bubble-pwa && npm run serve -- --port 8081",
+    "graph-pwa": "cd graph-pwa && npm run serve -- --port 8082",
+    "grid-pwa": "cd grid-pwa && npm run serve -- --port 8083",
+    "heat-pwa": "cd heat-pwa && npm run serve -- --port 8084",
+    "pie-pwa": "cd pie-pwa && npm run serve -- --port 8085",
+    "server": "cd server && node app.js",
+    "start-all": "npm-run-all --parallel --aggregate-output server bubble-pwa grid-pwa bar-pwa graph-pwa heat-pwa pie-pwa"
   },
   "devDependencies": {
     "concurrently": "^1.0.0",
