@@ -21,8 +21,6 @@ io.sockets.on("connection", function(socket) {
   //send data to clienzt
   connectCount++;
   console.log("Connection Established:", connectCount);
-  // console.log(socket.conn)
-  // console.log(socket.handshake)
   socket.on("filterByDate", function(data) {
     console.log(data);
     io.emit("filterByDate", data);
