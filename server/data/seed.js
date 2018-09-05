@@ -1,31 +1,33 @@
 // {date: DateObj, severity: int 1-5, raisedBy: int, project: string}
-function getRandomInt(max) {
-  return Math.floor(Math.random() * Math.floor(max));
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min;
 }
 
 const projectNames = [
-  "Agent",
-  "Gloves",
-  "Granite",
-  "Planner",
-  "Markets",
-  "Auto",
-  "Cotton",
-  "Architect",
-  "Canterbury",
-  "Cambridge"
+  'Agent',
+  'Gloves',
+  'Granite',
+  'Planner',
+  'Markets',
+  'Auto',
+  'Cotton',
+  'Architect',
+  'Canterbury',
+  'Cambridge'
 ];
 
 const userIds = [1034, 4532, 5464, 6787, 4575, 2324, 3465, 6756, 7887, 6354];
 
 function randomDate() {
   let year = 2018;
-  let month = getRandomInt(11) + 1;
-  let day = getRandomInt(27) + 1;
-  let hour = getRandomInt(6) + 9;
-  let minute = getRandomInt(60);
-  let seconds = getRandomInt(60);
-  let milli = getRandomInt(100);
+  let month = getRandomInt(1, 2);
+  let day = getRandomInt(1, 27);
+  let hour = getRandomInt(0, 24);
+  let minute = getRandomInt(0, 60);
+  let seconds = getRandomInt(0, 60);
+  let milli = getRandomInt(0, 100);
 
   return new Date(Date.UTC(year, month, day, hour, minute, seconds));
 }
@@ -39,7 +41,7 @@ function generateDataObj() {
   let raisedBy = randomElement(userIds);
   let date = randomDate();
   let project = randomElement(projectNames);
-  let severity = getRandomInt(4) + 1;
+  let severity = getRandomInt(1, 6);
 
   return {
     date: date,

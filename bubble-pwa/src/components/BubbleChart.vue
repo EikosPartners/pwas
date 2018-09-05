@@ -1,5 +1,5 @@
 <template>
-  <bubble-chart :dataModel="data"/>
+  <bubble-chart :dataModel="data" xAxisLabel="date" yAxisLabel="severity" :isTime='false' />
 </template>
 
 <script>

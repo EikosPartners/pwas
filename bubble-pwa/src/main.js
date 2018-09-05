@@ -4,12 +4,13 @@ import router from './router';
 import store from './store';
 import './registerServiceWorker';
 import VueSocketio from 'vue-socket.io';
+import linqjs from 'linqjs';
 
 import 'jscatalyst/dist/jscatalyst.min.css';
 import { ThemePlugin } from 'jscatalyst';
 
 Vue.config.productionTip = false;
-
+Vue.use(linqjs);
 Vue.use(VueSocketio, 'http://localhost:9000');
 
 Vue.use(ThemePlugin, {
