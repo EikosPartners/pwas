@@ -1,6 +1,6 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import axios from "axios";
+import Vue from 'vue';
+import Vuex from 'vuex';
+import axios from 'axios';
 
 Vue.use(Vuex);
 
@@ -19,8 +19,14 @@ export default new Vuex.Store({
   },
   actions: {
     fetchData({ commit }) {
-      axios.get("http://localhost:9000").then(response => {
-        commit("addData", response.data);
+      axios.get('http://localhost:9000').then(response => {
+        const heatData = response.data.map(item => {
+          return {
+            date: item.date,
+            volume: item.severity
+          };
+        });
+        commit('addData', heatData);
       });
     }
   }
