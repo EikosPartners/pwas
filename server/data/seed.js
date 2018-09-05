@@ -33,7 +33,7 @@ function randomDate() {
 }
 
 function randomElement(array) {
-  let i = getRandomInt(array.length);
+  let i = getRandomInt(0, array.length);
   return array[i];
 }
 
