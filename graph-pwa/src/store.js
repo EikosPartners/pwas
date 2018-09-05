@@ -1,6 +1,6 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import axios from 'axios';
+import Vue from "vue";
+import Vuex from "vuex";
+import axios from "axios";
 
 Vue.use(Vuex);
 
@@ -15,9 +15,9 @@ export default new Vuex.Store({
   },
   actions: {
     initializeData({ commit }) {
-      axios.get('http://localhost:9000').then(res => {
+      axios.get("http://localhost:9000").then(res => {
         console.log(res);
-        commit('initializeData', res.data);
+        commit("initializeData", res.data);
       });
     }
   },
@@ -28,8 +28,8 @@ export default new Vuex.Store({
       const modifiedData = [];
       state.data.forEach(datum => {
         const temp = {
-          date: datum.date,
-          value: datum.volume
+          date: datum.date.split("T")[0],
+          value: datum.severity
         };
         modifiedData.push(temp);
       });
