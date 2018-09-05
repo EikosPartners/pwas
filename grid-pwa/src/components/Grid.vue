@@ -11,7 +11,7 @@
     :gridReady='onGridReady'
     rowSelection='multiple'
   ></ag-grid-vue>
-  <button @click="removeQuickFilter()">Remove Filter</button>
+  <button @click="removeQuickFilter">Clear Filter</button>
   </div>
 </template>
 <script>
