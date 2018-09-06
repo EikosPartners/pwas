@@ -10,6 +10,12 @@ PWA's separation of UI's into micro applications
 
 [Dev Build](https://github.com/EikosPartners/pwas/blob/master/README.md#dev-build)
 
+- [To Build](https://github.com/EikosPartners/pwas/blob/master/README.md#to-build)
+    
+- [To Run](https://github.com/EikosPartners/pwas/blob/master/README.md#to-run)
+  
+[Individual PWAs](https://github.com/EikosPartners/pwas/blob/master/README.md#individual-pwas)
+
 
 
 # Setup
