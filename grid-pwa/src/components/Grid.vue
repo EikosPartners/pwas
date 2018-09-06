@@ -1,5 +1,5 @@
 <template>
-<div>
+<div style="width: 100%;">
   <ag-grid-vue
     id='Grid'
     style='width: 100%; height: 500px'
@@ -28,7 +28,6 @@ export default {
     prettyData() {
       return this.data.map(item => {
         item.date = this.parseDate(item.date);
-        console.log(item);
         return item;
       });
     }
@@ -37,7 +36,7 @@ export default {
     connect: function() {
       console.log("socket connected");
       this.$options.sockets.filterByDate = filter => {
-        console.log(filter);
+        console.log("filter", filter);
         this.setQuickFilter(filter.data);
       };
     }
@@ -50,7 +49,7 @@ export default {
     },
     setQuickFilter(data) {
       if (this.gridApi) {
-        this.gridApi.setQuickFilter(this.parseDate(data));
+        this.gridApi.setQuickFilter(data);
       }
     },
     removeQuickFilter() {
@@ -66,6 +65,7 @@ export default {
     }
   }
 };
+//this.parseDate(data)
 </script>
 <style>
 </style>
