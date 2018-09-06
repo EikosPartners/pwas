@@ -2,6 +2,14 @@
 
 PWA's separation of UI's into micro applications
 
+# Table of Contents
+
+[Setup]()
+[PWAs and Server]()
+[Dev Build]()
+
+
+
 # Setup
 
 To install all dependencies from the root PWA folder run
@@ -17,7 +25,7 @@ To install dependencies for an individual PWA you can use `npm run install-[fold
 npm run install-bar-pwa
 ```
 
-# To Run
+# PWAs and Server
 
 To begin the backend server from the route directory run
 
@@ -45,7 +53,7 @@ The PWAs will be available on the following ports:
 - heat-pwa Port: 8084
 - pie-pwa Port: 8085
 
-# Dev Build
+## Dev Build
 
 #### To Build
 
