@@ -4,9 +4,11 @@ PWA's separation of UI's into micro applications
 
 # Table of Contents
 
-[Setup]()
-[PWAs and Server]()
-[Dev Build]()
+[Setup](https://github.com/EikosPartners/pwas/edit/master/README.md#setup)
+
+[PWAs and Server](https://github.com/EikosPartners/pwas/edit/master/README.md#pwas-and-server)
+
+[Dev Build](https://github.com/EikosPartners/pwas/edit/master/README.md#dev-build)
 
 
 
