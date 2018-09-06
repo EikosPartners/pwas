@@ -50,7 +50,7 @@ export default {
     },
     setQuickFilter(data) {
       if (this.gridApi) {
-        this.gridApi.setQuickFilter(data);
+        this.gridApi.setQuickFilter(this.parseDate(data));
       }
     },
     removeQuickFilter() {
