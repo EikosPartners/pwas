@@ -6,7 +6,7 @@ PWA's separation of UI's into micro applications
 
 [Setup](https://github.com/EikosPartners/pwas/blob/master/README.md#setup)
 
-[PWAs and Server](https://github.com/EikosPartners/pwas/blob/master/README.md#pwas-and-server)
+[PWAs](https://github.com/EikosPartners/pwas/blob/master/README.md#pwas)
 
 [Dev Build](https://github.com/EikosPartners/pwas/blob/master/README.md#dev-build)
 
@@ -14,7 +14,13 @@ PWA's separation of UI's into micro applications
     
 - [To Run](https://github.com/EikosPartners/pwas/blob/master/README.md#to-run)
   
-[Individual PWAs](https://github.com/EikosPartners/pwas/blob/master/README.md#individual-pwas)
+[Running Individual PWAs](https://github.com/EikosPartners/pwas/blob/master/README.md#running-individual-pwas)
+
+- [Packages](https://github.com/EikosPartners/pwas/blob/master/README.md#packages)
+
+    - [Nodemon](https://github.com/EikosPartners/pwas/blob/master/README.md#nodemon)
+    
+    - [HTTP-Server](https://github.com/EikosPartners/pwas/blob/master/README.md#http-server)
 
 
 
@@ -33,7 +39,7 @@ To install dependencies for an individual PWA you can use `npm run install-[fold
 npm run install-bar-pwa
 ```
 
-# PWAs and Server
+# PWAs
 
 To begin the backend server from the route directory run
 
@@ -107,9 +113,9 @@ The PWAs will be available on the following ports:
 - heat-pwa Port: 5004
 - pie-pwa Port: 5005
 
-# Individual PWAs
+# Running Individual PWAs
 
-## Server
+## Packages
 
 ### nodemon
 
@@ -129,7 +135,7 @@ $ nodemon <your-app-file>
 
 The server will run on `localhost:9000`
 
-## http-server
+### http-server
 
 [HTTP-Server](https://www.npmjs.com/package/http-server) is a "simple, zero-configuration command-line http server." We use **http-server** to run our current priduction build of each PWA.
 
