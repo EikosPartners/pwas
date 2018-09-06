@@ -38,7 +38,7 @@ export default {
   },
   sockets: {
     connect: function() {
-      console.log("socket connected");
+      console.log("socket connected", this.sockets);
       this.$options.sockets.filterByDate = filter => {
         console.log("filter", filter);
         this.setQuickFilter(filter.data);
