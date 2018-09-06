@@ -21,6 +21,10 @@ PWA's separation of UI's into micro applications
     - [Nodemon](https://github.com/EikosPartners/pwas/blob/master/README.md#nodemon)
     
     - [HTTP-Server](https://github.com/EikosPartners/pwas/blob/master/README.md#http-server)
+ 
+[Communication Between PWAs](https://github.com/EikosPartners/pwas/blob/master/README.md#communication-between-pwas)
+
+- [Socket.io](https://github.com/EikosPartners/pwas/blob/master/README.md#socket.io)
 
 
 
@@ -160,3 +164,27 @@ $ http-serve dist/
 ```
 
 This will run the PWAs on different local host ports and provide PWA offline functionality.
+
+# Communication Between PWAs
+
+
+## Socket.io
+
+[Socket.io](https://socket.io/) enables real-time, bidirectional and event-based communication.
+
+Messages are sent to through Socket.io from one PWA to another to communicate event-based changes.
+
+To maintain functional communication between PWAs we have established a standard message structure:
+
+```
+{
+    source: "BubbleChart",
+    dataSource: "/",
+    data: <data you wish to filter by>
+
+}
+```
+
+
+
+
