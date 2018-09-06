@@ -1,7 +1,7 @@
 <template>
 <div style="height: 400px">
 
-  <pie-chart :dataModel="prettyData"/>
+  <pie-chart :dataModel="prettyData" @jsc_click="filterByProject"/>
 </div>
 </template>
 
@@ -43,6 +43,17 @@ export default {
         });
       });
       return finalData;
+    }
+  },
+  methods: {
+    filterByProject(data) {
+      console.log(data);
+      let filter = {};
+      filter.source = 'PieChart';
+      filter.dataSource = '/';
+      filter.data = data.data.label;
+      console.log(filter);
+      this.$socket.emit('filterByProject', filter);
     }
   },
   sockets: {

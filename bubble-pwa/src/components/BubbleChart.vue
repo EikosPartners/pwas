@@ -1,5 +1,5 @@
 <template>
-  <bubble-chart :dataModel="prettyData" xAxisLabel="date" yAxisLabel="severity" :isTime='false' />
+  <bubble-chart @jsc_click="filterByDate" :dataModel="prettyData" xAxisLabel="date" yAxisLabel="severity" :isTime='false' />
 </template>
 
 <script>
@@ -11,11 +11,6 @@ export default {
   name: 'BubbleChart',
   components: {
     bubbleChart: D3BubbleChart
-  },
-  sockets: {
-    connect: function() {
-      console.log('socket connected');
-    }
   },
   computed: {
     ...mapGetters(['data']),
@@ -60,6 +55,22 @@ export default {
         console.log('Final Data', finalData);
       });
       return finalData;
+    }
+  },
+  methods: {
+    filterByDate(data) {
+      console.log(data);
+      let filter = {};
+      filter.source = 'BubbleChart';
+      filter.dataSource = '/';
+      filter.data = data.x;
+      console.log(filter);
+      this.$socket.emit('filterByDate', filter);
+    }
+  },
+  sockets: {
+    connect: function() {
+      console.log('socket connected');
     }
   }
 };
