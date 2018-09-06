@@ -27,8 +27,12 @@ export default {
     ...mapGetters(["data", "columns"]),
     prettyData() {
       return this.data.map(item => {
-        item.date = this.parseDate(item.date);
-        return item;
+        let prettyItem = {};
+        prettyItem.date = this.parseDate(item.date);
+        prettyItem.project = item.project;
+        prettyItem.raisedBy = item.raisedBy;
+        prettyItem.severity = item.severity;
+        return prettyItem;
       });
     }
   },
@@ -77,7 +81,6 @@ export default {
     }
   }
 };
-//this.parseDate(data)
 </script>
 <style>
 </style>

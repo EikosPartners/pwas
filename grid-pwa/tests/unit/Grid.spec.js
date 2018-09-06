@@ -1,26 +1,35 @@
-import { shallowMount } from "@vue/test-utils";
+import { shallowMount, createLocalVue } from "@vue/test-utils";
 import Grid from "@/components/Grid.vue";
+import Vuex from "vuex";
+import { mockData } from "./mockData.js";
 
-// describe("Grid.vue", () => {
-//   it("renders grid when data exists", () => {
-//     const wrapper = shallowMount(Grid, {
-//       data: [
-//         {
-//           date: "2017-02-08",
-//           volume: 1
-//         }
-//       ],
-//       columns: [
-//         { headerName: date, field: date },
-//         { headerName: volume, field: volume }
-//       ]
-//     });
-//     expect(wrapper.text()).toMatch(msg);
-//   });
-// });
+const localVue = createLocalVue();
 
-test("parseInt transforms date correctly", () => {
-  const input = "2018-02-20T06:10:29.000Z";
-  const output = "02-20-2018 : 06 10 29";
-  expect(this.parseDate(input)).toEqual(output);
+localVue.use(Vuex);
+
+describe("Grid PWA", () => {
+  let getters;
+  let store;
+
+  beforeEach(() => {
+    getters = {
+      data: () => mockData.data,
+      columns: () => mockData.columns
+    };
+    store = new Vuex.Store({
+      getters
+    });
+  });
+
+  it("renders", () => {
+    const wrapper = shallowMount(Grid, { store, localVue });
+    expect(wrapper.contains("div")).toBe(true);
+  });
+
+  it("renders a grid", () => {
+    const wrapper = shallowMount(Grid, { store, localVue });
+    expect(wrapper.vm.$children[0].$options._componentTag).toBe("ag-grid-vue");
+  });
+
+  // it("data getter returns data", () => {});
 });
