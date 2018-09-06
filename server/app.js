@@ -25,4 +25,16 @@ io.sockets.on("connection", function(socket) {
     console.log(data);
     io.emit("filterByDate", data);
   });
+  socket.on("filterByProject", function(data) {
+    console.log(data);
+    io.emit("filterByProject", data);
+  });
+  socket.on("filterBySeverity", function(data) {
+    console.log(data);
+    io.emit("filterBySeverity", data);
+  });
+  socket.on("filterByRaisedBy", function(data) {
+    console.log(data);
+    io.emit("filterByRaisedBy", data);
+  });
 });

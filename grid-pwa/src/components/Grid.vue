@@ -39,6 +39,18 @@ export default {
         console.log("filter", filter);
         this.setQuickFilter(filter.data);
       };
+      this.$options.sockets.filterByProject = filter => {
+        console.log("filter", filter);
+        this.setQuickFilter(filter.data);
+      };
+      this.$options.sockets.filterBySeverity = filter => {
+        console.log("filter", filter);
+        this.setQuickFilter(filter.data);
+      };
+      this.$options.sockets.filterByRaisedBy = filter => {
+        console.log("filter", filter);
+        this.setQuickFilter(filter.data);
+      };
     }
   },
   methods: {
