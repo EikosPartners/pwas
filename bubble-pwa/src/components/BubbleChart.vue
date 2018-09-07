@@ -1,5 +1,5 @@
 <template>
-  <bubble-chart @jsc_click="filterByDate" :dataModel="prettyData" xAxisLabel="date" yAxisLabel="severity" :isTime='false' />
+  <bubble-chart :isDate="true" @jsc_click="filterByDate" :dataModel="prettyData" xAxisLabel="date" yAxisLabel="severity"  />
 </template>
 
 <script>
@@ -15,7 +15,6 @@ export default {
   computed: {
     ...mapGetters(['data']),
     prettyData() {
-      console.log(this.$store.state.data);
       let bubbleData = new jslinq(this.data)
         .select(item => {
           let date = item.date.split('T')[0];
@@ -37,22 +36,16 @@ export default {
           return i.key;
         });
 
-      console.log('bubble data', bubbleData.items);
       let finalData = [];
       bubbleData.items.forEach(set => {
         set.key.forEach(k => {
           finalData.push({
-            x: finalData.length,
+            x: k[0].date,
             y: k.key,
             value: k.length,
             label: 'Date/severity'
           });
         });
-        // console.log('DateData', dateData);
-        // dateData.forEach(i => {
-        //   finalData.push(i);
-        // });
-        console.log('Final Data', finalData);
       });
       return finalData;
     }
