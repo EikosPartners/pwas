@@ -19,10 +19,14 @@ export const mutations = {
     state.data = data;
   },
   generateColumns(state, data) {
-    const keys = Object.keys(data[0]);
-    state.columns = keys.map(key => {
-      return { headerName: key, field: key };
-    });
+    if (data.length > 0) {
+      const keys = Object.keys(data[0]);
+      state.columns = keys.map(key => {
+        return { headerName: key, field: key };
+      });
+    } else {
+      state.columns = [];
+    }
   }
 };
 

@@ -5,7 +5,7 @@
     style='width: 100%; height: 500px'
     class='ag-theme-balham'
     :columnDefs='columns'
-    :rowData='prettyData'
+    :rowData='prettyData()'
     :enableSorting='true'
     :enableFilter='true'
     :gridReady='onGridReady'
@@ -24,17 +24,7 @@ export default {
     AgGridVue
   },
   computed: {
-    ...mapGetters(["data", "columns"]),
-    prettyData() {
-      return this.data.map(item => {
-        let prettyItem = {};
-        prettyItem.date = this.parseDate(item.date);
-        prettyItem.project = item.project;
-        prettyItem.raisedBy = item.raisedBy;
-        prettyItem.severity = item.severity;
-        return prettyItem;
-      });
-    }
+    ...mapGetters(["data", "columns"])
   },
   sockets: {
     connect: function() {
@@ -72,6 +62,16 @@ export default {
       if (this.gridApi) {
         this.gridApi.setQuickFilter(null);
       }
+    },
+    prettyData() {
+      return this.data.map(item => {
+        let prettyItem = {};
+        prettyItem.date = this.parseDate(item.date);
+        prettyItem.project = item.project;
+        prettyItem.raisedBy = item.raisedBy;
+        prettyItem.severity = item.severity;
+        return prettyItem;
+      });
     },
     parseDate(date) {
       let dateA = date.split("T")[0].split("-");
