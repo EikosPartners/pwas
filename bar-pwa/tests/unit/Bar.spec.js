@@ -1,43 +1,53 @@
-import { shallowMount, mount, createLocalVue } from "@vue/test-utils";
-import Bar from "@/components/BarChart.vue";
-import Vuex from "vuex";
 import { mockData } from "./mockData.js";
 import { getters, mutations, actions } from "@/store.js";
 import axios from "axios"; //imports mock axios from __mock__
 
-const localVue = createLocalVue();
-
-localVue.use(Vuex);
-
-describe("BarChart PWA", () => {
-  let comp;
-  let store;
+describe("HeatMap PWA", () => {
   let state = mockData;
 
-  beforeEach(() => {
-    store = new Vuex.Store({
-      state,
-      getters,
-      mutations,
-      actions
-    });
-    comp = shallowMount(Bar, { store, localVue, stubs: ["bar-chart"] });
-
-    afterEach(() => {
-      comp.destroy();
+  describe("Getters", () => {
+    test("data() returns data", () => {
+      const result = getters.data(state);
+      expect(result).toEqual(mockData.data);
     });
   });
 
-  it("barData() transforms date correctly", () => {
-    const barData = comp.vm.$options._parentVnode.componentInstance.barData;
-    const rawData = [
-      {
-        date: "2018-02-11T23:33:52.000Z",
-        raisedBy: 6354,
-        project: "Architect",
-        severity: 3
-      }
-    ];
-    expect(Object.keys(barData(rawData))).toEqual(["x", "y"]);
+  describe("Mutations", () => {
+    test("addData() replaces state.data with fetched data", () => {
+      const newData = [
+        {
+          date: "2018-02-20T20:27:40.000Z",
+          raisedBy: 7887,
+          project: "Cotton",
+          severity: 1
+        }
+      ];
+      mutations.addData(state, newData);
+      expect(state.data).toEqual(newData);
+    });
+  });
+
+  describe("Actions", () => {
+    it("fetchData() calls axios.get", () => {
+      const commit = jest.fn();
+      actions.fetchData({ commit });
+      expect(axios.get).toBeCalled;
+    });
+
+    it("fetchData() calls commit twice", () => {
+      const commit = jest.fn();
+      async () => {
+        actions.fetchData({ commit });
+        await expect(commit.mock.calls.length).toBe(2);
+      };
+    });
+
+    it("fetchData() commits addData", () => {
+      const commit = jest.fn();
+      async () => {
+        actions.fetchData({ commit });
+        await expect(commit.mock.calls[0][0]).toBe("addData");
+      };
+    });
   });
 });

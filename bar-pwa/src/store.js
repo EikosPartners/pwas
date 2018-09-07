@@ -4,23 +4,31 @@ import axios from "axios";
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
-  state: {
-    data: []
-  },
-  getters: {
-    data: state => state.data
-  },
-  mutations: {
-    addData(state, data) {
-      state.data = data;
-    }
-  },
-  actions: {
-    fetchData({ commit }) {
-      axios.get("http://localhost:9000").then(response => {
-        commit("addData", response.data);
-      });
-    }
+const state = {
+  data: []
+};
+
+export const getters = {
+  data: state => state.data
+};
+
+export const mutations = {
+  addData(state, data) {
+    state.data = data;
   }
+};
+
+export const actions = {
+  fetchData({ commit }) {
+    axios.get("http://localhost:9000").then(response => {
+      commit("addData", response.data);
+    });
+  }
+};
+
+export default new Vuex.Store({
+  state,
+  getters,
+  mutations,
+  actions
 });
