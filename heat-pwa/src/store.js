@@ -22,7 +22,6 @@ export const actions = {
   fetchData({ commit }) {
     axios.get("http://localhost:9000").then(response => {
       const heatData = response.data.map(item => {
-        console.log(typeof item.date);
         return {
           date: item.date.split("T")[0],
           volume: item.severity
