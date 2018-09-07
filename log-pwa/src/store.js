@@ -9,7 +9,7 @@ const state = {
 };
 
 export const mutations = {
-  fetchData(state, payload) {
+  addData(state, payload) {
     state.data = payload;
   }
 };
@@ -18,7 +18,7 @@ export const actions = {
   fetchData({ commit }) {
     axios.get("http://localhost:9000").then(res => {
       console.log("log pwa", res);
-      commit("fetchData", res.data);
+      commit("addData", res.data);
     });
   }
 };
