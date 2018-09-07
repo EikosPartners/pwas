@@ -1,9 +1,57 @@
+import { shallowMount, createLocalVue } from "@vue/test-utils";
+import Bar from "@/components/BarChart.vue";
+import Vuex from "vuex";
 import { mockData } from "./mockData.js";
 import { getters, mutations, actions } from "@/store.js";
 import axios from "axios"; //imports mock axios from __mock__
+import { D3BarChart } from "jscatalyst"; //imports from __mock__
+import VueSocketio from "vue-socket.io"; //imports from __mock__
 
-describe("HeatMap PWA", () => {
+const localVue = createLocalVue();
+
+localVue.use(Vuex);
+localVue.use(VueSocketio);
+
+describe("Bar Chart PWA", () => {
+  let store;
   let state = mockData;
+  let comp;
+
+  beforeEach(() => {
+    store = new Vuex.Store({ state, getters, mutations, actions });
+    comp = shallowMount(Bar, { store, localVue });
+  });
+
+  afterEach(() => {
+    comp.destroy();
+  });
+
+  describe("Bar.vue", () => {
+    test("renders a js catalyst bar chart component", () => {
+      expect(comp.vm.$children[0].$options._componentTag).toBe("bar-chart");
+    });
+
+    // test("parseDate() transforms date correctly", () => {
+    //   const parseDate =
+    //     comp.vm.$options._parentVnode.componentInstance.parseDate;
+    //   const rawDate = "2018-02-20";
+    //   expect(parseDate(rawDate)).toEqual("02-20-2018");
+    // });
+
+    // test("filterByDate() correctly creates filter object", () => {
+    //   const filterByDate =
+    //     comp.vm.$options._parentVnode.componentInstance.filterByDate;
+    //   const mockClickData = { date: "2018-02-13", volume: 5 };
+    //   const filterObj = {
+    //     source: "heatMap",
+    //     dataSource: "/",
+    //     data: "02-13-2018"
+    //   };
+    //   expect(filterByDate(mockClickData)).toEqual(filterObj);
+    // });
+    //TODO: test socket emit?
+    //TODO: test service worker?
+  });
 
   describe("Getters", () => {
     test("data() returns data", () => {

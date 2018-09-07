@@ -4,7 +4,7 @@ import Vuex from "vuex";
 import { mockData } from "./mockData.js";
 import { getters, mutations, actions } from "@/store.js";
 import axios from "axios"; //imports from __mock__
-import jscatalyst from "jscatalyst"; //imports from __mock__
+import { D3HeatMap } from "jscatalyst"; //imports from __mock__ - necessary!!!
 import VueSocketio from "vue-socket.io"; //imports from __mock__
 
 const localVue = createLocalVue();
