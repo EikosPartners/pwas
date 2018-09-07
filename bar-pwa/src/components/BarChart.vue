@@ -14,7 +14,7 @@ import { mapGetters } from "vuex";
 import { D3BarChart } from "jscatalyst";
 
 export default {
-  name: "",
+  name: "BarChart",
   components: {
     barChart: D3BarChart
   },
