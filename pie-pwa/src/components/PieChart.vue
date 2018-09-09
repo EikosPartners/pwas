@@ -33,15 +33,12 @@ export default {
       });
       const finalData = [];
       temp.forEach(i => {
-        let sum = 0;
-        i.elements.forEach(el => {
-          return (sum += el.value);
-        });
         finalData.push({
           label: i.key,
-          value: sum
+          value: i.count
         });
       });
+      console.log('Final Data', finalData);
       return finalData;
     }
   },
