@@ -174,6 +174,8 @@ This will run the PWAs on different local host ports and provide PWA offline fun
 
 Messages are sent to through Socket.io from one PWA to another to communicate event-based changes.
 
+## Messages 
+
 To maintain functional communication between PWAs we have established a standard message structure:
 
 ```
@@ -184,7 +186,29 @@ To maintain functional communication between PWAs we have established a standard
 
 }
 ```
+By building messages using this standardized structure, processing the messages is made simple. This means that the message must convey an intended behavior by passing a specific piece of data and using the appropriate message type.
 
+### Message Types
+
+Message types inform the reciever how to handle a given message. 
+
+#### Filter
+
+- **filterByDate**
+
+    Requires a *date* string passed into message.data key
+
+- **filterByProject**
+
+    Requires a *project* string passed into message.data key
+
+- **filterBySeverity**
+
+    Requires a *severity* number passed into message.data key
+
+- **filterByRaisedBy**
+
+    Requires a *raisedBy* string passed into message.data key
 
 
 
