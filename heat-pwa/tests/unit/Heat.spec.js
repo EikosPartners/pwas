@@ -39,17 +39,21 @@ describe("HeatMap PWA", () => {
       expect(parseDate(rawDate)).toEqual("02-20-2018");
     });
 
-    // test("filterByDate() correctly creates filter object", () => {
-    //   const filterByDate =
-    //     comp.vm.$options._parentVnode.componentInstance.filterByDate;
-    //   const mockClickData = { date: "2018-02-13", volume: 5 };
-    //   const filterObj = {
-    //     source: "heatMap",
-    //     dataSource: "/",
-    //     data: "02-13-2018"
-    //   };
-    //   expect(filterByDate(mockClickData)).toEqual(filterObj);
-    // });
+    test("sortData() correctly sorts data by date", () => {
+      const sortData = comp.vm.$options._parentVnode.componentInstance.sortData;
+      const expected = { "2018-02-20": 1, "2018-02-11": 1 };
+      expect(sortData(mockData.data)).toEqual(expected);
+    });
+
+    test("heatData() correctly maps sorted data to X and Y keys", () => {
+      const heatData = comp.vm.$options._parentVnode.componentInstance.heatData;
+      const expected = [
+        { date: "2018-02-20", volume: 1 },
+        { date: "2018-02-11", volume: 1 }
+      ];
+      expect(heatData).toEqual(expected);
+    });
+
     //TODO: test socket emit?
     //TODO: test service worker?
   });

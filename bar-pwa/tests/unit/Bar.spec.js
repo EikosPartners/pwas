@@ -27,49 +27,45 @@ describe("Bar Chart PWA", () => {
     comp.destroy();
   });
 
-  describe("Bar.vue", () => {
-    test("renders a js catalyst bar chart component", () => {
-      expect(comp.vm.$children[0].$options._componentTag).toBe("bar-chart");
-    });
-
-    test("parseDate() transforms date correctly", () => {
-      const parseDate =
-        comp.vm.$options._parentVnode.componentInstance.parseDate;
-      const rawDate = "2018-02-20T06:10:29.000Z";
-      expect(parseDate(rawDate)).toEqual("02-20-2018");
-    });
-
-    test("sortData() correctly counts data points by date", () => {
-      const sortData = comp.vm.$options._parentVnode.componentInstance.sortData;
-      expect(sortData(state.data)).toEqual({
-        "02-20-2018": 2,
-        "02-11-2018": 1
-      });
-    });
-
-    // test("barData() correctly maps sorted data to X and Y keys", () => {
-    //   const barData =
-    //     comp.vm.$options._parentVnode.componentInstance.computed.barData;
-    //   expect(barData(state.data)).toEqual([
-    //     { x: "02-20-2018", y: 2 },
-    //     { x: "02-11-2018", y: 1 }
-    //   ]);
-    // });
-
-    // test("filterByDate() correctly creates filter object", () => {
-    //   const filterByDate =
-    //     comp.vm.$options._parentVnode.componentInstance.filterByDate;
-    //   const mockClickData = { date: "2018-02-13", volume: 5 };
-    //   const filterObj = {
-    //     source: "heatMap",
-    //     dataSource: "/",
-    //     data: "02-13-2018"
-    //   };
-    //   expect(filterByDate(mockClickData)).toEqual(filterObj);
-    // });
-    //TODO: test socket emit?
-    //TODO: test service worker?
+  test("renders a js catalyst bar chart component", () => {
+    expect(comp.vm.$children[0].$options._componentTag).toBe("bar-chart");
   });
+
+  test("parseDate() transforms date correctly", () => {
+    const parseDate = comp.vm.$options._parentVnode.componentInstance.parseDate;
+    const rawDate = "2018-02-20T06:10:29.000Z";
+    expect(parseDate(rawDate)).toEqual("02-20-2018");
+  });
+
+  test("sortData() correctly counts data points by date", () => {
+    const sortData = comp.vm.$options._parentVnode.componentInstance.sortData;
+    expect(sortData(state.data)).toEqual({
+      "02-20-2018": 2,
+      "02-11-2018": 1
+    });
+  });
+
+  test("barData() correctly maps sorted data to X and Y keys", () => {
+    const barData = comp.vm.$options._parentVnode.componentInstance.barData;
+    expect(barData).toEqual([
+      { x: "02-20-2018", y: 2 },
+      { x: "02-11-2018", y: 1 }
+    ]);
+  });
+
+  // test("filterByDate() correctly creates filter object", () => {
+  //   const filterByDate =
+  //     comp.vm.$options._parentVnode.componentInstance.filterByDate;
+  //   const mockClickData = { date: "2018-02-13", volume: 5 };
+  //   const filterObj = {
+  //     source: "heatMap",
+  //     dataSource: "/",
+  //     data: "02-13-2018"
+  //   };
+  //   expect(filterByDate(mockClickData)).toEqual(filterObj);
+  // });
+  //TODO: test socket emit?
+  //TODO: test service worker?
 
   describe("Getters", () => {
     test("data() returns data", () => {
