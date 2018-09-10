@@ -4,15 +4,15 @@ import Vuex from "vuex";
 import { mockData } from "./mockData.js";
 import { getters, mutations, actions } from "@/store.js";
 import axios from "axios"; //imports mock axios from __mock__
+import linqjs from "linqjs"; //imports mock jslinq
 // import VueSocketio from "vue-socket.io"; //imports from __mock__
-
-//!!!!!!!! TESTS NEED TO ACCOUNT FOR LINQ.js
 
 jest.mock("jscatalyst", () => "bubble-chart");
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
+localVue.use(linqjs);
 // localVue.use(VueSocketio);
 
 describe("Bubble Chart PWA", () => {
@@ -20,19 +20,28 @@ describe("Bubble Chart PWA", () => {
   let state = mockData;
   let comp;
 
-  // beforeEach(() => {
-  //   store = new Vuex.Store({ state, getters, mutations, actions });
-  //   comp = shallowMount(Bubble, { store, localVue });
-  // });
+  beforeEach(() => {
+    store = new Vuex.Store({ state, getters, mutations, actions });
+    comp = shallowMount(Bubble, { store, localVue });
+  });
 
-  // afterEach(() => {
-  //   comp.destroy();
-  // });
+  afterEach(() => {
+    comp.destroy();
+  });
 
-  // test("renders a js catalyst bubble chart component", () => {
-  //   console.log(comp);
-  //   // expect(comp.vm.$children[0].$options._componentTag).toBe("bubble-chart");
-  // });
+  test("renders a js catalyst bubble chart component", () => {
+    expect(comp.vm.$children[0].$options._componentTag).toBe("bubble-chart");
+  });
+
+  test("prettyData() transforms data correctly", () => {
+    const prettyData =
+      comp.vm.$options._parentVnode.componentInstance.prettyData;
+    const expected = [
+      { x: "2018-02-11", y: 3, value: 1, label: "Date/severity" },
+      { x: "2018-02-20", y: 3, value: 1, label: "Date/severity" }
+    ];
+    expect(prettyData).toEqual(expected);
+  });
 
   describe("Getters", () => {
     test("data() returns data", () => {

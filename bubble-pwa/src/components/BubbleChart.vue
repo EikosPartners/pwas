@@ -3,21 +3,21 @@
 </template>
 
 <script>
-import { D3BubbleChart } from 'jscatalyst';
-import { mapGetters } from 'vuex';
-import jslinq from 'jslinq';
+import { D3BubbleChart } from "jscatalyst";
+import { mapGetters } from "vuex";
+import jslinq from "jslinq";
 
 export default {
-  name: 'BubbleChart',
+  name: "BubbleChart",
   components: {
     bubbleChart: D3BubbleChart
   },
   computed: {
-    ...mapGetters(['data']),
+    ...mapGetters(["data"]),
     prettyData() {
       let bubbleData = new jslinq(this.data)
         .select(item => {
-          let date = item.date.split('T')[0];
+          let date = item.date.split("T")[0];
           return {
             date,
             severity: item.severity
@@ -35,7 +35,6 @@ export default {
         .orderByDescending(i => {
           return i.key;
         });
-
       let finalData = [];
       bubbleData.items.forEach(set => {
         set.key.forEach(k => {
@@ -43,7 +42,7 @@ export default {
             x: k[0].date,
             y: k.key,
             value: k.length,
-            label: 'Date/severity'
+            label: "Date/severity"
           });
         });
       });
@@ -52,18 +51,17 @@ export default {
   },
   methods: {
     filterByDate(data) {
-      console.log(data);
       let filter = {};
-      filter.source = 'BubbleChart';
-      filter.dataSource = '/';
+      filter.source = "BubbleChart";
+      filter.dataSource = "/";
       filter.data = data.x;
       console.log(filter);
-      this.$socket.emit('filterByDate', filter);
+      this.$socket.emit("filterByDate", filter);
     }
   },
   sockets: {
     connect: function() {
-      console.log('socket connected');
+      console.log("socket connected");
     }
   }
 };
