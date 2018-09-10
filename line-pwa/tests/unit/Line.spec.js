@@ -1,9 +1,44 @@
+import { shallowMount, createLocalVue } from "@vue/test-utils";
+import Line from "@/components/LineChart.vue";
+import Vuex from "vuex";
 import { mockData } from "./mockData.js";
 import { getters, mutations, actions } from "@/store.js";
-import axios from "axios"; //imports mock axios from __mock__
+import axios from "axios"; //imports from __mock__
+// import VueSocketio from "vue-socket.io"; //imports from __mock__
 
-describe("HeatMap PWA", () => {
+jest.mock("jscatalyst", () => "line-chart");
+
+const localVue = createLocalVue();
+
+localVue.use(Vuex);
+// localVue.use(VueSocketio);
+
+describe("Line Chart PWA", () => {
+  let store;
   let state = mockData;
+  let comp;
+
+  beforeEach(() => {
+    store = new Vuex.Store({ state, getters, mutations, actions });
+    comp = shallowMount(Line, { store, localVue });
+  });
+
+  afterEach(() => {
+    comp.destroy();
+  });
+
+  describe("LineChart.vue", () => {
+    test("renders a js catalyst bar chart component", () => {
+      expect(comp.vm.$children[0].$options._componentTag).toBe("line-chart");
+    });
+
+    test("formatDate() transforms date correctly", () => {
+      const formatDate =
+        comp.vm.$options._parentVnode.componentInstance.formatDate;
+      const rawDate = "2018-02-20T06:10:29.000Z";
+      expect(formatDate(rawDate)).toEqual("02-20-2018");
+    });
+  });
 
   describe("Getters", () => {
     test("data() returns data", () => {

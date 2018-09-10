@@ -9,7 +9,7 @@ import { D3LineChart, D3HeatMap } from "jscatalyst";
 import { mapGetters } from "vuex";
 
 export default {
-  name: "Chart",
+  name: "LineChart",
   components: {
     lineChart: D3LineChart,
     heatMap: D3HeatMap
