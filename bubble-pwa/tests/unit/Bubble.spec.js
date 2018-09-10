@@ -3,8 +3,8 @@ import Bubble from "@/components/BubbleChart.vue";
 import Vuex from "vuex";
 import { mockData } from "./mockData.js";
 import { getters, mutations, actions } from "@/store.js";
+import linqjs from "linqjs";
 import axios from "axios"; //imports mock axios from __mock__
-import linqjs from "linqjs"; //imports mock jslinq
 // import VueSocketio from "vue-socket.io"; //imports from __mock__
 
 jest.mock("jscatalyst", () => "bubble-chart");
