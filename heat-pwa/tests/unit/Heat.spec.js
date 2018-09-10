@@ -4,13 +4,14 @@ import Vuex from "vuex";
 import { mockData } from "./mockData.js";
 import { getters, mutations, actions } from "@/store.js";
 import axios from "axios"; //imports from __mock__
-import { D3HeatMap } from "jscatalyst"; //imports from __mock__ - necessary!!!
-import VueSocketio from "vue-socket.io"; //imports from __mock__
+// import VueSocketio from "vue-socket.io"; //imports from __mock__
+
+jest.mock("jscatalyst", () => "heat-map");
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
-localVue.use(VueSocketio);
+// localVue.use(VueSocketio);
 
 describe("HeatMap PWA", () => {
   let store;
@@ -38,17 +39,17 @@ describe("HeatMap PWA", () => {
       expect(parseDate(rawDate)).toEqual("02-20-2018");
     });
 
-    test("filterByDate() correctly creates filter object", () => {
-      const filterByDate =
-        comp.vm.$options._parentVnode.componentInstance.filterByDate;
-      const mockClickData = { date: "2018-02-13", volume: 5 };
-      const filterObj = {
-        source: "heatMap",
-        dataSource: "/",
-        data: "02-13-2018"
-      };
-      expect(filterByDate(mockClickData)).toEqual(filterObj);
-    });
+    // test("filterByDate() correctly creates filter object", () => {
+    //   const filterByDate =
+    //     comp.vm.$options._parentVnode.componentInstance.filterByDate;
+    //   const mockClickData = { date: "2018-02-13", volume: 5 };
+    //   const filterObj = {
+    //     source: "heatMap",
+    //     dataSource: "/",
+    //     data: "02-13-2018"
+    //   };
+    //   expect(filterByDate(mockClickData)).toEqual(filterObj);
+    // });
     //TODO: test socket emit?
     //TODO: test service worker?
   });

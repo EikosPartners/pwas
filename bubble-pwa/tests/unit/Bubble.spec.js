@@ -2,7 +2,7 @@ import { mockData } from "./mockData.js";
 import { getters, mutations, actions } from "@/store.js";
 import axios from "axios"; //imports mock axios from __mock__
 
-describe("HeatMap PWA", () => {
+describe("Bubble PWA", () => {
   let state = mockData;
 
   describe("Getters", () => {

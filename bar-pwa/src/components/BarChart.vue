@@ -45,8 +45,6 @@ export default {
     },
     parseDate(date) {
       let dateA = date.split("T")[0].split("-");
-      let timeA = date.split("T")[1].split(".");
-      let hms = timeA[0].split(":").join(" ");
       return dateA[1] + "-" + dateA[2] + "-" + dateA[0];
     },
     sortData(rawData) {

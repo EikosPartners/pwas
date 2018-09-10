@@ -4,13 +4,14 @@ import Vuex from "vuex";
 import { mockData } from "./mockData.js";
 import { getters, mutations, actions } from "@/store.js";
 import axios from "axios"; //imports from __mock__
-import { D3BarChart } from "jscatalyst"; //imports from __mock__
-import VueSocketio from "vue-socket.io"; //imports from __mock__
+// import VueSocketio from "vue-socket.io"; //imports from __mock__
+
+jest.mock("jscatalyst", () => "bar-chart");
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
-localVue.use(VueSocketio);
+// localVue.use(VueSocketio);
 
 describe("Bar Chart PWA", () => {
   let store;
@@ -31,11 +32,28 @@ describe("Bar Chart PWA", () => {
       expect(comp.vm.$children[0].$options._componentTag).toBe("bar-chart");
     });
 
-    // test("parseDate() transforms date correctly", () => {
-    //   const parseDate =
-    //     comp.vm.$options._parentVnode.componentInstance.parseDate;
-    //   const rawDate = "2018-02-20";
-    //   expect(parseDate(rawDate)).toEqual("02-20-2018");
+    test("parseDate() transforms date correctly", () => {
+      const parseDate =
+        comp.vm.$options._parentVnode.componentInstance.parseDate;
+      const rawDate = "2018-02-20T06:10:29.000Z";
+      expect(parseDate(rawDate)).toEqual("02-20-2018");
+    });
+
+    test("sortData() correctly counts data points by date", () => {
+      const sortData = comp.vm.$options._parentVnode.componentInstance.sortData;
+      expect(sortData(state.data)).toEqual({
+        "02-20-2018": 2,
+        "02-11-2018": 1
+      });
+    });
+
+    // test("barData() correctly maps sorted data to X and Y keys", () => {
+    //   const barData =
+    //     comp.vm.$options._parentVnode.componentInstance.computed.barData;
+    //   expect(barData(state.data)).toEqual([
+    //     { x: "02-20-2018", y: 2 },
+    //     { x: "02-11-2018", y: 1 }
+    //   ]);
     // });
 
     // test("filterByDate() correctly creates filter object", () => {

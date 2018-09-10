@@ -54,7 +54,7 @@
     "test-pie-pwa": "cd pie-pwa && npm run test:unit",
     "test-log-pwa": "cd log-pwa && npm run test:unit",
     "test-server": "cd server && npm run test:unit",
-    "test-all": "npm-run-all test-bar-pwa test-bubble-pwa test-line-pwa test-grid-pwa test-heat-pwa test-pie-pwa test-log-pwa"
+    "test-all": "npm-run-all test-bar-pwa test-bubble-pwa test-grid-pwa test-heat-pwa test-line-pwa test-log-pwa test-pie-pwa"
   },
   "devDependencies": {
     "@vue/cli": "^3.0.1",

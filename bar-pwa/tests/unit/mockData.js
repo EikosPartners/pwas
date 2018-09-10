@@ -11,6 +11,12 @@ export const mockData = {
       raisedBy: 6354,
       project: "Architect",
       severity: 3
+    },
+    {
+      date: "2018-02-20T06:10:29.000Z",
+      raisedBy: 6354,
+      project: "Architect",
+      severity: 4
     }
   ],
   columns: [
