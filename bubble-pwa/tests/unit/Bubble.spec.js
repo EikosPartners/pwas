@@ -1,9 +1,38 @@
+import { shallowMount, createLocalVue } from "@vue/test-utils";
+import Bubble from "@/components/BubbleChart.vue";
+import Vuex from "vuex";
 import { mockData } from "./mockData.js";
 import { getters, mutations, actions } from "@/store.js";
 import axios from "axios"; //imports mock axios from __mock__
+// import VueSocketio from "vue-socket.io"; //imports from __mock__
 
-describe("Bubble PWA", () => {
+//!!!!!!!! TESTS NEED TO ACCOUNT FOR LINQ.js
+
+jest.mock("jscatalyst", () => "bubble-chart");
+
+const localVue = createLocalVue();
+
+localVue.use(Vuex);
+// localVue.use(VueSocketio);
+
+describe("Bubble Chart PWA", () => {
+  let store;
   let state = mockData;
+  let comp;
+
+  // beforeEach(() => {
+  //   store = new Vuex.Store({ state, getters, mutations, actions });
+  //   comp = shallowMount(Bubble, { store, localVue });
+  // });
+
+  // afterEach(() => {
+  //   comp.destroy();
+  // });
+
+  // test("renders a js catalyst bubble chart component", () => {
+  //   console.log(comp);
+  //   // expect(comp.vm.$children[0].$options._componentTag).toBe("bubble-chart");
+  // });
 
   describe("Getters", () => {
     test("data() returns data", () => {
