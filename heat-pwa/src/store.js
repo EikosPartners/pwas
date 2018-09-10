@@ -21,13 +21,7 @@ export const mutations = {
 export const actions = {
   fetchData({ commit }) {
     axios.get("http://localhost:9000").then(response => {
-      const heatData = response.data.map(item => {
-        return {
-          date: item.date.split("T")[0],
-          volume: item.severity
-        };
-      });
-      commit("addData", heatData);
+      commit("addData", response.data);
     });
   }
 };

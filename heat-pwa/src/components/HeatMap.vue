@@ -1,7 +1,7 @@
 <template>
    <heat-map
       @jsc_click="filterByDate"
-      :dataModel='data'
+      :dataModel='heatData'
       title='D3 Heat Map'
       xaxis-label="date"
       yaxis-label="volume"
@@ -17,7 +17,16 @@ export default {
     heatMap: D3HeatMap
   },
   computed: {
-    ...mapGetters(["data"])
+    ...mapGetters(["data"]),
+    heatData() {
+      const heatData = [];
+      let sorted = this.sortData(this.data);
+      for (let date in sorted) {
+        let dataObj = { date: date, volume: sorted[date] };
+        heatData.push(dataObj);
+      }
+      return heatData;
+    }
   },
   sockets: {
     connect: function() {
@@ -36,6 +45,19 @@ export default {
     parseDate(date) {
       const dateArray = date.split("-");
       return dateArray[1] + "-" + dateArray[2] + "-" + dateArray[0];
+    },
+    sortData(rawData) {
+      const groupedData = {};
+      rawData.forEach(item => {
+        let justDate = item.date.split("T");
+        let date = justDate[0];
+        if (Object.keys(groupedData).includes(date)) {
+          groupedData[date] += 1;
+        } else {
+          groupedData[date] = 1;
+        }
+      });
+      return groupedData;
     }
   }
 };
