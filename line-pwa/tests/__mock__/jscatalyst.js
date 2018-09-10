@@ -1,3 +1,3 @@
 module.exports = {
-  D3BarChart: () => "<div id="container-barchart"></div>"
+  D3LineChart: () => "<line-chart></line-chart>"
 };

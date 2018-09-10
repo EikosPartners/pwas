@@ -3,7 +3,7 @@ import Bar from "@/components/BarChart.vue";
 import Vuex from "vuex";
 import { mockData } from "./mockData.js";
 import { getters, mutations, actions } from "@/store.js";
-import axios from "axios"; //imports mock axios from __mock__
+import axios from "axios"; //imports from __mock__
 import { D3BarChart } from "jscatalyst"; //imports from __mock__
 import VueSocketio from "vue-socket.io"; //imports from __mock__
 
