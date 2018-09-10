@@ -1,9 +1,47 @@
+import { shallowMount, createLocalVue } from "@vue/test-utils";
+import Pie from "@/components/PieChart.vue";
+import Vuex from "vuex";
 import { mockData } from "./mockData.js";
 import { getters, mutations, actions } from "@/store.js";
-import axios from "axios"; //imports mock axios from __mock__
+import axios from "axios"; //imports from __mock__
+// import VueSocketio from "vue-socket.io"; //imports from __mock__
 
-describe("HeatMap PWA", () => {
+jest.mock("jscatalyst", () => "line-chart");
+
+const localVue = createLocalVue();
+
+localVue.use(Vuex);
+// localVue.use(VueSocketio);
+
+describe("Pie Chart PWA", () => {
+  let store;
   let state = mockData;
+  let comp;
+
+  beforeEach(() => {
+    store = new Vuex.Store({ state, getters, mutations, actions });
+    comp = shallowMount(Pie, { store, localVue });
+  });
+
+  afterEach(() => {
+    comp.destroy();
+  });
+
+  describe("PieChart.vue", () => {
+    test("renders a js catalyst bar chart component", () => {
+      expect(comp.vm.$children[0].$options._componentTag).toBe("pie-chart");
+    });
+
+    test("prettyData() correctly formats data for Pie chart", () => {
+      const prettyData =
+        comp.vm.$options._parentVnode.componentInstance.prettyData;
+      const expected = [
+        { label: "Cotton", value: 1 },
+        { label: "Architect", value: 1 }
+      ];
+      expect(prettyData).toEqual(expected);
+    });
+  });
 
   describe("Getters", () => {
     test("data() returns data", () => {
