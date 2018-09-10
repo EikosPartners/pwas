@@ -22,7 +22,6 @@ export const mutations = {
 export const actions = {
   fetchData({ commit }) {
     axios.get("http://localhost:9000").then(response => {
-      console.log(response.data);
       commit("addData", response.data);
     });
   }

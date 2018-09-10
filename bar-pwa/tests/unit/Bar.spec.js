@@ -4,7 +4,7 @@ import Vuex from "vuex";
 import { mockData } from "./mockData.js";
 import { getters, mutations, actions } from "@/store.js";
 import axios from "axios"; //imports from __mock__
-// import VueSocketio from "vue-socket.io"; //imports from __mock__
+import { io, serverSocket, cleanUp } from "vue-socket.io"; //imports from __mock__
 
 jest.mock("jscatalyst", () => "bar-chart");
 
