@@ -37,9 +37,7 @@ export default {
         });
       let finalData = [];
       bubbleData.items.forEach(set => {
-        console.log("set", set);
         set.key.forEach(k => {
-          console.log("k", k[0].date);
           finalData.push({
             x: k[0].date,
             y: k.key,
@@ -48,7 +46,6 @@ export default {
           });
         });
       });
-      console.log("finalData", finalData[0]);
       return finalData;
     }
   },
