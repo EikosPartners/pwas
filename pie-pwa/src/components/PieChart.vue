@@ -6,17 +6,17 @@
 </template>
 
 <script>
-import { D3PieChart } from "jscatalyst";
-import { mapGetters } from "vuex";
-import jslinq from "jslinq";
+import { D3PieChart, StyleTogglerMixin } from 'jscatalyst';
+import { mapGetters } from 'vuex';
+import jslinq from 'jslinq';
 
 export default {
-  name: "PieChart",
+  name: 'PieChart',
   components: {
     pieChart: D3PieChart
   },
   computed: {
-    ...mapGetters(["data"]),
+    ...mapGetters(['data']),
     prettyData() {
       const pieLinqData = new jslinq(this.data)
         .select(d => {
@@ -44,16 +44,24 @@ export default {
   methods: {
     filterByProject(data) {
       let filter = {};
-      filter.source = "PieChart";
-      filter.dataSource = "/";
+      filter.source = 'PieChart';
+      filter.dataSource = '/';
       filter.data = data.data.label;
       console.log(filter);
-      this.$socket.emit("filterByProject", filter);
+      this.$socket.emit('filterByProject', filter);
     }
   },
   sockets: {
     connect: function() {
-      console.log("socket connected");
+      console.log('socket connected');
+    }
+  },
+  mixins: [StyleTogglerMixin],
+  created() {
+    this.$store.commit('changeColor', 'Blue');
+    console.log(this.$store.state.themeMod);
+    if (this.$store.state.themeMod) {
+      this.chooseTheme(this.$store.state.themeMod.colorTheme);
     }
   }
 };
