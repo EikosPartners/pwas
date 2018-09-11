@@ -1,4 +1,5 @@
 <template>
+<div class="container">
    <heat-map
       @jsc_click="filterByDate"
       :dataModel='heatData'
@@ -6,18 +7,19 @@
       xaxis-label="date"
       yaxis-label="volume"
     ></heat-map>
+  </div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
-import { D3HeatMap, StyleTogglerMixin } from 'jscatalyst';
+import { mapGetters } from "vuex";
+import { D3HeatMap, StyleTogglerMixin } from "jscatalyst";
 
 export default {
-  name: 'HeatMap',
+  name: "HeatMap",
   components: {
     heatMap: D3HeatMap
   },
   computed: {
-    ...mapGetters(['data']),
+    ...mapGetters(["data"]),
     heatData() {
       const heatData = [];
       let sorted = this.sortData(this.data);
@@ -30,26 +32,26 @@ export default {
   },
   sockets: {
     connect: function() {
-      console.log('socket connected');
+      console.log("socket connected");
     }
   },
   methods: {
     filterByDate(data) {
       let filter = {};
-      filter.source = 'heatMap';
-      filter.dataSource = '/';
+      filter.source = "heatMap";
+      filter.dataSource = "/";
       filter.data = this.parseDate(data.date);
       console.log(filter);
-      this.$socket.emit('filterByDate', filter);
+      this.$socket.emit("filterByDate", filter);
     },
     parseDate(date) {
-      const dateArray = date.split('-');
-      return dateArray[1] + '-' + dateArray[2] + '-' + dateArray[0];
+      const dateArray = date.split("-");
+      return dateArray[1] + "-" + dateArray[2] + "-" + dateArray[0];
     },
     sortData(rawData) {
       const groupedData = {};
       rawData.forEach(item => {
-        let justDate = item.date.split('T');
+        let justDate = item.date.split("T");
         let date = justDate[0];
         if (Object.keys(groupedData).includes(date)) {
           groupedData[date] += 1;
@@ -62,7 +64,7 @@ export default {
   },
   mixins: [StyleTogglerMixin],
   created() {
-    this.$store.commit('changeColor', 'Blue');
+    this.$store.commit("changeColor", "Blue");
     console.log(this.$store.state.themeMod);
     if (this.$store.state.themeMod) {
       this.chooseTheme(this.$store.state.themeMod.colorTheme);
@@ -71,4 +73,9 @@ export default {
 };
 </script>
 <style>
+.container {
+  width: 90%;
+  padding: 0 5%;
+  height: 90vh;
+}
 </style>
