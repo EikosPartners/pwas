@@ -5,12 +5,12 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions } from "vuex";
 
 export default {
-  name: 'app',
+  name: "app",
   methods: {
-    ...mapActions(['fetchData'])
+    ...mapActions(["fetchData"])
   },
   created() {
     this.fetchData();
@@ -18,13 +18,12 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   width: 100%;
-  overflow: hidden;
 }
 </style>
