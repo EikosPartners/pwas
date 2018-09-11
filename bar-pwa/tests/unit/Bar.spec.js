@@ -4,14 +4,14 @@ import Vuex from "vuex";
 import { mockData } from "./mockData.js";
 import { getters, mutations, actions } from "@/store.js";
 import axios from "axios"; //imports from __mock__
-import { io, serverSocket, cleanUp } from "vue-socket.io"; //imports from __mock__
+import VueSocketio from "vue-socket.io";
 
 jest.mock("jscatalyst", () => "bar-chart");
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
-// localVue.use(VueSocketio);
+localVue.use(VueSocketio, "http://localhost:9000");
 
 describe("Bar Chart PWA", () => {
   let store;
@@ -53,17 +53,32 @@ describe("Bar Chart PWA", () => {
     ]);
   });
 
-  // test("filterByDate() correctly creates filter object", () => {
-  //   const filterByDate =
-  //     comp.vm.$options._parentVnode.componentInstance.filterByDate;
-  //   const mockClickData = { date: "2018-02-13", volume: 5 };
-  //   const filterObj = {
-  //     source: "heatMap",
-  //     dataSource: "/",
-  //     data: "02-13-2018"
-  //   };
-  //   expect(filterByDate(mockClickData)).toEqual(filterObj);
+  // test("can connect to websocket", () => {
+  //   const connect = comp.vm.$options;
+  //   console.log(connect);
+  //   expect(connect).toEqual("connected");
   // });
+
+  test("filterByDate successfully emits filter object to websocket", () => {
+    const filterByDate =
+      comp.vm.$options._parentVnode.componentInstance.filterByDate;
+    const clicked = { x: "02-20-2018", y: 2 };
+    const expected = [
+      "filterByDate",
+      { source: "barChart", dataSource: "/", data: "02-20-2018" }
+    ];
+    console.log(comp.vm.$socket.emit(clicked).sendBuffer[0].data);
+    expect(comp.vm.$socket.emit(clicked).sendBuffer[0].data).toEqual(expected);
+  });
+
+  test("filter contains source key, which specifies chart of origin.", () => {});
+
+  test("filter contains dataSource key, which specifies endpoint of data.", () => {});
+
+  test("filter contains data key, which contains data to filter by.", () => {});
+
+  test("filter type is passed correctly", () => {});
+
   //TODO: test socket emit?
   //TODO: test service worker?
 
