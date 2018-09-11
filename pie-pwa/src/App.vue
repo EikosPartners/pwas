@@ -10,10 +10,11 @@ import { mapActions } from 'vuex';
 export default {
   name: 'app',
   methods: {
-    ...mapActions(['fetchData'])
+    ...mapActions(['fetchData', 'fetchColor'])
   },
   created() {
     this.fetchData();
+    this.fetchColor();
   }
 };
 </script>

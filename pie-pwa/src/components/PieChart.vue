@@ -1,13 +1,12 @@
 <template>
 <div style="height: 400px">
-
-  <pie-chart :dataModel="prettyData" @jsc_click="filterByProject"/>
+  <pie-chart  :dataModel="prettyData" @jsc_click="filterByProject"/>
 </div>
 </template>
 
 <script>
 import { D3PieChart, StyleTogglerMixin } from 'jscatalyst';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import jslinq from 'jslinq';
 
 export default {
@@ -16,6 +15,7 @@ export default {
     pieChart: D3PieChart
   },
   computed: {
+    ...mapState(['color']),
     ...mapGetters(['data']),
     prettyData() {
       const pieLinqData = new jslinq(this.data)
@@ -57,11 +57,17 @@ export default {
     }
   },
   mixins: [StyleTogglerMixin],
-  created() {
-    this.$store.commit('changeColor', 'Blue');
-    console.log(this.$store.state.themeMod);
-    if (this.$store.state.themeMod) {
-      this.chooseTheme(this.$store.state.themeMod.colorTheme);
+  watch: {
+    color(newData) {
+      console.log(newData);
+
+      if (newData) {
+        this.$store.commit(this.color.action, this.color.color);
+        if (this.$store.state.themeMod) {
+          this.chooseTheme(this.$store.state.themeMod.colorTheme);
+        }
+        // this.color;
+      }
     }
   }
 };

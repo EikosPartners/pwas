@@ -1,6 +1,6 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import axios from "axios";
+import Vue from 'vue';
+import Vuex from 'vuex';
+import axios from 'axios';
 
 Vue.use(Vuex);
 
@@ -20,8 +20,15 @@ export const mutations = {
 
 export const actions = {
   fetchData({ commit }) {
-    axios.get("http://localhost:9000").then(response => {
-      commit("addData", response.data);
+    axios.get('http://localhost:9000').then(response => {
+      commit('addData', response.data);
+    });
+  },
+  fetchColor({ commit }) {
+    console.log('here');
+    axios.get('http://localhost:9000/color').then(response => {
+      console.log(response);
+      commit(response.action, response.color);
     });
   }
 };
