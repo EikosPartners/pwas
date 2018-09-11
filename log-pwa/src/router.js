@@ -1,16 +1,16 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-import Log from './components/Log.vue';
+import Vue from "vue";
+import Router from "vue-router";
+import Log from "./components/Log.vue";
 
 Vue.use(Router);
 
 export default new Router({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/',
-      name: 'log',
+      path: "/",
+      name: "Log",
       component: Log
     }
   ]

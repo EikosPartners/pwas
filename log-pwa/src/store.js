@@ -10,18 +10,11 @@ const state = {
 
 export const mutations = {
   addData(state, payload) {
-    state.data = payload;
+    state.data.unshift(payload);
   }
 };
 
-export const actions = {
-  fetchData({ commit }) {
-    axios.get("http://localhost:9000").then(res => {
-      console.log("log pwa", res);
-      commit("addData", res.data);
-    });
-  }
-};
+export const actions = {};
 
 export const getters = {
   data: state => state.data
