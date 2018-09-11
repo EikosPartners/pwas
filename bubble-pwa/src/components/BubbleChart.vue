@@ -4,6 +4,7 @@
       :isDate="true" 
       @jsc_click="filterByDateAndSeverity" 
       :dataModel="prettyData" 
+      title="Ticket Severity by Date"
       xAxisLabel="date" 
       yAxisLabel="severity"
     ></bubble-chart>

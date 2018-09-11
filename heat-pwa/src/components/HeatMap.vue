@@ -3,7 +3,7 @@
    <heat-map
       @jsc_click="filterByDate"
       :dataModel='heatData'
-      title='D3 Heat Map'
+      title='Number of Tickets by Date'
       xaxis-label="date"
       yaxis-label="volume"
     ></heat-map>

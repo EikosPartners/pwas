@@ -3,7 +3,7 @@
     <pie-chart
       :dataModel="prettyData" 
       @jsc_click="filterByProject"
-      title="Pie Chart"
+      title="Tickets per Project"
     ></pie-chart>
 </div>
 </template>
