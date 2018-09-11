@@ -1,5 +1,5 @@
 <template>
-    <div style="height: 400px">
+    <div class="container">
       <line-chart 
         @jsc_click="filterByDate" 
         title="Ticket Severity by Date" 
@@ -61,5 +61,11 @@ export default {
 };
 </script>
  
-<style>
+<style >
+.container {
+  width: 90%;
+  padding: 0 5%;
+  height: 90vh;
+}
 </style>
+
