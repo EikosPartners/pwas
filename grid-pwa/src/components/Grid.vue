@@ -47,18 +47,19 @@ export default {
       };
       this.$options.sockets.filterByDateAndSeverity = filter => {
         console.log("filter", filter);
-        // let filterOne = this.gridApi.getFilterInstance("date");
-        // let filterTwo = this.gridApi.getFilterInstance("severity");
+        let filterInstanceOne = this.gridApi.getFilterInstance("date");
+        let filterInstanceTwo = this.gridApi.getFilterInstance("severity");
 
-        // let modelOne = data.FilterInstance.setModel({
-        //   type: "contains",
-        //   filter: data.date //check this?
-        // });
-        // let modelTwo = data.FilterInstance.setModel({
-        //   type: "contains",
-        //   filter: data.severity //check this?
-        // });
-        // dataFilterInstance.onFilterChanged();
+        let modelOne = filterInstanceOne.setModel({
+          type: "contains",
+          filter: filter.data.date
+        });
+        let modelTwo = filterInstanceTwo.setModel({
+          type: "contains",
+          filter: filter.data.severity
+        });
+        filterInstanceOne.onFilterChanged();
+        filterInstanceTwo.onFilterChanged();
       };
     }
   },
