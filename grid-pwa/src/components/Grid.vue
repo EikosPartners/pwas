@@ -45,6 +45,20 @@ export default {
         console.log("filter", filter);
         this.setQuickFilter(filter.data);
       };
+      this.$options.sockits.filterByDateAndSeverity = filter => {
+        let filterOne = this.gridApi.getFilterInstance("date");
+        let filterTwo = this.gridApi.getFilterInstance("severity");
+
+        let modelOne = data.FilterInstance.setModel({
+          type: "contains",
+          filter: data.date //check this?
+        });
+        // let modelTwo = data.FilterInstance.setModel({
+        //   type: "contains",
+        //   filter: data.severity //check this?
+        // });
+        dataFilterInstance.onFilterChanged();
+      };
     }
   },
   methods: {
@@ -61,6 +75,7 @@ export default {
     removeQuickFilter() {
       if (this.gridApi) {
         this.gridApi.setQuickFilter(null);
+        this.gridApi.setFilterModel(null); //reg filter
       }
     },
     prettyData() {

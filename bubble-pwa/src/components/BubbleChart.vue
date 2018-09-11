@@ -1,5 +1,5 @@
 <template>
-  <bubble-chart :isDate="true" @jsc_click="filterByDate" :dataModel="prettyData" xAxisLabel="date" yAxisLabel="severity"  />
+  <bubble-chart :isDate="true" @jsc_click="filterByDateAndSeverity" :dataModel="prettyData" xAxisLabel="date" yAxisLabel="severity"  />
 </template>
 
 <script>
@@ -17,6 +17,7 @@ export default {
     prettyData() {
       let bubbleData = new jslinq(this.data)
         .select(item => {
+          console.log(item);
           let date = item.date.split("T")[0];
           return {
             date,
@@ -24,6 +25,7 @@ export default {
           };
         })
         .groupBy(i => {
+          console.log(i);
           return i.date;
         })
         .groupBy(i => {
@@ -50,13 +52,13 @@ export default {
     }
   },
   methods: {
-    filterByDate(data) {
+    filterByDateAndSeverity(data) {
       let filter = {};
       filter.source = "BubbleChart";
       filter.dataSource = "/";
-      filter.data = this.parseDate(data.x);
+      filter.data = { date: this.parseDate(data.x), severity: data.y };
       console.log(filter);
-      this.$socket.emit("filterByDate", filter);
+      this.$socket.emit("filterByDateAndSeverity", filter);
     },
     parseDate(date) {
       let month = date.getMonth() + 1;
