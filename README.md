@@ -51,9 +51,9 @@ $ npm run update-all
 This will run `npm update` in each individual PWA folder. If you only want to update one PWA, you can do so from the root folder as well as from the specific PWA folder:
 
 ```bash
-// From the root
+// Update from the root
 $ npm run update-heat-pwa
-// in the PWA folder
+// Update from the PWA folder
 $ cd heat-pwa
 $ npm update
 ```
