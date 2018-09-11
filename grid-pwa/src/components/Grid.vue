@@ -77,13 +77,9 @@ export default {
     removeFilter() {
       if (this.gridApi) {
         this.gridApi.setQuickFilter(null);
-        this.gridApi.setFilterModel(null); //reg filter
+        this.gridApi.setFilterModel(null);
       }
     },
-    // setDataSeverityFilter() {
-    //   if (this.gridApi) {
-    //   }
-    // },
     prettyData() {
       return this.data.map(item => {
         let prettyItem = {};
@@ -99,8 +95,7 @@ export default {
       let timeA = date.split("T")[1].split(".");
       let hms = timeA[0].split(":").join(" ");
       return dateA[1] + "-" + dateA[2] + "-" + dateA[0] + " : " + hms;
-    },
-    dateAndSeverityFilter() {}
+    }
   }
 };
 </script>
