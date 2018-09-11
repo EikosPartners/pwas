@@ -1,9 +1,8 @@
 <template>
-<div style="width: 100%;">
+<div class="container">
   <ag-grid-vue
     id='Grid'
-    style='width: 100%; height: 500px'
-    class='ag-theme-balham'
+    class='ag-theme-balham grid'
     :columnDefs='columns'
     :rowData='prettyData()'
     :enableSorting='true'
@@ -68,6 +67,9 @@ export default {
       this.gridApi = params.api;
       this.columnApi = params.columnApi;
       this.gridApi.sizeColumnsToFit();
+      window.addEventListener("resize", () => {
+        this.gridApi.sizeColumnsToFit();
+      });
     },
     setQuickFilter(data) {
       if (this.gridApi) {
@@ -100,4 +102,27 @@ export default {
 };
 </script>
 <style>
+.container {
+  width: 100%;
+  height: 95vh;
+  overflow: hidden;
+}
+
+.grid {
+  width: 100%;
+  height: 90%;
+}
+
+button {
+  margin: 0.5rem;
+  padding: 0.5rem 1.2rem;
+  font-family: inherit;
+  font-size: 1.1rem;
+  background: rgb(66, 184, 221);
+  box-shadow: 0.1rem 0.1rem 0.4rem rgba(0, 0, 0, 0.3);
+}
+
+button:focus {
+  outline: 0;
+}
 </style>
