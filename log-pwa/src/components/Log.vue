@@ -11,7 +11,7 @@
           <span>Filtered By:</span>
           {{msg.data.date}} & {{msg.data.severity}}
         </span>
-        <span v-else>
+        <span v-else class="outer-span">
           <span>Filtered By:</span>
           {{msg.data}}
         </span>

@@ -1,5 +1,9 @@
 <template>
 <div class="container">
+  <div class="header">
+    <span>Grid</span>
+    <button @click="removeFilter">Clear Filter</button>
+    </div>
   <ag-grid-vue
     id='Grid'
     class='ag-theme-balham grid'
@@ -10,7 +14,6 @@
     :gridReady='onGridReady'
     rowSelection='multiple'
   ></ag-grid-vue>
-  <button @click="removeFilter">Clear Filter</button>
   </div>
 </template>
 <script>
@@ -102,6 +105,15 @@ export default {
 };
 </script>
 <style>
+.header {
+  background: rgb(66, 184, 221);
+  color: white;
+  font-size: 1.5rem;
+  padding: 0.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .container {
   width: 100%;
   height: 95vh;
@@ -110,7 +122,7 @@ export default {
 
 .grid {
   width: 100%;
-  height: 90%;
+  height: 85%;
 }
 
 button {
@@ -118,7 +130,7 @@ button {
   padding: 0.5rem 1.2rem;
   font-family: inherit;
   font-size: 1.1rem;
-  background: rgb(66, 184, 221);
+  background: rgb(220, 220, 220);
   box-shadow: 0.1rem 0.1rem 0.4rem rgba(0, 0, 0, 0.3);
 }
 
