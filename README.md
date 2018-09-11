@@ -30,18 +30,34 @@ PWA's separation of UI's into micro applications
 
 # Setup
 
-To install all dependencies from the root PWA folder run
+To install all dependencies from the root PWA folder, run
 
 ```bash
-npm install
-npm run install-all
+$ npm install
+$ npm run install-all
 ```
 
 To install dependencies for an individual PWA you can use `npm run install-[folder-name]`. For example, to install dependencies for **Bar PWA**, you would run
 
 ```bash
-npm run install-bar-pwa
+$ npm run install-bar-pwa
 ```
+
+To update dependencies for each PWA from the root folder, run
+
+```bash
+$ npm run update-all
+```
+This will run `npm update` in each individual PWA folder. If you only want to update one PWA, you can do so from the root folder as well as from the specific PWA folder:
+
+```bash
+// From the root
+$ npm run update-heat-pwa
+// in the PWA folder
+$ cd heat-pwa
+$ npm update
+```
+
 
 # PWAs
 
@@ -54,13 +70,13 @@ npm run server
 To run a specific UI from the root folder, you may use the command `npm run [folder-name]`. For example, to run **Grid PWA** on a dev server, you would run the following command.
 
 ```bash
-npm run grid-pwa
+$ npm run grid-pwa
 ```
 
 to start dev servers for all UI's you can use
 
 ```bash
-npm run serve-all
+$ npm run serve-all
 ```
 
 The PWAs will be available on the following ports:
@@ -79,13 +95,13 @@ To build a specific PWA from the root folder, you can run
 the command `npm build-[folder-name]`. For example, to build **Heat PWA**, you would run the following command.
 
 ```bash
-npm run build-heat-pwa
+$ npm run build-heat-pwa
 ```
 
 to build app PWAs at once you can run the following command. (It will take a few minutes)
 
 ```bash
-npm run build-all
+$ npm run build-all
 ```
 
 #### To Run
@@ -93,19 +109,19 @@ npm run build-all
 To run the built versions of the PWAs, you must start the backend server, like before.
 
 ```bash
-npm run server
+$ npm run server
 ```
 
 And then you can start the individual PWAs with `npm run [folder-name]-built`
 
 ```bash
-npm run heat-pwa-built
+$ npm run heat-pwa-built
 ```
 
 You can also run all PWAs with a single command by runnign
 
 ```bash
-npm-run-all-built
+$ npm-run-all-built
 ```
 
 The PWAs will be available on the following ports:
@@ -154,7 +170,7 @@ This will install the package gloablly so it can be run in your console if you h
 Next, build the production version of each PWA (not the server):
 
 ```bash
-$npm run build
+$ npm run build
 ```
 
 Finally, use **http-server** to run each PWA independently:
