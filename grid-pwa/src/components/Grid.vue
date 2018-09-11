@@ -11,7 +11,7 @@
     :gridReady='onGridReady'
     rowSelection='multiple'
   ></ag-grid-vue>
-  <button @click="removeQuickFilter">Clear Filter</button>
+  <button @click="removeFilter">Clear Filter</button>
   </div>
 </template>
 <script>
@@ -28,7 +28,7 @@ export default {
   },
   sockets: {
     connect: function() {
-      console.log("socket connected", this.sockets);
+      console.log("socket connected");
       this.$options.sockets.filterByDate = filter => {
         console.log("filter", filter);
         this.setQuickFilter(filter.data);
@@ -45,19 +45,20 @@ export default {
         console.log("filter", filter);
         this.setQuickFilter(filter.data);
       };
-      this.$options.sockits.filterByDateAndSeverity = filter => {
-        let filterOne = this.gridApi.getFilterInstance("date");
-        let filterTwo = this.gridApi.getFilterInstance("severity");
+      this.$options.sockets.filterByDateAndSeverity = filter => {
+        console.log("filter", filter);
+        // let filterOne = this.gridApi.getFilterInstance("date");
+        // let filterTwo = this.gridApi.getFilterInstance("severity");
 
-        let modelOne = data.FilterInstance.setModel({
-          type: "contains",
-          filter: data.date //check this?
-        });
+        // let modelOne = data.FilterInstance.setModel({
+        //   type: "contains",
+        //   filter: data.date //check this?
+        // });
         // let modelTwo = data.FilterInstance.setModel({
         //   type: "contains",
         //   filter: data.severity //check this?
         // });
-        dataFilterInstance.onFilterChanged();
+        // dataFilterInstance.onFilterChanged();
       };
     }
   },
@@ -72,12 +73,16 @@ export default {
         this.gridApi.setQuickFilter(data);
       }
     },
-    removeQuickFilter() {
+    removeFilter() {
       if (this.gridApi) {
         this.gridApi.setQuickFilter(null);
         this.gridApi.setFilterModel(null); //reg filter
       }
     },
+    // setDataSeverityFilter() {
+    //   if (this.gridApi) {
+    //   }
+    // },
     prettyData() {
       return this.data.map(item => {
         let prettyItem = {};
@@ -93,7 +98,8 @@ export default {
       let timeA = date.split("T")[1].split(".");
       let hms = timeA[0].split(":").join(" ");
       return dateA[1] + "-" + dateA[2] + "-" + dateA[0] + " : " + hms;
-    }
+    },
+    dateAndSeverityFilter() {}
   }
 };
 </script>

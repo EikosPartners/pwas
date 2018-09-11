@@ -37,4 +37,8 @@ io.sockets.on("connection", function(socket) {
     console.log(data);
     io.emit("filterByRaisedBy", data);
   });
+  socket.on("filterByDateAndSeverity", function(data) {
+    console.log(data);
+    io.emit("filterByDateAndSeverity", data);
+  });
 });
