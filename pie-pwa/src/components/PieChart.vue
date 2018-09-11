@@ -1,22 +1,26 @@
 <template>
-<div style="height: 400px">
-  <pie-chart  :dataModel="prettyData" @jsc_click="filterByProject"/>
+  <div class="container">
+    <pie-chart
+      :dataModel="prettyData" 
+      @jsc_click="filterByProject"
+      title="Pie Chart"
+    ></pie-chart>
 </div>
 </template>
 
 <script>
-import { D3PieChart, StyleTogglerMixin } from 'jscatalyst';
-import { mapGetters, mapState } from 'vuex';
-import jslinq from 'jslinq';
+import { D3PieChart, StyleTogglerMixin } from "jscatalyst";
+import { mapGetters, mapState } from "vuex";
+import jslinq from "jslinq";
 
 export default {
-  name: 'PieChart',
+  name: "PieChart",
   components: {
     pieChart: D3PieChart
   },
   computed: {
-    ...mapState(['color']),
-    ...mapGetters(['data']),
+    ...mapState(["color"]),
+    ...mapGetters(["data"]),
     prettyData() {
       const pieLinqData = new jslinq(this.data)
         .select(d => {
@@ -44,16 +48,16 @@ export default {
   methods: {
     filterByProject(data) {
       let filter = {};
-      filter.source = 'PieChart';
-      filter.dataSource = '/';
+      filter.source = "PieChart";
+      filter.dataSource = "/";
       filter.data = data.data.label;
       console.log(filter);
-      this.$socket.emit('filterByProject', filter);
+      this.$socket.emit("filterByProject", filter);
     }
   },
   sockets: {
     connect: function() {
-      console.log('socket connected');
+      console.log("socket connected");
     }
   },
   mixins: [StyleTogglerMixin],
@@ -72,7 +76,10 @@ export default {
   }
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style >
+.container {
+  width: 90%;
+  padding: 0 5%;
+  height: 90vh;
+}
 </style>

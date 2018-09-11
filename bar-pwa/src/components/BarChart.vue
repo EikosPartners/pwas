@@ -3,7 +3,7 @@
     <bar-chart
       @jsc_click="filterByDate"
       :dataModel='barData'
-      title='D3 Bar Chart'
+      title='Number of Tickets by Date'
       xaxisLabel="Date"
       yaxisLabel="Number of Tickets"
       xAxisAngle="0"
