@@ -5,33 +5,32 @@
 </template>
 
 <script>
-import { D3LineChart, D3HeatMap } from "jscatalyst";
-import { mapGetters } from "vuex";
+import { D3LineChart, StyleTogglerMixin } from 'jscatalyst';
+import { mapGetters } from 'vuex';
 
 export default {
-  name: "LineChart",
+  name: 'LineChart',
   components: {
-    lineChart: D3LineChart,
-    heatMap: D3HeatMap
+    lineChart: D3LineChart
   },
   computed: {
-    ...mapGetters(["dataDV"])
+    ...mapGetters(['dataDV'])
   },
   sockets: {
     connect: function() {
-      console.log("socket connected");
+      console.log('socket connected');
     }
   },
   methods: {
     filterByDate(data) {
       let filter = {};
-      filter.source = "lineChart";
-      filter.dataSource = "/";
+      filter.source = 'lineChart';
+      filter.dataSource = '/';
       filter.data = this.formatDate(data.date);
       this.emitFilter(filter);
     },
     emitFilter: function(data) {
-      this.$socket.emit("filterByDate", data);
+      this.$socket.emit('filterByDate', data);
     },
     formatDate(dateObj) {
       let date = new Date(dateObj);
@@ -39,16 +38,24 @@ export default {
       let day = date.getDate();
       let year = date.getFullYear();
       if (day < 10) {
-        day = "0" + day;
+        day = '0' + day;
       }
       if (month < 10) {
-        month = "0" + month;
+        month = '0' + month;
       }
       return `${month}-${day}-${year}`;
+    }
+  },
+  mixins: [StyleTogglerMixin],
+  created() {
+    this.$store.commit('changeColor', 'Blue');
+    console.log(this.$store.state.themeMod);
+    if (this.$store.state.themeMod) {
+      this.chooseTheme(this.$store.state.themeMod.colorTheme);
     }
   }
 };
 </script>
-
+ 
 <style>
 </style>

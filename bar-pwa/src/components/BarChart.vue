@@ -59,6 +59,14 @@ export default {
       });
       return groupedData;
     }
+  },
+  mixins: [StyleTogglerMixin],
+  created() {
+    this.$store.commit('changeColor', 'Blue');
+    console.log(this.$store.state.themeMod);
+    if (this.$store.state.themeMod) {
+      this.chooseTheme(this.$store.state.themeMod.colorTheme);
+    }
   }
 };
 </script>
