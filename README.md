@@ -6,6 +6,8 @@ PWA's separation of UI's into micro applications
 
 [Setup](https://github.com/EikosPartners/pwas/blob/master/README.md#setup)
 
+[Testing](https://github.com/EikosPartners/pwas/blob/master/README.md#testing)
+
 [PWAs](https://github.com/EikosPartners/pwas/blob/master/README.md#pwas)
 
 [Dev Build](https://github.com/EikosPartners/pwas/blob/master/README.md#dev-build)
@@ -58,6 +60,20 @@ $ cd heat-pwa
 $ npm update
 ```
 
+# Testing
+
+To run tests on each PWA from the root folder:
+
+```bash
+$ npm run test-all
+```
+
+To run tests on a specific PWA from the root folder:
+
+
+```bash
+$ npm run test-heat-pwa
+```
 
 # PWAs
 
