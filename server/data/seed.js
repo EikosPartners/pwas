@@ -21,8 +21,8 @@ const projectNames = [
 const userIds = [1034, 4532, 5464, 6787, 4575, 2324, 3465, 6756, 7887, 6354];
 
 function randomDate() {
-  let year = 2018;
-  let month = getRandomInt(1, 2);
+  let year = getRandomInt(2016, 2018);
+  let month = getRandomInt(1, 12);
   let day = getRandomInt(1, 27);
   let hour = getRandomInt(0, 24);
   let minute = getRandomInt(0, 60);
