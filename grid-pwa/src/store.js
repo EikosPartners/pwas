@@ -6,17 +6,26 @@ Vue.use(Vuex);
 
 const state = {
   data: [],
-  columns: []
+  columns: [],
+  currentFilter: "No Filter"
 };
 
 export const getters = {
   data: state => state.data,
-  columns: state => state.columns
+  columns: state => state.columns,
+  currentFilter: state => state.currentFilter
 };
 
 export const mutations = {
   addData(state, data) {
     state.data = data;
+  },
+  setCurrentFilter(state, data) {
+    if (data) {
+      state.currentFilter = data;
+    } else {
+      state.currentFilter = "No Filter";
+    }
   },
   generateColumns(state, data) {
     if (data.length > 0) {

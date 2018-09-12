@@ -2,6 +2,7 @@
 <div class="container">
   <div class="header">
     <span>Grid</span>
+    <span class="current-filter">{{currentFilter}}</span>
     <button @click="removeFilter">Clear Filter</button>
     </div>
   <ag-grid-vue
@@ -17,7 +18,7 @@
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 import { AgGridVue } from "ag-grid-vue";
 
 export default {
@@ -26,29 +27,41 @@ export default {
     AgGridVue
   },
   computed: {
-    ...mapGetters(["data", "columns"])
+    ...mapGetters(["data", "columns", "currentFilter"])
   },
   sockets: {
     connect: function() {
-      console.log("socket connected");
       this.$options.sockets.filterByDate = filter => {
         console.log("filter", filter);
+        this.removeFilter();
         this.setQuickFilter(filter.data);
+        let source = this.formatSource(filter.source);
+        this.setCurrentFilter(source);
       };
       this.$options.sockets.filterByProject = filter => {
         console.log("filter", filter);
+        this.removeFilter();
         this.setQuickFilter(filter.data);
+        let source = this.formatSource(filter.source);
+        this.setCurrentFilter(source);
       };
       this.$options.sockets.filterBySeverity = filter => {
         console.log("filter", filter);
+        this.removeFilter();
         this.setQuickFilter(filter.data);
+        let source = this.formatSource(filter.source);
+        this.setCurrentFilter(source);
       };
       this.$options.sockets.filterByRaisedBy = filter => {
         console.log("filter", filter);
+        this.removeFilter();
         this.setQuickFilter(filter.data);
+        let source = this.formatSource(filter.source);
+        this.setCurrentFilter(source);
       };
       this.$options.sockets.filterByDateAndSeverity = filter => {
         console.log("filter", filter);
+        this.removeFilter();
         let filterInstanceOne = this.gridApi.getFilterInstance("date");
         let filterInstanceTwo = this.gridApi.getFilterInstance("severity");
 
@@ -62,10 +75,13 @@ export default {
         });
         filterInstanceOne.onFilterChanged();
         filterInstanceTwo.onFilterChanged();
+        let source = this.formatSource(filter.source);
+        this.setCurrentFilter(source);
       };
     }
   },
   methods: {
+    ...mapMutations(["setCurrentFilter"]),
     onGridReady(params) {
       this.gridApi = params.api;
       this.columnApi = params.columnApi;
@@ -76,6 +92,7 @@ export default {
     },
     setQuickFilter(data) {
       if (this.gridApi) {
+        console.log(data);
         this.gridApi.setQuickFilter(data);
       }
     },
@@ -83,6 +100,7 @@ export default {
       if (this.gridApi) {
         this.gridApi.setQuickFilter(null);
         this.gridApi.setFilterModel(null);
+        this.setCurrentFilter(null);
       }
     },
     prettyData() {
@@ -100,6 +118,10 @@ export default {
       let timeA = date.split("T")[1].split(".");
       let hms = timeA[0].split(":").join(" ");
       return dateA[1] + "-" + dateA[2] + "-" + dateA[0] + " : " + hms;
+    },
+    formatSource(sourceApp) {
+      let withSpaces = sourceApp.replace(/([A-Z])/g, " $1");
+      return withSpaces.charAt(0).toUpperCase() + withSpaces.slice(1);
     }
   }
 };
@@ -118,6 +140,11 @@ export default {
   width: 100%;
   height: 95vh;
   overflow: hidden;
+}
+
+.current-filter {
+  padding: 0 0 0 20rem;
+  font-size: 0.6em;
 }
 
 .grid {
