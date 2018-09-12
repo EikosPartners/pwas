@@ -64,7 +64,7 @@ export default {
   mixins: [StyleTogglerMixin],
   watch: {
     color(newData) {
-      console.log(this.color);
+      console.log(newData);
 
       if (newData) {
         this.$store.commit(this.color.action, this.color.color);

@@ -1,6 +1,7 @@
 <template>
 <div class="container">
    <heat-map
+      v-if="themeColorsComp.length > 0"
       @jsc_click="filterByDate"
       :dataModel='heatData'
       title='Number of Tickets by Date'
@@ -29,6 +30,9 @@ export default {
         heatData.push(dataObj);
       }
       return heatData;
+    },
+    themeColorsComp() {
+      return this.$store.state.themeMod.themeColors;
     }
   },
   sockets: {
@@ -65,6 +69,13 @@ export default {
     }
   },
   mixins: [StyleTogglerMixin],
+  created() {
+    console.log(this.themeColorsComp);
+    // this.$store.commit('changeColor', 'Red');
+    // if (this.$store.state.themeMod) {
+    //   this.chooseTheme(this.$store.state.themeMod.colorTheme);
+    // }
+  },
   watch: {
     color(newData) {
       if (newData) {
@@ -73,6 +84,9 @@ export default {
           this.chooseTheme(this.$store.state.themeMod.colorTheme);
         }
       }
+    },
+    themeColorsComp(well) {
+      this.draw;
     }
   }
 };
