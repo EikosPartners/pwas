@@ -5,16 +5,21 @@ import axios from 'axios';
 Vue.use(Vuex);
 
 const state = {
-  data: []
+  data: [],
+  color: null
 };
 
 export const getters = {
-  data: state => state.data
+  data: state => state.data,
+  color: state => state.color
 };
 
 export const mutations = {
   addData(state, data) {
     state.data = data;
+  },
+  addColor(state, data) {
+    state.color = data;
   }
 };
 
@@ -28,7 +33,7 @@ export const actions = {
     console.log('here');
     axios.get('http://localhost:9000/color').then(response => {
       console.log(response);
-      commit(response.action, response.color);
+      commit('addColor', response.data);
     });
   }
 };

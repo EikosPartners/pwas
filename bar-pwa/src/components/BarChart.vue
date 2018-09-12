@@ -6,12 +6,12 @@
       title='Number of Tickets by Date'
       xaxisLabel="Date"
       yaxisLabel="Number of Tickets"
-      :xAxisAngle="0"
+      :xAxisAngle='0'
     ></bar-chart>
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import { D3BarChart, StyleTogglerMixin } from "jscatalyst";
 
 export default {
@@ -21,6 +21,7 @@ export default {
   },
   computed: {
     ...mapGetters(["data", "height"]),
+    ...mapState(["color"]),
     barData() {
       const barData = [];
       let sorted = this.sortData(this.data);
@@ -63,11 +64,15 @@ export default {
     }
   },
   mixins: [StyleTogglerMixin],
-  created() {
-    this.$store.commit("changeColor", "Blue");
-    console.log(this.$store.state.themeMod);
-    if (this.$store.state.themeMod) {
-      this.chooseTheme(this.$store.state.themeMod.colorTheme);
+  watch: {
+    color(newData) {
+      if (newData) {
+        this.$store.commit(this.color.action, this.color.color);
+        console.log(this.$store.state.themeMod);
+        if (this.$store.state.themeMod) {
+          this.chooseTheme(this.$store.state.themeMod.colorTheme);
+        }
+      }
     }
   }
 };
