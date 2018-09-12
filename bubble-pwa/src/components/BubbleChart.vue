@@ -66,6 +66,7 @@ export default {
       filter.source = "BubbleChart";
       filter.dataSource = "/";
       filter.data = { date: this.parseDate(data.x), severity: data.y };
+      filter.time = new Date();
       console.log(filter);
       this.$socket.emit("filterByDateAndSeverity", filter);
     },

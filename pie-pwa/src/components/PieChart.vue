@@ -51,6 +51,7 @@ export default {
       filter.source = "PieChart";
       filter.dataSource = "/";
       filter.data = data.data.label;
+      filter.time = new Date();
       console.log(filter);
       this.$socket.emit("filterByProject", filter);
     }

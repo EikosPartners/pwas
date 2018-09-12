@@ -4,6 +4,10 @@
     <ul v-if="data.length > 0">
       <li v-for="(msg, i) in data" :key = "i" class="log-item">
         <span class="outer-span">
+          <span>Sent:</span>
+          {{parseDate(msg.time)}}
+        </span>
+        <span class="outer-span">
           <span>Source App:</span>
           {{formatSource(msg.source)}}
         </span>
@@ -40,6 +44,12 @@ export default {
     formatSource(sourceApp) {
       let withSpaces = sourceApp.replace(/([A-Z])/g, " $1");
       return withSpaces.charAt(0).toUpperCase() + withSpaces.slice(1);
+    },
+    parseDate(date) {
+      let dateA = date.split("T")[0].split("-");
+      let timeA = date.split("T")[1].split(".");
+      let hms = timeA[0].split(":").join(" ");
+      return dateA[1] + "-" + dateA[2] + "-" + dateA[0] + " : " + hms;
     }
   },
   sockets: {
@@ -74,13 +84,14 @@ export default {
 .header {
   background: rgb(66, 184, 221);
   color: white;
-  font-size: 1.5rem;
+  font-size: 1.5em;
   padding: 1rem;
 }
 
 .log-item {
   border-bottom: 0.1rem dotted grey;
   margin-bottom: 0.5rem;
+  font-size: 0.7rem;
 }
 
 ul,
@@ -107,6 +118,7 @@ span span {
 .outer-span {
   display: flex;
   justify-content: flex-start;
+  width: 25%;
 }
 
 .container {

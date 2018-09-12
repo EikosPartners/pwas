@@ -41,6 +41,7 @@ export default {
       filter.source = "heatMap";
       filter.dataSource = "/";
       filter.data = this.parseDate(data.date);
+      filter.time = new Date();
       console.log(filter);
       this.$socket.emit("filterByDate", filter);
     },

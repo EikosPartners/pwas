@@ -42,6 +42,7 @@ export default {
       filter.source = "barChart";
       filter.dataSource = "/";
       filter.data = data.x;
+      filter.time = new Date();
       this.$socket.emit("filterByDate", filter);
     },
     parseDate(date) {

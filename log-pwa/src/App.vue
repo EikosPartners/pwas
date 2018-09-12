@@ -9,6 +9,14 @@
 
 
 <style>
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  font-size: calc(0.3em + 1vw);
+}
+
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

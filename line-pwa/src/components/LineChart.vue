@@ -31,6 +31,8 @@ export default {
       filter.source = "lineChart";
       filter.dataSource = "/";
       filter.data = this.formatDate(data.date);
+      filter.time = new Date();
+      console.log(filter);
       this.emitFilter(filter);
     },
     emitFilter: function(data) {
