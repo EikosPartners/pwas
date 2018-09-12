@@ -1,30 +1,32 @@
 <template>
   <div class="container">
     <div class="header">Message Log</div>
-    <ul v-if="data.length > 0">
-      <li v-for="(msg, i) in data" :key = "i" class="log-item">
-        <span class="outer-span">
-          <span>Sent:</span>
-          {{parseDate(msg.time)}}
-        </span>
-        <span class="outer-span">
-          <span>Source App:</span>
-          {{formatSource(msg.source)}}
-        </span>
-        <span v-if="typeof msg.data === 'object' " class="outer-span">
-          <span>Filtered By:</span>
-          {{msg.data.date}} & {{msg.data.severity}}
-        </span>
-        <span v-else class="outer-span">
-          <span>Filtered By:</span>
-          {{msg.data}}
-        </span>
-        <span class="outer-span">
-          <span>Data Source:</span>
-          "{{msg.dataSource}}"
-        </span>
-      </li>
-    </ul>
+      <ul v-if="data.length > 0">
+        <transition name="bluein">
+          <li v-for="(msg, i) in data" :key = "i" class="log-item">
+            <span class="outer-span">
+              <span>Sent:</span>
+              {{parseDate(msg.time)}}
+            </span>
+            <span class="outer-span">
+              <span>Source App:</span>
+              {{formatSource(msg.source)}}
+            </span>
+            <span v-if="typeof msg.data === 'object' " class="outer-span">
+              <span>Filtered By:</span>
+              {{msg.data.date}} & {{msg.data.severity}}
+            </span>
+            <span v-else class="outer-span">
+              <span>Filtered By:</span>
+              {{msg.data}}
+            </span>
+            <span class="outer-span">
+              <span>Data Source:</span>
+              "{{msg.dataSource}}"
+            </span>
+          </li>
+        </transition>
+      </ul>
     <ul v-else>
       <li>Log Empty</li>
     </ul>
@@ -49,7 +51,8 @@ export default {
       let dateA = date.split("T")[0].split("-");
       let timeA = date.split("T")[1].split(".");
       let hms = timeA[0].split(":").join(" ");
-      return dateA[1] + "-" + dateA[2] + "-" + dateA[0] + " : " + hms;
+      // return dateA[1] + "-" + dateA[2] + "-" + dateA[0] + " : " + hms;
+      return timeA[0];
     }
   },
   sockets: {
@@ -92,6 +95,18 @@ export default {
   border-bottom: 0.1rem dotted grey;
   margin-bottom: 0.5rem;
   font-size: 0.7rem;
+  animation-delay: 1s;
+}
+
+.bluein-enter-active {
+  transition: background-color 1s ease;
+}
+.bluein-v-enter {
+  background-color: rgba(66, 184, 221, 1);
+}
+
+.bluein-v-enter-to {
+  background-color: white;
 }
 
 ul,
