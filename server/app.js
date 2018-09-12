@@ -41,4 +41,9 @@ io.sockets.on("connection", function(socket) {
     console.log(data);
     io.emit("filterByDateAndSeverity", data);
   });
+
+  socket.on("refreshData", function(data) {
+    console.log(data);
+    io.emit("refreshData", data);
+  });
 });
