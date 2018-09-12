@@ -14,8 +14,11 @@ app.use("/", index);
 let server = http.createServer(app);
 
 server.listen(9000);
-
 var io = require("socket.io").listen(server);
+setInterval(function() {
+  io.emit("refresh");
+}, 20500);
+
 var connectCount = 0;
 io.sockets.on("connection", function(socket) {
   //send data to clienzt
@@ -41,9 +44,5 @@ io.sockets.on("connection", function(socket) {
     console.log(data);
     io.emit("filterByDateAndSeverity", data);
   });
-
-  socket.on("refreshData", function(data) {
-    console.log(data);
-    io.emit("refreshData", data);
-  });
 });
+module.exports = server;

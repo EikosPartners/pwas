@@ -1,4 +1,4 @@
-let jslinq = require('jslinq')
+let jslinq = require("jslinq");
 
 // {date: DateObj, severity: int 1-5, raisedBy: int, project: string}
 function getRandomInt(min, max) {
@@ -58,7 +58,16 @@ exports.generateDataSet = length => {
     dataSet.push(generateDataObj());
   }
 
-  let sorted = jslinq(dataSet).orderBy( i => i.date).toList()
+  let sorted = jslinq(dataSet)
+    .orderBy(i => i.date)
+    .toList();
 
   return sorted;
+};
+
+exports.updateDataSet = data => {
+  data.splice(0, 100);
+  let newData = exports.generateDataSet(100);
+  data = data.concat(newData);
+  return data;
 };

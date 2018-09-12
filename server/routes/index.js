@@ -3,13 +3,12 @@ let express = require("express");
 let seed = require("../data/seed.js");
 let router = express.Router();
 
-let data = seed.generateDataSet(500);
 let colorObj = { action: "changeColor", color: "Blue" };
-let refreshTime = 360000;
+
+let data = seed.generateDataSet(500);
+let refreshTime = 20000;
 setInterval(function() {
-  data.splice(0, 100);
-  let newData = seed.generateDataSet(100);
-  data = data.concat(newData);
+  data = seed.updateDataSet(data);
 }, refreshTime);
 
 router.get("/", (req, res) => {

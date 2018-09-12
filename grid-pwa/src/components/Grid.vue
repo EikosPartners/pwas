@@ -31,6 +31,9 @@ export default {
   },
   sockets: {
     connect: function() {
+      this.$options.sockets.refresh = () => {
+        console.log("refresh!");
+      };
       this.$options.sockets.filterByDate = filter => {
         console.log("filter", filter);
         this.removeFilter();
