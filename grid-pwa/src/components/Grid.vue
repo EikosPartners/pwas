@@ -92,7 +92,6 @@ export default {
     },
     setQuickFilter(data) {
       if (this.gridApi) {
-        console.log(data);
         this.gridApi.setQuickFilter(data);
       }
     },
