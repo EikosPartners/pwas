@@ -6,7 +6,7 @@
       title='Number of Tickets by Date'
       xaxisLabel="Date"
       yaxisLabel="Number of Tickets"
-      xAxisAngle="0"
+      :xAxisAngle="0"
     ></bar-chart>
   </div>
 </template>
