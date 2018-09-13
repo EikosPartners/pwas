@@ -9,39 +9,35 @@
 </template>
 
 <script>
-import { D3LineChart, StyleTogglerMixin } from "jscatalyst";
-import { mapGetters, mapActions } from "vuex";
+import { D3LineChart, StyleTogglerMixin } from 'jscatalyst';
+import { mapGetters, mapState } from 'vuex';
 
 export default {
-  name: "LineChart",
+  name: 'LineChart',
   components: {
     lineChart: D3LineChart
   },
   computed: {
-    ...mapGetters(["dataDV"])
+    ...mapState(['color']),
+    ...mapGetters(['dataDV'])
   },
   sockets: {
     connect: function() {
-      console.log("socket connected");
-      this.$options.sockets.refresh = () => {
-        console.log("refresh!");
-        this.updateData();
-      };
+      console.log('socket connected');
     }
   },
   methods: {
-    ...mapActions(["updateData"]),
     filterByDate(data) {
       let filter = {};
-      filter.source = "lineChart";
-      filter.dataSource = "/";
+      filter.source = 'lineChart';
+      filter.dataSource = '/';
       filter.data = this.formatDate(data.date);
       filter.time = new Date();
       console.log(filter);
       this.emitFilter(filter);
     },
     emitFilter: function(data) {
-      this.$socket.emit("filterByDate", data);
+      this.$socket.emit('filterByDate', data);
     },
     formatDate(dateObj) {
       let date = new Date(dateObj);
@@ -49,20 +45,23 @@ export default {
       let day = date.getDate();
       let year = date.getFullYear();
       if (day < 10) {
-        day = "0" + day;
+        day = '0' + day;
       }
       if (month < 10) {
-        month = "0" + month;
+        month = '0' + month;
       }
       return `${month}-${day}-${year}`;
     }
   },
   mixins: [StyleTogglerMixin],
-  created() {
-    this.$store.commit("changeColor", "Blue");
-    console.log(this.$store.state.themeMod);
-    if (this.$store.state.themeMod) {
-      this.chooseTheme(this.$store.state.themeMod.colorTheme);
+  watch: {
+    color(newData) {
+      if (newData) {
+        this.$store.commit(this.color.action, this.color.color);
+        if (this.$store.state.themeMod) {
+          this.chooseTheme(this.$store.state.themeMod.colorTheme);
+        }
+      }
     }
   }
 };

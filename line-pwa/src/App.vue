@@ -5,21 +5,22 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions } from 'vuex';
 
 export default {
   created() {
-    this.initializeData();
+    this.fetchData();
+    this.fetchColor();
   },
   methods: {
-    ...mapActions(["initializeData"])
+    ...mapActions(['fetchData', 'fetchColor'])
   }
 };
 </script>
 
 <style>
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
