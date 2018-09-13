@@ -31,6 +31,7 @@ export const mutations = {
     if (data.length > 0) {
       const keys = Object.keys(data[0]);
       state.columns = keys.map(key => {
+        console.log(key);
         return { headerName: key, field: key };
       });
     } else {

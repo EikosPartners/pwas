@@ -26,7 +26,6 @@ export default {
     prettyData() {
       let bubbleData = new jslinq(this.data)
         .select(item => {
-          // console.log(item);
           let date = item.date.split("T")[0];
           return {
             date,
@@ -34,7 +33,6 @@ export default {
           };
         })
         .groupBy(i => {
-          // console.log(i);
           return i.date;
         })
         .groupBy(i => {
@@ -97,7 +95,6 @@ export default {
   mixins: [StyleTogglerMixin],
   created() {
     this.$store.commit("changeColor", "Pink");
-    console.log(this.$store.state.themeMod);
     if (this.$store.state.themeMod) {
       this.chooseTheme(this.$store.state.themeMod.colorTheme);
     }

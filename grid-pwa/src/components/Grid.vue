@@ -5,20 +5,22 @@
     <span class="current-filter">{{currentFilter}}</span>
     <button @click="removeFilter">Clear Filter</button>
     </div>
+    <button @click="testFun">Why</button>
   <ag-grid-vue
     id='Grid'
     class='ag-theme-balham grid'
     :columnDefs='columns'
-    :rowData='prettyData()'
-    :enableSorting='true'
-    :enableFilter='true'
+    :rowData='prettyData'
+    :enableSorting='trueVar'
+    :enableFilter='trueVar'
+    :onFilterChanged="testFun"
     :gridReady='onGridReady'
     rowSelection='multiple'
   ></ag-grid-vue>
   </div>
 </template>
 <script>
-import { mapGetters, mapMutations, mapActions } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 import { AgGridVue } from "ag-grid-vue";
 
 export default {
@@ -27,7 +29,22 @@ export default {
     AgGridVue
   },
   computed: {
-    ...mapGetters(["data", "columns", "currentFilter"])
+    ...mapState(["data", "columns", "currentFilter"]),
+    prettyData() {
+      return this.data.map(item => {
+        let prettyItem = {};
+        prettyItem.date = this.parseDate(item.date);
+        prettyItem.project = item.project;
+        prettyItem.raisedBy = item.raisedBy;
+        prettyItem.severity = item.severity;
+        return prettyItem;
+      });
+    }
+  },
+  data() {
+    return {
+      trueVar: true
+    };
   },
   sockets: {
     connect: function() {
@@ -67,27 +84,29 @@ export default {
       this.$options.sockets.filterByDateAndSeverity = filter => {
         console.log("filter", filter);
         this.removeFilter();
-        let filterInstanceOne = this.gridApi.getFilterInstance("date");
-        let filterInstanceTwo = this.gridApi.getFilterInstance("severity");
-
-        let modelOne = filterInstanceOne.setModel({
-          type: "contains",
-          filter: filter.data.date
-        });
-        let modelTwo = filterInstanceTwo.setModel({
-          type: "contains",
-          filter: filter.data.severity
-        });
-        filterInstanceOne.onFilterChanged();
-        filterInstanceTwo.onFilterChanged();
+        let filterObject = {
+          date: {
+            type: "contains",
+            filter: `${filter.data.date}`
+          },
+          severity: {
+            type: "contains",
+            filter: `${filter.data.severity}`
+          }
+        };
+        this.gridApi.setFilterModel(filterObject);
+        console.log(this.gridApi.rowModel.rowsToDisplay);
         let source = this.formatSource(filter.source);
-        this.setCurrentFilter(source);
+        this.testFun(source);
       };
     }
   },
   methods: {
     ...mapMutations(["setCurrentFilter"]),
     ...mapActions(["updateData"]),
+    testFun(thing) {
+      this.setCurrentFilter(thing);
+    },
     onGridReady(params) {
       this.gridApi = params.api;
       this.columnApi = params.columnApi;
@@ -95,6 +114,7 @@ export default {
       window.addEventListener("resize", () => {
         this.gridApi.sizeColumnsToFit();
       });
+      this.gridApi.onFilterChanged(this.testFun);
     },
     setQuickFilter(data) {
       if (this.gridApi) {
@@ -108,16 +128,7 @@ export default {
         this.setCurrentFilter(null);
       }
     },
-    prettyData() {
-      return this.data.map(item => {
-        let prettyItem = {};
-        prettyItem.date = this.parseDate(item.date);
-        prettyItem.project = item.project;
-        prettyItem.raisedBy = item.raisedBy;
-        prettyItem.severity = item.severity;
-        return prettyItem;
-      });
-    },
+
     parseDate(date) {
       let dateA = date.split("T")[0].split("-");
       let timeA = date.split("T")[1].split(".");
@@ -148,7 +159,7 @@ export default {
 }
 
 .current-filter {
-  padding: 0 0 0 20rem;
+  padding: 0 0 0 20em;
   font-size: 0.6em;
 }
 
