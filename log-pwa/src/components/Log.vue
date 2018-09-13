@@ -1,8 +1,7 @@
 <template>
   <div class="container">
     <div class="header">Message Log</div>
-      <ul v-if="data.length > 0">
-        <transition name="bluein">
+        <transition-group appear tag="ul" name="bluein" v-if="data.length > 0">
           <li v-for="(msg, i) in data" :key = "i" class="log-item">
             <span class="outer-span">
               <span>Sent:</span>
@@ -25,8 +24,7 @@
               "{{msg.dataSource}}"
             </span>
           </li>
-        </transition>
-      </ul>
+        </transition-group>
     <ul v-else>
       <li>Log Empty</li>
     </ul>
@@ -87,26 +85,26 @@ export default {
 .header {
   background: rgb(66, 184, 221);
   color: white;
-  font-size: 1.5em;
+  font-size: 1.5rem;
   padding: 1rem;
 }
 
 .log-item {
   border-bottom: 0.1rem dotted grey;
-  margin-bottom: 0.5rem;
+  padding-top: 0.5rem;
   font-size: 0.7rem;
-  animation-delay: 1s;
+  background-color: rgba(66, 184, 221, 0);
 }
 
 .bluein-enter-active {
-  transition: background-color 1s ease;
-}
-.bluein-v-enter {
-  background-color: rgba(66, 184, 221, 1);
+  transition: background-color 1s linear;
+  background-color: rgba(66, 184, 221, 0.8);
 }
 
-.bluein-v-enter-to {
-  background-color: white;
+ul {
+  display: flex;
+  flex-direction: column-reverse;
+  padding-top: 0;
 }
 
 ul,

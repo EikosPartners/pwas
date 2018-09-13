@@ -5,7 +5,6 @@
     <span class="current-filter">{{currentFilter}}</span>
     <button @click="removeFilter">Clear Filter</button>
     </div>
-    <button @click="testFun">Why</button>
   <ag-grid-vue
     id='Grid'
     class='ag-theme-balham grid'
@@ -104,9 +103,6 @@ export default {
   methods: {
     ...mapMutations(["setCurrentFilter"]),
     ...mapActions(["updateData"]),
-    testFun(thing) {
-      this.setCurrentFilter(thing);
-    },
     onGridReady(params) {
       this.gridApi = params.api;
       this.columnApi = params.columnApi;

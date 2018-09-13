@@ -9,7 +9,7 @@ const state = {
 
 export const mutations = {
   addData(state, payload) {
-    state.data.unshift(payload);
+    state.data.push(payload);
   }
 };
 
