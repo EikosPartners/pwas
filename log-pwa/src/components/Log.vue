@@ -93,12 +93,19 @@ export default {
   border-bottom: 0.1rem dotted grey;
   padding-top: 0.5rem;
   font-size: 0.7rem;
-  background-color: rgba(66, 184, 221, 0);
+  background-color: white;
 }
 
+.bluein-enter {
+  background-color: rgba(66, 184, 221, 0.5);
+}
 .bluein-enter-active {
-  transition: background-color 1s linear;
-  background-color: rgba(66, 184, 221, 0.8);
+  transition: background-color 1.5s ease-in-out;
+  background-color: rgba(66, 184, 221, 0.5);
+}
+
+.bluein-enter-to {
+  background-color: white;
 }
 
 ul {
