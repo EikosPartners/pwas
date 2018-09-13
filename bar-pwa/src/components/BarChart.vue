@@ -11,7 +11,7 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapGetters, mapState, mapActions } from "vuex";
 import { D3BarChart, StyleTogglerMixin } from "jscatalyst";
 
 export default {
@@ -35,9 +35,14 @@ export default {
   sockets: {
     connect: function() {
       console.log("socket connected");
+      this.$options.sockets.refresh = () => {
+        console.log("refresh!");
+        this.updateData();
+      };
     }
   },
   methods: {
+    ...mapActions(["updateData"]),
     filterByDate(data) {
       let filter = {};
       filter.source = "barChart";

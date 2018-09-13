@@ -14,15 +14,25 @@ export const getters = {
 };
 
 export const mutations = {
-  addData(state, data) {
+  initializeData(state, data) {
     state.data = data;
+  },
+  refreshData(state, data) {
+    const oldData = state.data;
+    oldData.splice(0, 100);
+    state.data = oldData.concat(data);
   }
 };
 
 export const actions = {
   fetchData({ commit }) {
     axios.get("http://localhost:9000").then(response => {
-      commit("addData", response.data);
+      commit("initializeData", response.data);
+    });
+  },
+  updateData({ commit }) {
+    axios.get("http://localhost:9000/update").then(response => {
+      commit("refreshData", response.data);
     });
   }
 };

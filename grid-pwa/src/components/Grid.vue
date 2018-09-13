@@ -18,7 +18,7 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapMutations } from "vuex";
+import { mapGetters, mapMutations, mapActions } from "vuex";
 import { AgGridVue } from "ag-grid-vue";
 
 export default {
@@ -31,8 +31,10 @@ export default {
   },
   sockets: {
     connect: function() {
+      console.log("socket connected");
       this.$options.sockets.refresh = () => {
         console.log("refresh!");
+        this.updateData();
       };
       this.$options.sockets.filterByDate = filter => {
         console.log("filter", filter);
@@ -85,6 +87,7 @@ export default {
   },
   methods: {
     ...mapMutations(["setCurrentFilter"]),
+    ...mapActions(["updateData"]),
     onGridReady(params) {
       this.gridApi = params.api;
       this.columnApi = params.columnApi;

@@ -13,7 +13,7 @@
 
 <script>
 import { D3BubbleChart, StyleTogglerMixin } from "jscatalyst";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import jslinq from "jslinq";
 
 export default {
@@ -61,6 +61,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(["updateData"]),
     filterByDateAndSeverity(data) {
       let filter = {};
       filter.source = "BubbleChart";
@@ -87,6 +88,10 @@ export default {
   sockets: {
     connect: function() {
       console.log("socket connected");
+      this.$options.sockets.refresh = () => {
+        console.log("refresh!");
+        this.updateData();
+      };
     }
   },
   mixins: [StyleTogglerMixin],

@@ -10,7 +10,7 @@
 
 <script>
 import { D3LineChart, StyleTogglerMixin } from "jscatalyst";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "LineChart",
@@ -23,9 +23,14 @@ export default {
   sockets: {
     connect: function() {
       console.log("socket connected");
+      this.$options.sockets.refresh = () => {
+        console.log("refresh!");
+        this.updateData();
+      };
     }
   },
   methods: {
+    ...mapActions(["updateData"]),
     filterByDate(data) {
       let filter = {};
       filter.source = "lineChart";

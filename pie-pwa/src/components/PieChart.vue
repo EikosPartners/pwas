@@ -9,18 +9,18 @@
 </template>
 
 <script>
-import { D3PieChart, StyleTogglerMixin } from 'jscatalyst';
-import { mapGetters, mapState } from 'vuex';
-import jslinq from 'jslinq';
+import { D3PieChart, StyleTogglerMixin } from "jscatalyst";
+import { mapGetters, mapState, mapActions } from "vuex";
+import jslinq from "jslinq";
 
 export default {
-  name: 'PieChart',
+  name: "PieChart",
   components: {
     pieChart: D3PieChart
   },
   computed: {
-    ...mapState(['color']),
-    ...mapGetters(['data']),
+    ...mapState(["color"]),
+    ...mapGetters(["data"]),
     prettyData() {
       const pieLinqData = new jslinq(this.data)
         .select(d => {
@@ -46,19 +46,24 @@ export default {
     }
   },
   methods: {
+    ...mapActions(["updateData"]),
     filterByProject(data) {
       let filter = {};
-      filter.source = 'PieChart';
-      filter.dataSource = '/';
+      filter.source = "PieChart";
+      filter.dataSource = "/";
       filter.data = data.data.label;
       filter.time = new Date();
       console.log(filter);
-      this.$socket.emit('filterByProject', filter);
+      this.$socket.emit("filterByProject", filter);
     }
   },
   sockets: {
     connect: function() {
-      console.log('socket connected');
+      console.log("socket connected");
+      this.$options.sockets.refresh = () => {
+        console.log("refresh!");
+        this.updateData();
+      };
     }
   },
   mixins: [StyleTogglerMixin],
