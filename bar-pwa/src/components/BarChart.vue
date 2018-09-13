@@ -2,8 +2,8 @@
   <div class="container">
     <bar-chart
       @jsc_click="filterByDate"
-      :dataModel='barData'
-      title='Number of Tickets by Date'
+      :dataModel='prettyData'
+      title='Number of Tickets by Month'
       xaxisLabel="Date"
       yaxisLabel="Number of Tickets"
       :xAxisAngle='0'
@@ -11,17 +11,18 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapState, mapActions } from "vuex";
-import { D3BarChart, StyleTogglerMixin } from "jscatalyst";
+import { mapGetters, mapState, mapActions } from 'vuex';
+import { D3BarChart, StyleTogglerMixin } from 'jscatalyst';
+import jslinq from 'jslinq';
 
 export default {
-  name: "BarChart",
+  name: 'BarChart',
   components: {
     barChart: D3BarChart
   },
   computed: {
-    ...mapGetters(["data", "height"]),
-    ...mapState(["color"]),
+    ...mapGetters(['data', 'height']),
+    ...mapState(['color']),
     barData() {
       const barData = [];
       let sorted = this.sortData(this.data);
@@ -30,42 +31,80 @@ export default {
         barData.push(dataObj);
       }
       return barData;
+    },
+    prettyData() {
+      let barData = [];
+      let sorted = this.sortData(this.data);
+      for (let year in sorted) {
+        let oneYearData = [];
+        for (let month in sorted[year]) {
+          let date = month + '/' + year;
+          let dataObj = { x: date, y: sorted[year][month] };
+
+          oneYearData.push(dataObj);
+        }
+        oneYearData.sort((a, b) => {
+          let val1 = parseInt(a.x.split('/')[0]);
+          let val2 = parseInt(b.x.split('/')[0]);
+
+          return val1 - val2;
+        });
+
+        barData = barData.concat(oneYearData); //why no work???
+      }
+
+      return barData;
     }
   },
   sockets: {
     connect: function() {
-      console.log("socket connected");
+      console.log('socket connected');
       this.$options.sockets.refresh = () => {
-        console.log("refresh!");
+        console.log('refresh!');
         this.updateData();
       };
     }
   },
   methods: {
-    ...mapActions(["updateData"]),
+    ...mapActions(['updateData']),
     filterByDate(data) {
       let filter = {};
-      filter.source = "barChart";
-      filter.dataSource = "/";
+      filter.source = 'barChart';
+      filter.dataSource = '/';
       filter.data = data.x;
       filter.time = new Date();
-      this.$socket.emit("filterByDate", filter);
+      this.$socket.emit('filterByDate', filter);
     },
     parseDate(date) {
-      let dateA = date.split("T")[0].split("-");
-      return dateA[1] + "-" + dateA[2] + "-" + dateA[0];
+      let dateA = date.split('T')[0].split('-');
+      return dateA[1] + '-' + dateA[2] + '-' + dateA[0];
     },
     sortData(rawData) {
       const groupedData = {};
       rawData.forEach(item => {
         let date = this.parseDate(item.date);
-        if (Object.keys(groupedData).includes(date)) {
-          groupedData[date] += 1;
+        // console.log(date);
+        let year = this.parseYear(date);
+        let month = this.parseMonth(date);
+        if (Object.keys(groupedData).includes(year)) {
+          if (groupedData[year][month]) {
+            groupedData[year][month] += 1;
+          } else {
+            groupedData[year][month] = 1;
+          }
         } else {
-          groupedData[date] = 1;
+          groupedData[year] = {};
         }
       });
       return groupedData;
+    },
+    parseYear(date) {
+      let year = date.split('-')[2];
+      return year;
+    },
+    parseMonth(date) {
+      let month = date.split('-')[0];
+      return month;
     }
   },
   mixins: [StyleTogglerMixin],
@@ -73,7 +112,6 @@ export default {
     color(newData) {
       if (newData) {
         this.$store.commit(this.color.action, this.color.color);
-        console.log(this.$store.state.themeMod);
         if (this.$store.state.themeMod) {
           this.chooseTheme(this.$store.state.themeMod.colorTheme);
         }
