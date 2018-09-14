@@ -44,5 +44,9 @@ io.sockets.on("connection", function(socket) {
     console.log(data);
     io.emit("filterByDateAndSeverity", data);
   });
+  socket.on("filterByMonth", function(data) {
+    console.log(data);
+    io.emit("filterByMonth", data);
+  });
 });
 module.exports = server;

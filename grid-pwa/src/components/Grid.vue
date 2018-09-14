@@ -12,7 +12,6 @@
     :rowData='prettyData'
     :enableSorting='trueVar'
     :enableFilter='trueVar'
-    :onFilterChanged="testFun"
     :gridReady='onGridReady'
     rowSelection='multiple'
   ></ag-grid-vue>
@@ -94,9 +93,30 @@ export default {
           }
         };
         this.gridApi.setFilterModel(filterObject);
-        console.log(this.gridApi.rowModel.rowsToDisplay);
         let source = this.formatSource(filter.source);
-        this.testFun(source);
+        this.setCurrentFilter(source);
+      };
+      this.$options.sockets.filterByMonth = filter => {
+        console.log("filter", filter);
+        let month = filter.data.split("/")[0] + "-";
+        let year = "-" + filter.data.split("/")[1];
+        this.removeFilter();
+        let filterObject = {
+          date: {
+            condition1: {
+              type: "startsWith",
+              filter: month
+            },
+            condition2: {
+              type: "contains",
+              filter: year
+            },
+            operator: "AND"
+          }
+        };
+        this.gridApi.setFilterModel(filterObject);
+        let source = this.formatSource(filter.source);
+        this.setCurrentFilter(source);
       };
     }
   },
