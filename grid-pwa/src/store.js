@@ -30,6 +30,8 @@ export const mutations = {
   generateColumns(state, data) {
     if (data.length > 0) {
       const keys = Object.keys(data[0]);
+      const i = keys.indexOf("id");
+      keys.splice(i, 1);
       state.columns = keys.map(key => {
         return {
           headerName: key,
