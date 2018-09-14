@@ -35,6 +35,7 @@ export default {
         prettyItem.project = item.project;
         prettyItem.raisedBy = item.raisedBy;
         prettyItem.severity = item.severity;
+        prettyItem.id = item.id;
         return prettyItem;
       });
     }

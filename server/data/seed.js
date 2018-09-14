@@ -38,6 +38,8 @@ function randomElement(array) {
   return array[i];
 }
 
+let uniqueId = 1000;
+
 function generateDataObj() {
   let raisedBy = randomElement(userIds);
   let date = randomDate();
@@ -48,7 +50,8 @@ function generateDataObj() {
     date: date,
     raisedBy: raisedBy,
     project: project,
-    severity: severity
+    severity: severity,
+    id: uniqueId
   };
 }
 
@@ -56,6 +59,7 @@ exports.generateDataSet = length => {
   const dataSet = [];
   for (let i = 0; i < length; i++) {
     dataSet.push(generateDataObj());
+    uniqueId += 1;
   }
 
   let sorted = jslinq(dataSet)
