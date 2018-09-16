@@ -13,7 +13,7 @@
 <script>
 import { mapGetters, mapState, mapActions } from "vuex";
 import { D3HeatMap, StyleTogglerMixin } from "jscatalyst";
-import Messaging from './Messaging'
+import Messaging from '@/mixins/Messaging'
 
 export default {
   name: "HeatMap",
