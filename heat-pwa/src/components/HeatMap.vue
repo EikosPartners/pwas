@@ -13,6 +13,7 @@
 <script>
 import { mapGetters, mapState, mapActions } from "vuex";
 import { D3HeatMap, StyleTogglerMixin } from "jscatalyst";
+import Messaging from './Messaging'
 
 export default {
   name: "HeatMap",
@@ -53,7 +54,8 @@ export default {
       filter.data = this.parseDate(data.date);
       filter.time = new Date();
       console.log(filter);
-      this.$socket.emit("filterByDate", filter);
+
+      this.filter(filter)
     },
     parseDate(date) {
       const dateArray = date.split("-");
@@ -73,7 +75,7 @@ export default {
       return groupedData;
     }
   },
-  mixins: [StyleTogglerMixin],
+  mixins: [StyleTogglerMixin, Messaging],
   created() {
     console.log(this.themeColorsComp);
     // this.$store.commit('changeColor', 'Red');
