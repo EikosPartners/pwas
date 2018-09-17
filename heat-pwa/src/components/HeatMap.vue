@@ -8,6 +8,8 @@
       xaxis-label="date"
       yaxis-label="volume"
     ></heat-map>
+    <p>{{output}}</p>
+
   </div>
 </template>
 <script>
