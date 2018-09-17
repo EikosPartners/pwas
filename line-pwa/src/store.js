@@ -37,8 +37,11 @@ export const actions = {
   },
   fetchColor({ commit }) {
     axios.get('http://localhost:9000/color').then(res => {
-      commit('fetchColor', res.data);
+      commit('fetchColor', res.data.color);
     });
+  },
+  changeTheme({ commit }, data) {
+    commit('addColor', data);
   }
 };
 

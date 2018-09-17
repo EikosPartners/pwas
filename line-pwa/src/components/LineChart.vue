@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-      <theme-chooser/>
+      <theme-chooser @jsc_theme_change="themeHandler"/>
       <line-chart 
         @jsc_click="filterByDate" 
         title="Ticket Severity by Date" 
@@ -15,7 +15,7 @@ import {
   StyleTogglerMixin,
   ThemeChooserComponent
 } from 'jscatalyst';
-import { mapGetters, mapState } from 'vuex';
+import { mapGetters, mapState, mapActions } from 'vuex';
 
 export default {
   name: 'LineChart',
@@ -30,9 +30,13 @@ export default {
   sockets: {
     connect: function() {
       console.log('socket connected');
+      this.$options.sockets.themeColor = data => {
+        this.changeTheme(data.name);
+      };
     }
   },
   methods: {
+    ...mapActions(['changeTheme']),
     filterByDate(data) {
       let filter = {};
       filter.source = 'lineChart';
@@ -57,16 +61,22 @@ export default {
         month = '0' + month;
       }
       return `${month}-${day}-${year}`;
+    },
+    themeHandler(event) {
+      this.$socket.emit('themeColor', event);
+    },
+    setTheme() {
+      this.$store.commit(this.color.action, this.color.color);
+      if (this.$store.state.themeMod) {
+        this.chooseTheme(this.$store.state.themeMod.colorTheme);
+      }
     }
   },
   mixins: [StyleTogglerMixin],
   watch: {
     color(newData) {
       if (newData) {
-        this.$store.commit(this.color.action, this.color.color);
-        if (this.$store.state.themeMod) {
-          this.chooseTheme(this.$store.state.themeMod.colorTheme);
-        }
+        this.setTheme();
       }
     }
   }
