@@ -21,6 +21,7 @@ export const mutations = {
   addColor(state, data) {
     state.color = data;
   },
+
   refreshData(state, data) {
     const oldData = state.data;
     oldData.splice(0, 100);
@@ -41,8 +42,12 @@ export const actions = {
   },
   fetchColor({ commit }) {
     axios.get('http://localhost:9000/color').then(response => {
-      commit('addColor', response.data);
+      console.log(response);
+      commit('addColor', response.data.color);
     });
+  },
+  changeTheme({ commit }, data) {
+    commit('addColor', data);
   }
 };
 
