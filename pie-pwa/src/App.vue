@@ -6,6 +6,9 @@
 
 <script>
 import { mapActions } from 'vuex';
+import {
+  ThemeChooserComponent
+} from 'jscatalyst';
 
 export default {
   name: 'app',
@@ -15,7 +18,11 @@ export default {
   created() {
     this.fetchData();
     this.fetchColor();
-  }
+  },
+  components: {
+    themeChooser: ThemeChooserComponent
+  },
+
 };
 </script>
 
