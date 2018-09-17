@@ -9,7 +9,7 @@ var myMixin = {
     filter: function(filter) {
 
       if ( window.glue != undefined ) {
-        // alert('GLUE42: Filtering message ' + filter);
+        alert('GLUE42: Filtering message ' + filter);
         window.glue.contexts.update('filter', filter);
       }
       else {
