@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "jscatalyst": "^1.1.33",
+    "jscatalyst": "^1.1.35",
     "register-service-worker": "^1.0.0",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1",
@@ -19,12 +19,12 @@
     "vuex": "^3.0.1"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.2",
-    "@vue/cli-plugin-eslint": "^3.0.2",
-    "@vue/cli-plugin-pwa": "^3.0.2",
-    "@vue/cli-plugin-unit-jest": "^3.0.2",
-    "@vue/cli-service": "^3.0.2",
-    "@vue/eslint-config-airbnb": "^3.0.2",
+    "@vue/cli-plugin-babel": "^3.0.3",
+    "@vue/cli-plugin-eslint": "^3.0.3",
+    "@vue/cli-plugin-pwa": "^3.0.3",
+    "@vue/cli-plugin-unit-jest": "^3.0.3",
+    "@vue/cli-service": "^3.0.3",
+    "@vue/eslint-config-airbnb": "^3.0.3",
     "@vue/test-utils": "^1.0.0-beta.25",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^23.6.0",
