@@ -20,10 +20,9 @@ Vue.use(ThemePlugin, {
 
 // Initialize the Glue42 Environment
 
-
 Glue({})
-  .then( glue=> {
-    window.glue = glue
+  .then(glue => {
+    window.glue = glue;
 
     new Vue({
       router,
@@ -31,10 +30,10 @@ Glue({})
       render: h => h(App)
     }).$mount('#app');
   })
-  .catch( err => {
+  .catch(err => {
     new Vue({
       router,
       store,
       render: h => h(GlueNotAvailable)
     }).$mount('#app');
-  })
+  });

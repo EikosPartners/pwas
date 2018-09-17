@@ -1,5 +1,6 @@
 <template>
     <div class="container">
+      <theme-chooser/>
       <line-chart 
         @jsc_click="filterByDate" 
         title="Ticket Severity by Date" 
@@ -9,13 +10,18 @@
 </template>
 
 <script>
-import { D3LineChart, StyleTogglerMixin } from 'jscatalyst';
+import {
+  D3LineChart,
+  StyleTogglerMixin,
+  ThemeChooserComponent
+} from 'jscatalyst';
 import { mapGetters, mapState } from 'vuex';
 
 export default {
   name: 'LineChart',
   components: {
-    lineChart: D3LineChart
+    lineChart: D3LineChart,
+    themeChooser: ThemeChooserComponent
   },
   computed: {
     ...mapState(['color']),

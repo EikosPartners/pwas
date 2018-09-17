@@ -1,26 +1,35 @@
 <template>
-  <div class="container">
-    <pie-chart
-      :dataModel="prettyData" 
-      @jsc_click="filterByProject"
-      title="Tickets per Project"
-    ></pie-chart>
-</div>
+    <div class="container">
+    <theme-chooser/>
+        
+          <pie-chart
+          :dataModel="prettyData" 
+          @jsc_click="filterByProject"
+          title="Tickets per Project"
+          ></pie-chart>
+
+    </div>
 </template>
 
 <script>
-import { D3PieChart, StyleTogglerMixin } from "jscatalyst";
-import { mapGetters, mapState, mapActions } from "vuex";
-import jslinq from "jslinq";
+import {
+  D3PieChart,
+  StyleTogglerMixin,
+  ThemeChooserComponent
+} from 'jscatalyst';
+import { mapGetters, mapState, mapActions } from 'vuex';
+import jslinq from 'jslinq';
 
 export default {
-  name: "PieChart",
+  name: 'PieChart',
   components: {
-    pieChart: D3PieChart
+    pieChart: D3PieChart,
+    themeChooser: ThemeChooserComponent
   },
+  mixins: [StyleTogglerMixin],
   computed: {
-    ...mapState(["color"]),
-    ...mapGetters(["data"]),
+    ...mapState(['color']),
+    ...mapGetters(['data']),
     prettyData() {
       const pieLinqData = new jslinq(this.data)
         .select(d => {
@@ -46,27 +55,27 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["updateData"]),
+    ...mapActions(['updateData']),
     filterByProject(data) {
       let filter = {};
-      filter.source = "PieChart";
-      filter.dataSource = "/";
+      filter.source = 'PieChart';
+      filter.dataSource = '/';
       filter.data = data.data.label;
       filter.time = new Date();
       console.log(filter);
-      this.$socket.emit("filterByProject", filter);
+      this.$socket.emit('filterByProject', filter);
     }
   },
   sockets: {
     connect: function() {
-      console.log("socket connected");
+      console.log('socket connected');
       this.$options.sockets.refresh = () => {
-        console.log("refresh!");
+        console.log('refresh!');
         this.updateData();
       };
     }
   },
-  mixins: [StyleTogglerMixin],
+
   watch: {
     color(newData) {
       console.log(newData);

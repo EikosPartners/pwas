@@ -26,6 +26,16 @@ export default {
   components: {
     AgGridVue
   },
+  created() {
+    const ctx = window.glue.windows.my().context;
+    alert( ctx.filter.data )
+
+    this.removeFilter();
+    this.setQuickFilter(ctx.filter.data);
+    let source = this.formatSource(ctx.filter.source);
+    this.setCurrentFilter(source);
+  },
+
   computed: {
     ...mapState(["data", "columns", "currentFilter"]),
     prettyData() {
