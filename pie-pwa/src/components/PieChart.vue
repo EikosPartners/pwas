@@ -27,7 +27,6 @@ export default {
     themeChooser: ThemeChooserComponent
   },
   mixins: [StyleTogglerMixin],
-
   computed: {
     ...mapState(['color']),
     ...mapGetters(['data']),

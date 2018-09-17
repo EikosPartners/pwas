@@ -1,7 +1,7 @@
 <template>
-  <div id="app">
+  <v-app id="app">
     <router-view></router-view>
-  </div>
+  </v-app>
 </template>
 
 <script>
@@ -18,7 +18,7 @@ export default {
     this.fetchData();
     this.fetchColor();
 
-    this.enableOptions()
+    this.enableOptions();
   }
 };
 </script>

@@ -1,5 +1,6 @@
 <template>
 <div class="container">
+  <theme-chooser/>
    <heat-map
       v-if="themeColorsComp.length > 0"
       @jsc_click="filterByDate"
@@ -11,18 +12,24 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapState, mapActions } from "vuex";
-import { D3HeatMap, StyleTogglerMixin } from "jscatalyst";
-import Messaging from '@/mixins/Messaging'
+import { mapGetters, mapState, mapActions } from 'vuex';
+import {
+  D3HeatMap,
+  StyleTogglerMixin,
+  ThemeChooserComponent
+} from 'jscatalyst';
+import Messaging from '@/mixins/Messaging';
 
 export default {
-  name: "HeatMap",
+  name: 'HeatMap',
   components: {
-    heatMap: D3HeatMap
+    heatMap: D3HeatMap,
+    themeChooser: ThemeChooserComponent
   },
+  mixins: [StyleTogglerMixin, Messaging],
   computed: {
-    ...mapGetters(["data"]),
-    ...mapState(["color"]),
+    ...mapGetters(['data']),
+    ...mapState(['color']),
     heatData() {
       const heatData = [];
       let sorted = this.sortData(this.data);
@@ -38,33 +45,33 @@ export default {
   },
   sockets: {
     connect: function() {
-      console.log("socket connected");
+      console.log('socket connected');
       this.$options.sockets.refresh = () => {
-        console.log("refresh!");
+        console.log('refresh!');
         this.updateData();
       };
     }
   },
   methods: {
-    ...mapActions(["updateData"]),
+    ...mapActions(['updateData']),
     filterByDate(data) {
       let filter = {};
-      filter.source = "heatMap";
-      filter.dataSource = "/";
+      filter.source = 'heatMap';
+      filter.dataSource = '/';
       filter.data = this.parseDate(data.date);
       filter.time = new Date();
       console.log(filter);
 
-      this.filter(filter)
+      this.filter(filter);
     },
     parseDate(date) {
-      const dateArray = date.split("-");
-      return dateArray[1] + "-" + dateArray[2] + "-" + dateArray[0];
+      const dateArray = date.split('-');
+      return dateArray[1] + '-' + dateArray[2] + '-' + dateArray[0];
     },
     sortData(rawData) {
       const groupedData = {};
       rawData.forEach(item => {
-        let justDate = item.date.split("T");
+        let justDate = item.date.split('T');
         let date = justDate[0];
         if (Object.keys(groupedData).includes(date)) {
           groupedData[date] += 1;
@@ -75,7 +82,6 @@ export default {
       return groupedData;
     }
   },
-  mixins: [StyleTogglerMixin, Messaging],
   created() {
     console.log(this.themeColorsComp);
     // this.$store.commit('changeColor', 'Red');

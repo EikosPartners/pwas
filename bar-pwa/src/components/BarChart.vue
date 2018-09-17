@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <theme-chooser/>
     <bar-chart
       @jsc_click="filterByMonth"
       :dataModel='prettyData'
@@ -11,18 +12,24 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapState, mapActions } from "vuex";
-import { D3BarChart, StyleTogglerMixin } from "jscatalyst";
-import jslinq from "jslinq";
+import { mapGetters, mapState, mapActions } from 'vuex';
+import {
+  D3BarChart,
+  StyleTogglerMixin,
+  ThemeChooserComponent
+} from 'jscatalyst';
+import jslinq from 'jslinq';
 
 export default {
-  name: "BarChart",
+  name: 'BarChart',
   components: {
-    barChart: D3BarChart
+    barChart: D3BarChart,
+    themeChooser: ThemeChooserComponent
   },
+  mixins: [StyleTogglerMixin],
   computed: {
-    ...mapGetters(["data", "height"]),
-    ...mapState(["color"]),
+    ...mapGetters(['data', 'height']),
+    ...mapState(['color']),
     barData() {
       const barData = [];
       let sorted = this.sortData(this.data);
@@ -38,14 +45,14 @@ export default {
       for (let year in sorted) {
         let oneYearData = [];
         for (let month in sorted[year]) {
-          let date = month + "/" + year;
+          let date = month + '/' + year;
           let dataObj = { x: date, y: sorted[year][month] };
 
           oneYearData.push(dataObj);
         }
         oneYearData.sort((a, b) => {
-          let val1 = parseInt(a.x.split("/")[0]);
-          let val2 = parseInt(b.x.split("/")[0]);
+          let val1 = parseInt(a.x.split('/')[0]);
+          let val2 = parseInt(b.x.split('/')[0]);
 
           return val1 - val2;
         });
@@ -58,27 +65,27 @@ export default {
   },
   sockets: {
     connect: function() {
-      console.log("socket connected");
+      console.log('socket connected');
       this.$options.sockets.refresh = () => {
-        console.log("refresh!");
+        console.log('refresh!');
         this.updateData();
       };
     }
   },
   methods: {
-    ...mapActions(["updateData"]),
+    ...mapActions(['updateData']),
     filterByMonth(data) {
       let filter = {};
-      filter.source = "barChart";
-      filter.dataSource = "/";
+      filter.source = 'barChart';
+      filter.dataSource = '/';
       filter.data = data.x;
       filter.time = new Date();
-      console.log("filter", filter);
-      this.$socket.emit("filterByMonth", filter);
+      console.log('filter', filter);
+      this.$socket.emit('filterByMonth', filter);
     },
     parseDate(date) {
-      let dateA = date.split("T")[0].split("-");
-      return dateA[1] + "-" + dateA[2] + "-" + dateA[0];
+      let dateA = date.split('T')[0].split('-');
+      return dateA[1] + '-' + dateA[2] + '-' + dateA[0];
     },
     sortData(rawData) {
       const groupedData = {};
@@ -99,15 +106,14 @@ export default {
       return groupedData;
     },
     parseYear(date) {
-      let year = date.split("-")[2];
+      let year = date.split('-')[2];
       return year;
     },
     parseMonth(date) {
-      let month = date.split("-")[0];
+      let month = date.split('-')[0];
       return month;
     }
   },
-  mixins: [StyleTogglerMixin],
   watch: {
     color(newData) {
       if (newData) {
