@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-          <theme-chooser/>
+    <theme-chooser/>
         
           <pie-chart
           :dataModel="prettyData" 
