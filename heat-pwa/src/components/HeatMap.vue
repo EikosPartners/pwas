@@ -19,6 +19,7 @@ import {
   ThemeChooserComponent
 } from 'jscatalyst';
 import Messaging from '@/mixins/Messaging';
+import Windowing from '@/mixins/Windowing';
 
 export default {
   name: 'HeatMap',
@@ -26,7 +27,7 @@ export default {
     heatMap: D3HeatMap,
     themeChooser: ThemeChooserComponent
   },
-  mixins: [StyleTogglerMixin, Messaging],
+  mixins: [StyleTogglerMixin, Messaging, Windowing],
   computed: {
     ...mapGetters(['data']),
     ...mapState(['color']),
@@ -62,7 +63,9 @@ export default {
       filter.time = new Date();
       console.log(filter);
 
-      this.filter(filter);
+      this.openContextWindow('Filter Results', 'http://localhost:9093', filter)
+
+      //this.filter(filter);
     },
     parseDate(date) {
       const dateArray = date.split('-');
