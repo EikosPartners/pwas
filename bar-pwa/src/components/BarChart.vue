@@ -1,13 +1,13 @@
 <template>
   <div class="container">
-    <theme-chooser/>
+    <theme-chooser @jsc_theme_change="themeHandler"/>
     <bar-chart
       @jsc_click="filterByMonth"
       :dataModel='prettyData'
       title='Number of Tickets by Month'
       xaxisLabel="Date"
       yaxisLabel="Number of Tickets"
-      :xAxisAngle='0'
+      :xAxisAngle='45'
     ></bar-chart>
   </div>
 </template>
@@ -70,10 +70,14 @@ export default {
         console.log('refresh!');
         this.updateData();
       };
+      this.$options.sockets.themeColor = data => {
+        console.log('fetchColor recieved', data);
+        this.changeTheme(data.name);
+      };
     }
   },
   methods: {
-    ...mapActions(['updateData']),
+    ...mapActions(['updateData', 'fetchColor', 'changeTheme']),
     filterByMonth(data) {
       let filter = {};
       filter.source = 'barChart';
@@ -112,15 +116,21 @@ export default {
     parseMonth(date) {
       let month = date.split('-')[0];
       return month;
+    },
+    themeHandler(event) {
+      this.$socket.emit('themeColor', event);
+    },
+    setTheme() {
+      this.$store.commit('changeColor', this.color);
+      if (this.$store.state.themeMod) {
+        this.chooseTheme(this.$store.state.themeMod.colorTheme);
+      }
     }
   },
   watch: {
     color(newData) {
       if (newData) {
-        this.$store.commit(this.color.action, this.color.color);
-        if (this.$store.state.themeMod) {
-          this.chooseTheme(this.$store.state.themeMod.colorTheme);
-        }
+        this.setTheme();
       }
     }
   }

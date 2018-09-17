@@ -6,6 +6,8 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import VueSocketio from 'vue-socket.io';
+import '../node_modules/vuetify/dist/vuetify.min.css';
+import '../node_modules/material-design-icons-iconfont/dist/material-design-icons.css'; // Ensure you are using css-loader
 
 import './registerServiceWorker';
 

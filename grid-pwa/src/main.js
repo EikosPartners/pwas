@@ -11,8 +11,20 @@ Vue.config.productionTip = false;
 
 Vue.use(VueSocketio, "http://localhost:9000");
 
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount("#app");
+Glue({})
+  .then(glue => {
+    window.glue = glue;
+
+    new Vue({
+      router,
+      store,
+      render: h => h(App)
+    }).$mount('#app');
+  })
+  .catch(err => {
+    new Vue({
+      router,
+      store,
+      render: h => h(App)
+    }).$mount('#app');
+  });

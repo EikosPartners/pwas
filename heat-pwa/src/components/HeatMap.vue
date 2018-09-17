@@ -1,14 +1,16 @@
 <template>
-<div class="container">
-  <theme-chooser/>
-   <heat-map
-      v-if="themeColorsComp.length > 0"
-      @jsc_click="filterByDate"
-      :dataModel='heatData'
-      title='Number of Tickets by Date'
-      xaxis-label="date"
-      yaxis-label="volume"
-    ></heat-map>
+  <div class="container">
+    <theme-chooser/>
+    <heat-map
+        v-if="themeColorsComp.length > 0"
+        @jsc_click="filterByDate"
+        :dataModel='heatData'
+        title='Number of Tickets by Date'
+        xaxis-label="date"
+        yaxis-label="volume"
+      ></heat-map>
+      <p>{{output}}</p>
+
   </div>
 </template>
 <script>
@@ -19,6 +21,7 @@ import {
   ThemeChooserComponent
 } from 'jscatalyst';
 import Messaging from '@/mixins/Messaging';
+import Windowing from '@/mixins/Windowing';
 
 export default {
   name: 'HeatMap',
@@ -26,7 +29,12 @@ export default {
     heatMap: D3HeatMap,
     themeChooser: ThemeChooserComponent
   },
-  mixins: [StyleTogglerMixin, Messaging],
+  mixins: [StyleTogglerMixin, Messaging, Windowing],
+  data() {
+    return {
+      output: "test" 
+    }
+  },
   computed: {
     ...mapGetters(['data']),
     ...mapState(['color']),
@@ -60,9 +68,11 @@ export default {
       filter.dataSource = '/';
       filter.data = this.parseDate(data.date);
       filter.time = new Date();
-      console.log(filter);
-
+      // console.log(filter);
       this.filter(filter);
+      // this.openContextWindow('Filter Results', 'http://localhost:9093', filter)
+      let app = window.glue.appManager.application('JSCDataGrid')
+      app.start()
     },
     parseDate(date) {
       const dateArray = date.split('-');

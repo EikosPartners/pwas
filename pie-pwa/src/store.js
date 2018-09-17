@@ -1,6 +1,6 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import axios from "axios";
+import Vue from 'vue';
+import Vuex from 'vuex';
+import axios from 'axios';
 
 Vue.use(Vuex);
 
@@ -11,7 +11,8 @@ const state = {
 
 export const getters = {
   data: state => state.data,
-  color: state => state.color
+  color: state => state.color,
+  themeTrigger: state => state.themeTrigger
 };
 
 export const mutations = {
@@ -25,25 +26,32 @@ export const mutations = {
     const oldData = state.data;
     oldData.splice(0, 100);
     state.data = oldData.concat(data);
+  },
+  triggerThemeChange() {
+    state.themeTrigger = true;
+    state.themeTrigger = false;
   }
 };
 
 export const actions = {
   fetchData({ commit }) {
-    axios.get("http://localhost:9000").then(response => {
-      commit("initializeData", response.data);
+    axios.get('http://localhost:9000').then(response => {
+      commit('initializeData', response.data);
     });
   },
   fetchColor({ commit }) {
-    axios.get("http://localhost:9000/color").then(resp => {
+    axios.get('http://localhost:9000/color').then(resp => {
       console.log(resp);
-      commit("addColor", resp.data);
+      commit('addColor', resp.data.color);
     });
   },
   updateData({ commit }) {
-    axios.get("http://localhost:9000/update").then(response => {
-      commit("refreshData", response.data);
+    axios.get('http://localhost:9000/update').then(response => {
+      commit('refreshData', response.data);
     });
+  },
+  changeTheme({ commit }, data) {
+    commit('addColor', data);
   }
 };
 

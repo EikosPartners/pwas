@@ -1,9 +1,12 @@
-let express = require("express");
+let express = require('express');
 // let data = require("../data/example.json");
-let seed = require("../data/seed.js");
+let bodyParser = require('body-parser');
+let seed = require('../data/seed.js');
 let router = express.Router();
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({ extended: true }));
 
-let colorObj = { action: "changeColor", color: "Blue" };
+let colorObj = { action: 'changeColor', color: 'Blue' };
 
 let data = seed.generateDataSet(500);
 let refreshTime = 20000;
@@ -11,17 +14,22 @@ setInterval(function() {
   data = seed.updateDataSet(data);
 }, refreshTime);
 
-router.get("/", (req, res) => {
+router.get('/', (req, res) => {
   res.send(data);
 });
 
-router.get("/update", (req, res) => {
+router.get('/update', (req, res) => {
   let update = data.slice(400, data.length);
   res.send(update);
 });
 
-router.get("/color", (req, res) => {
+router.get('/color', (req, res) => {
   res.send(colorObj);
 });
 
+router.post('/color', (req, res) => {
+  colorObj.color = req.body.color;
+  console.log(colorObj);
+  res.send('Complete');
+});
 module.exports = router;

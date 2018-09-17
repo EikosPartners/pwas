@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-    <theme-chooser/>
+          <theme-chooser @jsc_theme_change="themeHandler"/>
         
           <pie-chart
           :dataModel="prettyData" 
@@ -28,7 +28,7 @@ export default {
   },
   mixins: [StyleTogglerMixin],
   computed: {
-    ...mapState(['color']),
+    ...mapState(['color', 'themeTrigger']),
     ...mapGetters(['data']),
     prettyData() {
       const pieLinqData = new jslinq(this.data)
@@ -55,7 +55,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['updateData']),
+    ...mapActions(['updateData', 'changeTheme']),
     filterByProject(data) {
       let filter = {};
       filter.source = 'PieChart';
@@ -64,6 +64,15 @@ export default {
       filter.time = new Date();
       console.log(filter);
       this.$socket.emit('filterByProject', filter);
+    },
+    themeHandler(event) {
+      this.$socket.emit('themeColor', event);
+    },
+    setTheme() {
+      this.$store.commit('changeColor', this.color);
+      if (this.$store.state.themeMod) {
+        this.chooseTheme(this.$store.state.themeMod.colorTheme);
+      }
     }
   },
   sockets: {
@@ -73,19 +82,18 @@ export default {
         console.log('refresh!');
         this.updateData();
       };
+      this.$options.sockets.themeColor = data => {
+        console.log('fetchColor recieved', data);
+        this.changeTheme(data.name);
+      };
     }
   },
 
   watch: {
     color(newData) {
       console.log(newData);
-
       if (newData) {
-        this.$store.commit(this.color.action, this.color.color);
-        if (this.$store.state.themeMod) {
-          this.chooseTheme(this.$store.state.themeMod.colorTheme);
-        }
-        // this.color;
+        this.setTheme();
       }
     }
   }

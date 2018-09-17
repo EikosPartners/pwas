@@ -20,12 +20,15 @@
 <script>
 import { mapState, mapMutations, mapActions } from "vuex";
 import { AgGridVue } from "ag-grid-vue";
+import Messaging from '@/mixins/Messaging';
+import Windowing from '@/mixins/Windowing';
 
 export default {
   name: "Grid",
   components: {
     AgGridVue
   },
+  mixins: [Messaging, Windowing],
   computed: {
     ...mapState(["data", "columns", "currentFilter"]),
     prettyData() {
