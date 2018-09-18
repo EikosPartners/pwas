@@ -11,8 +11,7 @@ const state = {
 
 export const getters = {
   data: state => state.data,
-  color: state => state.color,
-  themeTrigger: state => state.themeTrigger
+  color: state => state.color
 };
 
 export const mutations = {
@@ -26,10 +25,6 @@ export const mutations = {
     const oldData = state.data;
     oldData.splice(0, 100);
     state.data = oldData.concat(data);
-  },
-  triggerThemeChange() {
-    state.themeTrigger = true;
-    state.themeTrigger = false;
   }
 };
 

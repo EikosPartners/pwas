@@ -1,30 +1,18 @@
 <template>
-    <div class="container">
-          <theme-chooser @jsc_theme_change="themeHandler"/>
-        
-          <pie-chart
-          :dataModel="prettyData" 
-          @jsc_click="filterByProject"
-          title="Tickets per Project"
-          ></pie-chart>
-
+    <div class="container">        
+      <pie-chart :dataModel="prettyData"  @jsc_click="filterByProject" title="Tickets per Project"/>
     </div>
 </template>
 
 <script>
-import {
-  D3PieChart,
-  StyleTogglerMixin,
-  ThemeChooserComponent
-} from 'jscatalyst';
+import { D3PieChart, StyleTogglerMixin } from 'jscatalyst';
 import { mapGetters, mapState, mapActions } from 'vuex';
 import jslinq from 'jslinq';
 
 export default {
   name: 'PieChart',
   components: {
-    pieChart: D3PieChart,
-    themeChooser: ThemeChooserComponent
+    pieChart: D3PieChart
   },
   mixins: [StyleTogglerMixin],
   computed: {
@@ -65,9 +53,7 @@ export default {
       console.log(filter);
       this.$socket.emit('filterByProject', filter);
     },
-    themeHandler(event) {
-      this.$socket.emit('themeColor', event);
-    },
+
     setTheme() {
       this.$store.commit('changeColor', this.color);
       if (this.$store.state.themeMod) {
@@ -83,15 +69,12 @@ export default {
         this.updateData();
       };
       this.$options.sockets.themeColor = data => {
-        console.log('fetchColor recieved', data);
         this.changeTheme(data.name);
       };
     }
   },
-
   watch: {
     color(newData) {
-      console.log(newData);
       if (newData) {
         this.setTheme();
       }
