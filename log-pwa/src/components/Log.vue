@@ -33,8 +33,17 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations } from "vuex";
+import Messaging from '@/mixins/Messaging';
+import Windowing from '@/mixins/Windowing';
+
 export default {
   name: "Log",
+  mixins: [Messaging, Windowing],
+  data() {
+    return {
+      gridInstance: false
+    };
+  },
   computed: {
     ...mapGetters(["data"])
   },
@@ -77,7 +86,12 @@ export default {
         this.addData(filter);
       };
     }
-  }
+  },
+  created() {
+    this.subscribe('filterOnGrid', (context, delta, removed) => {
+      console.log('context update', context.data);
+    });
+  },
 };
 </script>
 
