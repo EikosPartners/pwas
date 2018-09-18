@@ -27,23 +27,12 @@ export default {
   name: "Grid",
   components: {
     AgGridVue
-  },
-  mounted: function() {
-    const localWindow = window.glue.windows.my();
-    const ctx = localWindow.context
-
-     this.subscribe(ctx.eventName, (context, delta, removed) => {
-       this.removeFilter();
-      this.setQuickFilter(context.data);
-      let source = this.formatSource(context.source);
-      this.setCurrentFilter(source);
-
-      //this.output = context.data
-    })
-  },
-
+  }, 
+  //// Moved the mounted subscribe functionality to onGridReady()
+ 
   mixins: [Messaging, Windowing],
   computed: {
+
     ...mapState(["data", "columns", "currentFilter"]),
     prettyData() {
       return this.data.map(item => {
@@ -148,7 +137,30 @@ export default {
       window.addEventListener("resize", () => {
         this.gridApi.sizeColumnsToFit();
       });
-      this.gridApi.onFilterChanged(this.testFun);
+      // this.gridApi.onFilterChanged(this.testFun);
+      const localWindow = window.glue.windows.my();
+    const ctx = localWindow.context
+
+     this.subscribe(ctx.eventName, (context, delta, removed) => {
+      this.removeFilter();
+      console.log('context', context)
+      let source = this.formatSource(context.source);
+      this.setCurrentFilter(source);
+      if (context.source === "dateAndSeverity") {
+        console.log("dateAndSeverity", context);
+      }
+      else if (context.source === "barChart") {
+        console.log("bar chart", context);
+        console.log(this)
+        let month = context.data.split("/")[0] + "-";
+        let year = "-" + context.data.split("/")[1];
+
+        let filterObject = { date: { condition1: { type: "startsWith", filter: month }, condition2: { type: "contains", filter: year }, operator: "AND" } };
+        this.gridApi.setFilterModel(filterObject);
+      } else {
+        this.setQuickFilter(context.data);
+      }
+    })
     },
     setQuickFilter(data) {
       if (this.gridApi) {

@@ -1,13 +1,9 @@
 var myMixin = {
-  created: function() {
-    window.glue.contexts.subscribe('filter', (context, delta, removed) => {
-      console.log('context update', context.data)
-      this.removeFilter();
-      this.setQuickFilter(context.data);
-      let source = this.formatSource(context.source);
-      this.setCurrentFilter(source);
-    })
-  },
+  // created: function() {
+  //   window.glue.contexts.subscribe('filter', (context, delta, removed) => {
+      
+  //   })
+  // },
   methods: {
     subscribe: function(name, subscriber) {
       window.glue.contexts.subscribe(name, (context, delta, removed) => {

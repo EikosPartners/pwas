@@ -13,7 +13,7 @@ var myMixin = {
     filter: function(filter, name) {
 
       if ( window.glue != undefined ) {
-        console.log('GLUE42: Filtering message ' + filter);
+        console.log('GLUE42: Filtering message ', filter);
         if ( name !== undefined ) {
           window.glue.contexts.set(name, filter);
         }
