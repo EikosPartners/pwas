@@ -1,6 +1,6 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import axios from "axios";
+import Vue from 'vue';
+import Vuex from 'vuex';
+import axios from 'axios';
 
 Vue.use(Vuex);
 
@@ -30,20 +30,23 @@ export const mutations = {
 
 export const actions = {
   fetchData({ commit }) {
-    axios.get("http://localhost:9000").then(response => {
-      commit("initializeData", response.data);
+    axios.get('http://localhost:9000').then(response => {
+      commit('initializeData', response.data);
     });
   },
   updateData({ commit }) {
-    axios.get("http://localhost:9000/update").then(response => {
-      commit("refreshData", response.data);
+    axios.get('http://localhost:9000/update').then(response => {
+      commit('refreshData', response.data);
     });
   },
   fetchColor({ commit }) {
-    axios.get("http://localhost:9000/color").then(resp => {
+    axios.get('http://localhost:9000/color').then(resp => {
       console.log(resp);
-      commit("addColor", resp.data);
+      commit('addColor', resp.data.color);
     });
+  },
+  changeTheme({ commit }, data) {
+    commit('addColor', data);
   }
 };
 

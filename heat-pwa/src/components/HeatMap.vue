@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <theme-chooser/>
     <heat-map
         v-if="themeColorsComp.length > 0"
         @jsc_click="filterByDate"
@@ -9,32 +8,25 @@
         xaxis-label="date"
         yaxis-label="volume"
       ></heat-map>
-      <p>{{output}}</p>
 
   </div>
 </template>
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex';
-import {
-  D3HeatMap,
-  StyleTogglerMixin,
-  ThemeChooserComponent
-} from 'jscatalyst';
+import { D3HeatMap, StyleTogglerMixin } from 'jscatalyst';
 import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
 
 export default {
   name: 'HeatMap',
   components: {
-    heatMap: D3HeatMap,
-    themeChooser: ThemeChooserComponent
+    heatMap: D3HeatMap
   },
   mixins: [StyleTogglerMixin, Messaging, Windowing],
   data() {
     return {
-      output: "test",
-      gridInstance: false,
-    }
+      gridInstance: false
+    };
   },
   computed: {
     ...mapGetters(['data']),
@@ -59,10 +51,14 @@ export default {
         console.log('refresh!');
         this.updateData();
       };
+      this.$options.sockets.themeColor = data => {
+        console.log(data);
+        this.changeTheme(data.name);
+      };
     }
   },
   methods: {
-    ...mapActions(['updateData']),
+    ...mapActions(['updateData', 'changeTheme']),
     filterByDate(data) {
       let filter = {};
       filter.source = 'heatMap';
@@ -76,25 +72,27 @@ export default {
       // this.openContextWindow('Filter Results', 'http://localhost:9093', filter)
 
       // A Named object
-      if ( this.gridInstance === true ) {
-        debugger
-          // Can we pass the instance an updated context here?
-          
+      if (this.gridInstance === true) {
+        debugger;
+        // Can we pass the instance an updated context here?
       } else {
-        let app = window.glue.appManager.application('JSCDataGrid')
+        let app = window.glue.appManager.application('JSCDataGrid');
         const localWindow = window.glue.windows.my();
         const localThis = this;
-        let windowConfig = { relativeTo: localWindow.id, relativePosition:'right'}
+        let windowConfig = {
+          relativeTo: localWindow.id,
+          relativePosition: 'right'
+        };
         // let windowConfig = { }
 
         // Launch the app and then wait for the return so that we can grab the instance Id
-        app.start({filter:filter, eventName: 'filterOnGrid'}, windowConfig)
-          .then( (instance) => {
+        app
+          .start({ filter: filter, eventName: 'filterOnGrid' }, windowConfig)
+          .then(instance => {
             //localThis.gridInstance = instance
-          })
+          });
 
-        this.gridInstance = true
-
+        this.gridInstance = true;
       }
     },
     parseDate(date) {
@@ -113,27 +111,24 @@ export default {
         }
       });
       return groupedData;
+    },
+    setTheme() {
+      this.$store.commit('changeColor', this.color);
+      if (this.$store.state.themeMod) {
+        this.chooseTheme(this.$store.state.themeMod.colorTheme);
+      }
     }
   },
   created() {
-    console.log(this.themeColorsComp);
-    // this.$store.commit('changeColor', 'Red');
-    // if (this.$store.state.themeMod) {
-    //   this.chooseTheme(this.$store.state.themeMod.colorTheme);
-    // }
-
     this.subscribe('filterOnGrid', (context, delta, removed) => {
-      console.log('context update', context.data)
-      this.output = context.data
-    })
+      console.log('context update', context.data);
+      this.output = context.data;
+    });
   },
   watch: {
     color(newData) {
       if (newData) {
-        this.$store.commit(this.color.action, this.color.color);
-        if (this.$store.state.themeMod) {
-          this.chooseTheme(this.$store.state.themeMod.colorTheme);
-        }
+        this.setTheme();
       }
     },
     themeColorsComp(well) {
