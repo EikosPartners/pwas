@@ -5,12 +5,12 @@ let cors = require('cors');
 
 let http = require('http');
 
-let index = require('./routes/');
+let { router, colorObj } = require('./routes/');
 let bodyParser = require('body-parser');
 app.use(cors());
 app.use(helmet());
 
-app.use('/', index);
+app.use('/', router);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -25,6 +25,7 @@ setInterval(function() {
 var connectCount = 0;
 io.sockets.on('connection', function(socket) {
   //send data to clienzt
+  console.log(colorObj);
   connectCount++;
   console.log('Connection Established:', connectCount);
   socket.on('filterByDate', function(data) {
@@ -52,7 +53,7 @@ io.sockets.on('connection', function(socket) {
     io.emit('filterByMonth', data);
   });
   socket.on('themeColor', function(data) {
-    console.log(data);
+    colorObj.color = data.name;
     io.emit('themeColor', data);
   });
 });

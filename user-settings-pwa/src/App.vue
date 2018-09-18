@@ -1,7 +1,6 @@
 <template>
   <v-app id="app">
     <settings/>
-    <p>Test</p>
   </v-app>
 </template>
 <script>

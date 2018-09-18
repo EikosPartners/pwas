@@ -29,7 +29,9 @@ router.get('/color', (req, res) => {
 
 router.post('/color', (req, res) => {
   colorObj.color = req.body.color;
-  console.log(colorObj);
   res.send('Complete');
 });
-module.exports = router;
+module.exports = {
+  colorObj,
+  router
+};

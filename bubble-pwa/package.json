@@ -9,13 +9,13 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
-    "jscatalyst": "^1.1.44",
+    "jscatalyst": "^1.1.46",
     "jslinq": "^1.0.21",
     "linqjs": "0.0.6",
     "register-service-worker": "^1.0.0",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1",
-    "vuetify": "^1.2.3",
+    "vuetify": "^1.2.4",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
