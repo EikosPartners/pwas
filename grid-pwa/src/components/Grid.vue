@@ -160,15 +160,16 @@ export default {
         this.gridApi.setFilterModel(filterObject);
 
       }
-      else if (context.source === "barChart") {
+      else if (context.source === "BarChart") {
         console.log("bar chart", context);
-        console.log(this)
         let month = context.data.split("/")[0] + "-";
         let year = "-" + context.data.split("/")[1];
 
         let filterObject = { date: { condition1: { type: "startsWith", filter: month }, condition2: { type: "contains", filter: year }, operator: "AND" } };
+
         this.gridApi.setFilterModel(filterObject);
-      } else {
+      } 
+      else {
         this.setQuickFilter(context.data);
       }
     })

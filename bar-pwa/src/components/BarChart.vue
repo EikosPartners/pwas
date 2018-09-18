@@ -81,7 +81,7 @@ export default {
     ...mapActions(['updateData', 'fetchColor', 'changeTheme']),
     filterByMonth(data) {
       let filter = {};
-      filter.source = 'barChart';
+      filter.source = "BarChart";
       filter.dataSource = '/';
       filter.data = data.x;
       filter.time = new Date();

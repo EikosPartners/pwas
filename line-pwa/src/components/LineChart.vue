@@ -101,7 +101,6 @@ export default {
   created() {
     this.subscribe('filterOnGrid', (context, delta, removed) => {
       console.log('context update', context.data);
-      this.output = context.data;
     });
   },
   watch: {
