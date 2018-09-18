@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <theme-chooser @jsc_theme_change="themeHandler"/>
     <bar-chart
       @jsc_click="filterByMonth"
       :dataModel='prettyData'
@@ -13,11 +12,7 @@
 </template>
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex';
-import {
-  D3BarChart,
-  StyleTogglerMixin,
-  ThemeChooserComponent
-} from 'jscatalyst';
+import { D3BarChart, StyleTogglerMixin } from 'jscatalyst';
 import jslinq from 'jslinq';
 import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
@@ -25,14 +20,13 @@ import Windowing from '@/mixins/Windowing';
 export default {
   name: 'BarChart',
   components: {
-    barChart: D3BarChart,
-    themeChooser: ThemeChooserComponent
+    barChart: D3BarChart
   },
   mixins: [StyleTogglerMixin, Messaging, Windowing],
   data() {
     return {
-      gridInstance: false,
-    }
+      gridInstance: false
+    };
   },
   computed: {
     ...mapGetters(['data', 'height']),
@@ -92,33 +86,34 @@ export default {
       filter.data = data.x;
       filter.time = new Date();
       // console.log('filter', filter);
-      
+
       this.filter(filter, 'filterOnGrid');
 
       // this.openContextWindow('Filter Results', 'http://localhost:9093', filter)
 
       // A Named object
-      if ( this.gridInstance === true ) {
-        debugger
-          // Can we pass the instance an updated context here?
-          
+      if (this.gridInstance === true) {
+        debugger;
+        // Can we pass the instance an updated context here?
       } else {
-        let app = window.glue.appManager.application('JSCDataGrid')
+        let app = window.glue.appManager.application('JSCDataGrid');
         const localWindow = window.glue.windows.my();
         const localThis = this;
-        let windowConfig = { relativeTo: localWindow.id, relativePosition:'right'}
+        let windowConfig = {
+          relativeTo: localWindow.id,
+          relativePosition: 'right'
+        };
         // let windowConfig = { }
 
         // Launch the app and then wait for the return so that we can grab the instance Id
-        app.start({filter:filter, eventName: 'filterOnGrid'}, windowConfig)
-          .then( (instance) => {
+        app
+          .start({ filter: filter, eventName: 'filterOnGrid' }, windowConfig)
+          .then(instance => {
             //localThis.gridInstance = instance
-          })
+          });
 
-        this.gridInstance = true
-
+        this.gridInstance = true;
       }
-
     },
     parseDate(date) {
       let dateA = date.split('T')[0].split('-');
@@ -150,9 +145,6 @@ export default {
       let month = date.split('-')[0];
       return month;
     },
-    themeHandler(event) {
-      this.$socket.emit('themeColor', event);
-    },
     setTheme() {
       this.$store.commit('changeColor', this.color);
       if (this.$store.state.themeMod) {
@@ -168,9 +160,9 @@ export default {
     // }
 
     this.subscribe('filterOnGrid', (context, delta, removed) => {
-      console.log('context update', context.data)
-      this.output = context.data
-    })
+      console.log('context update', context.data);
+      this.output = context.data;
+    });
   },
   watch: {
     color(newData) {
