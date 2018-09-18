@@ -4,7 +4,16 @@
     <span>Grid</span>
     <span class="current-filter">{{currentFilter}}</span>
     <button @click="removeFilter">Clear Filter</button>
-    </div>
+    <select v-model="selected">
+      <option disabled value="">Select chart</option>
+      <option value="JSCBar">BarChart</option>
+      <option value="JSCBubble">Bubble Chart</option>
+      <option value="JSCHeatMap">Heat Map</option>
+      <option value="JSCLine">Line Chart</option>
+      <option value="JSCPie">Pie Chart</option>
+    </select>
+     <button @click="openNewChart">Open</button>
+  </div>
   <ag-grid-vue
     id='Grid'
     class='ag-theme-balham grid'
@@ -48,7 +57,8 @@ export default {
   },
   data() {
     return {
-      trueVar: true
+      trueVar: true,
+      selected: ""
     };
   },
   sockets: {
@@ -140,7 +150,7 @@ export default {
       const localWindow = window.glue.windows.my();
       const ctx = localWindow.context
 
-     this.subscribe(ctx.eventName, (context, delta, removed) => {
+      this.subscribe(ctx.eventName, (context, delta, removed) => {
       this.removeFilter();
       console.log('context', context)
       let source = this.formatSource(context.source);
@@ -186,7 +196,12 @@ export default {
         this.setCurrentFilter(null);
       }
     },
-
+    openNewChart() {
+      const newChart = glue.appManager.application(this.selected)
+      const localWindow = window.glue.windows.my();
+      const ctx = localWindow.context
+      newChart.start(ctx)
+    },
     parseDate(date) {
       let dateA = date.split("T")[0].split("-");
       let timeA = date.split("T")[1].split(".");
