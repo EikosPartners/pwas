@@ -19,6 +19,8 @@ import {
   ThemeChooserComponent
 } from 'jscatalyst';
 import jslinq from 'jslinq';
+import Messaging from '@/mixins/Messaging';
+import Windowing from '@/mixins/Windowing';
 
 export default {
   name: 'BarChart',
@@ -26,7 +28,12 @@ export default {
     barChart: D3BarChart,
     themeChooser: ThemeChooserComponent
   },
-  mixins: [StyleTogglerMixin],
+  mixins: [StyleTogglerMixin, Messaging, Windowing],
+  data() {
+    return {
+      gridInstance: false,
+    }
+  },
   computed: {
     ...mapGetters(['data', 'height']),
     ...mapState(['color']),
@@ -84,8 +91,34 @@ export default {
       filter.dataSource = '/';
       filter.data = data.x;
       filter.time = new Date();
-      console.log('filter', filter);
-      this.$socket.emit('filterByMonth', filter);
+      // console.log('filter', filter);
+      
+      this.filter(filter, 'filterOnGrid');
+
+      // this.openContextWindow('Filter Results', 'http://localhost:9093', filter)
+
+      // A Named object
+      if ( this.gridInstance === true ) {
+        debugger
+          // Can we pass the instance an updated context here?
+          
+      } else {
+        let app = window.glue.appManager.application('JSCDataGrid')
+        const localWindow = window.glue.windows.my();
+        const localThis = this;
+        let windowConfig = { relativeTo: localWindow.id, relativePosition:'right'}
+        // let windowConfig = { }
+
+        // Launch the app and then wait for the return so that we can grab the instance Id
+        app.start({filter:filter, eventName: 'filterOnGrid'}, windowConfig)
+          .then( (instance) => {
+            //localThis.gridInstance = instance
+          })
+
+        this.gridInstance = true
+
+      }
+
     },
     parseDate(date) {
       let dateA = date.split('T')[0].split('-');
@@ -126,6 +159,18 @@ export default {
         this.chooseTheme(this.$store.state.themeMod.colorTheme);
       }
     }
+  },
+  created() {
+    console.log(this.themeColorsComp);
+    // this.$store.commit('changeColor', 'Red');
+    // if (this.$store.state.themeMod) {
+    //   this.chooseTheme(this.$store.state.themeMod.colorTheme);
+    // }
+
+    this.subscribe('filterOnGrid', (context, delta, removed) => {
+      console.log('context update', context.data)
+      this.output = context.data
+    })
   },
   watch: {
     color(newData) {

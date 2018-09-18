@@ -84,8 +84,8 @@ export default {
         let app = window.glue.appManager.application('JSCDataGrid')
         const localWindow = window.glue.windows.my();
         const localThis = this;
-        //let windowConfig = { relativeTo: localWindow.id, relativePosition:'right'}
-        let windowConfig = { }
+        let windowConfig = { relativeTo: localWindow.id, relativePosition:'right'}
+        // let windowConfig = { }
 
         // Launch the app and then wait for the return so that we can grab the instance Id
         app.start({filter:filter, eventName: 'filterOnGrid'}, windowConfig)

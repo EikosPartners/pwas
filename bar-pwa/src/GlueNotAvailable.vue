@@ -1,16 +1,13 @@
 <template>
-  <v-app id="app">
-    <router-view></router-view>
-  </v-app>
+  <div id="app">
+    This app needs to run within the Glue42 envoironment
+  </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex';
-import Windowing from '@/mixins/Windowing';
-
 
 export default {
-  mixins: [Windowing],
   name: 'app',
   methods: {
     ...mapActions(['fetchData', 'fetchColor'])
@@ -22,7 +19,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
