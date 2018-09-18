@@ -11,13 +11,20 @@
 <script>
 import { D3LineChart, StyleTogglerMixin } from 'jscatalyst';
 import { mapGetters, mapState, mapActions } from 'vuex';
+import Messaging from '@/mixins/Messaging';
+import Windowing from '@/mixins/Windowing';
 
 export default {
   name: 'LineChart',
   components: {
     lineChart: D3LineChart
   },
-  mixins: [StyleTogglerMixin],
+ mixins: [StyleTogglerMixin, Messaging, Windowing],
+  data() {
+    return {
+      gridInstance: false
+    };
+  },
   computed: {
     ...mapState(['color']),
     ...mapGetters(['dataDV'])
@@ -42,11 +49,34 @@ export default {
       filter.dataSource = '/';
       filter.data = this.formatDate(data.date);
       filter.time = new Date();
-      console.log(filter);
-      this.emitFilter(filter);
-    },
-    emitFilter: function(data) {
-      this.$socket.emit('filterByDate', data);
+
+      this.filter(filter, 'filterOnGrid');
+       // this.openContextWindow('Filter Results', 'http://localhost:9093', filter)
+
+      // A Named object
+      if (this.gridInstance === true) {
+        debugger;
+        // Can we pass the instance an updated context here?
+      } else {
+        let app = window.glue.appManager.application('JSCDataGrid');
+        const localWindow = window.glue.windows.my();
+        const localThis = this;
+        let windowConfig = {
+          relativeTo: localWindow.id,
+          relativePosition: 'right'
+        };
+        // let windowConfig = { }
+
+        // Launch the app and then wait for the return so that we can grab the instance Id
+        app
+          .start({ filter: filter, eventName: 'filterOnGrid' }, windowConfig)
+          .then(instance => {
+            //localThis.gridInstance = instance
+          });
+
+        this.gridInstance = true;
+      }
+      
     },
     formatDate(dateObj) {
       let date = new Date(dateObj);
@@ -67,6 +97,12 @@ export default {
         this.chooseTheme(this.$store.state.themeMod.colorTheme);
       }
     }
+  },
+  created() {
+    this.subscribe('filterOnGrid', (context, delta, removed) => {
+      console.log('context update', context.data);
+      this.output = context.data;
+    });
   },
   watch: {
     color(newData) {
