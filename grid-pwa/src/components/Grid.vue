@@ -137,17 +137,28 @@ export default {
       window.addEventListener("resize", () => {
         this.gridApi.sizeColumnsToFit();
       });
-      // this.gridApi.onFilterChanged(this.testFun);
       const localWindow = window.glue.windows.my();
-    const ctx = localWindow.context
+      const ctx = localWindow.context
 
      this.subscribe(ctx.eventName, (context, delta, removed) => {
       this.removeFilter();
       console.log('context', context)
       let source = this.formatSource(context.source);
       this.setCurrentFilter(source);
-      if (context.source === "dateAndSeverity") {
-        console.log("dateAndSeverity", context);
+      if (context.source === "BubbleChart") {
+        console.log("bubble chart", context);
+         let filterObject = {
+          date: {
+            type: "contains",
+            filter: `${context.data.date}`
+          },
+          severity: {
+            type: "contains",
+            filter: `${context.data.severity}`
+          }
+        };
+        this.gridApi.setFilterModel(filterObject);
+
       }
       else if (context.source === "barChart") {
         console.log("bar chart", context);
