@@ -9,6 +9,14 @@ var myMixin = {
     })
   },
   methods: {
+    subscribe: function(name, subscriber) {
+      window.glue.contexts.subscribe(name, (context, delta, removed) => {
+        if ( subscriber !== undefined ) {
+          subscriber(context, delta, removed)
+        }
+      })
+    },
+
     filter: function(filter) {
 
       if ( window.glue != undefined ) {

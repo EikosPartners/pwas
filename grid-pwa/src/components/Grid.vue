@@ -28,6 +28,20 @@ export default {
   components: {
     AgGridVue
   },
+  mounted: function() {
+    const localWindow = window.glue.windows.my();
+    const ctx = localWindow.context
+
+     this.subscribe(ctx.eventName, (context, delta, removed) => {
+       this.removeFilter();
+      this.setQuickFilter(context.data);
+      let source = this.formatSource(context.source);
+      this.setCurrentFilter(source);
+
+      //this.output = context.data
+    })
+  },
+
   mixins: [Messaging, Windowing],
   computed: {
     ...mapState(["data", "columns", "currentFilter"]),

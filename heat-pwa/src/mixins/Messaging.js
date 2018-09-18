@@ -1,19 +1,28 @@
 var myMixin = {
   created: function() {
-    window.glue.contexts.subscribe('filter', (context, delta, removed) => {
-      console.log('context update', context.data)
-      this.output = context.data
-    })
   },
   methods: {
-    filter: function(filter) {
+    // Subscribe to the named event passed in
+    subscribe: function(name, subscriber) {
+      window.glue.contexts.subscribe(name, (context, delta, removed) => {
+        if ( subscriber !== undefined ) {
+          subscriber(context, delta, removed)
+        }
+      })
+    },
+    filter: function(filter, name) {
 
       if ( window.glue != undefined ) {
-        alert('GLUE42: Filtering message ' + filter);
-        window.glue.contexts.update('filter', filter);
+        console.log('GLUE42: Filtering message ' + filter);
+        if ( name !== undefined ) {
+          window.glue.contexts.set(name, filter);
+        }
+        else {
+          window.glue.contexts.set('filter', filter);
+        }
       }
       else {
-        alert('WEBSockets: Filtering message ' + filter);
+        console.log('WEBSockets: Filtering message ' + filter);
         this.$socket.emit('filterByDate', filter);
       }
     }
