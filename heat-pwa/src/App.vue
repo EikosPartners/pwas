@@ -7,9 +7,10 @@
 <script>
 import { mapActions, mapMutations } from 'vuex';
 import Windowing from '@/mixins/Windowing';
+import Messaging from '@/mixins/Messaging';
 
 export default {
-  mixins: [Windowing],
+  mixins: [Windowing, Messaging],
   name: 'app',
   methods: {
     ...mapActions(['fetchData', 'fetchColor']),
@@ -18,12 +19,18 @@ export default {
   created() {
     const localWindow = window.glue.windows.my();
     const ctx = localWindow.context
-    console.log("ctx filter", ctx.filter)
-    if (ctx.filter) {
-     console.log("filter.data", ctx.filter.data)
+    const contextName = ctx.contextName
+
+     this.subscribe(contextName, (context, delta, removed) => {
+      debugger
+      this.$store.commit('initializeData', context.filter.data)
+    });
+
+     console.log("ctx filter", ctx)
+    if (ctx) {
       this.$store.commit('initializeData', ctx.filter.data)
-      //disables socket refresh
-      this.$store.commit('setBelongsToGrid')
+      this.$store.commit('setBelongsToGrid') //disables socket refresh
+      localWindow.onContextUpdated((context, win) => console.log('update context:', context))
     }
     else {
       this.fetchData();
