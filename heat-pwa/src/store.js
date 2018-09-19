@@ -6,12 +6,14 @@ Vue.use(Vuex);
 
 const state = {
   data: [],
-  color: null
+  color: null,
+  belongsToGrid: false
 };
 
 export const getters = {
   data: state => state.data,
-  color: state => state.color
+  color: state => state.color,
+  belongsToGrid: state => state.belongsToGrid
 };
 
 export const mutations = {
@@ -25,6 +27,9 @@ export const mutations = {
     const oldData = state.data;
     oldData.splice(0, 100);
     state.data = oldData.concat(data);
+  },
+  setBelongsToGrid(state) {
+    state.belongsToGrid = true    
   }
 };
 

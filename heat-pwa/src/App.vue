@@ -5,17 +5,29 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapMutations } from 'vuex';
 import Windowing from '@/mixins/Windowing';
 
 export default {
   mixins: [Windowing],
   name: 'app',
   methods: {
-    ...mapActions(['fetchData', 'fetchColor'])
+    ...mapActions(['fetchData', 'fetchColor']),
+    ...mapMutations(['initializeData', 'setBelongsTo'])
   },
   created() {
-    this.fetchData();
+    const localWindow = window.glue.windows.my();
+    const ctx = localWindow.context
+    console.log("ctx filter", ctx.filter)
+    if (ctx.filter) {
+     console.log("filter.data", ctx.filter.data)
+      this.$store.commit('initializeData', ctx.filter.data)
+      //disables socket refresh
+      this.$store.commit('setBelongsTo')
+    }
+    else {
+      this.fetchData();
+    }
     this.fetchColor();
 
     this.enableOptions();

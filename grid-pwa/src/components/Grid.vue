@@ -211,6 +211,14 @@ export default {
         console.log( this.gridApi )
         filter.data = new jslinq(this.gridApi.clientSideRowModel.rowsToDisplay)
         .select ( i => { return i.data} ).items
+
+        //convert date from grid display formatting to match what the server is sending
+        filter.data.forEach(item => {
+          let dtA = item.date.split(" ")
+          let dateA = dtA[0].split("-")
+          let dateString = dateA[2] + "-" + dateA[0] + "-" + dateA[1] + "T" + dtA[2] + ":" + dtA[3] + ":" + dtA[4] + ".000Z"
+          item.date = dateString
+        })
       }
       newChart.start({localContext:ctx, filter:filter})
     },

@@ -30,15 +30,15 @@ export default {
   },
   computed: {
     ...mapGetters(['data']),
-    ...mapState(['color']),
+    ...mapState(['color','belongsToGrid']),
     heatData() {
       const heatData = [];
-      let sorted = this.sortData(this.data);
-      for (let date in sorted) {
-        let dataObj = { date: date, volume: sorted[date] };
-        heatData.push(dataObj);
-      }
-      return heatData;
+        let sorted = this.sortData(this.data);
+        for (let date in sorted) {
+          let dataObj = { date: date, volume: sorted[date] };
+          heatData.push(dataObj);
+        }
+        return heatData;
     },
     themeColorsComp() {
       return this.$store.state.themeMod.themeColors;
@@ -48,8 +48,10 @@ export default {
     connect: function() {
       console.log('socket connected');
       this.$options.sockets.refresh = () => {
-        console.log('refresh!');
-        this.updateData();
+        if (!this.belongsToGrid) {
+          console.log('refresh!');
+          this.updateData();
+        }
       };
       /*
       this.$options.sockets.themeColor = data => {
