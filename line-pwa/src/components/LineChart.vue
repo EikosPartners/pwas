@@ -26,7 +26,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['color']),
+    ...mapState(['color','belongsToGrid']),
     ...mapGetters(['dataDV'])
   },
   sockets: {
@@ -36,8 +36,10 @@ export default {
         this.changeTheme(data.name);
       };
       this.$options.sockets.refresh = () => {
-        console.log('refresh!');
-        this.updateData();
+       if (!this.belongsToGrid) {
+          console.log('refresh!');
+          this.updateData();
+        }
       };
     }
   },

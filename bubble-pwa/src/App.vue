@@ -11,7 +11,7 @@ export default {
   name: 'app',
   methods: {
     ...mapActions(['fetchData']),
-    ...mapMutations(['initializeData', 'setBelongsTo'])
+    ...mapMutations(['initializeData', 'setBelongsToGrid'])
   },
   created() {
       const localWindow = window.glue.windows.my();
@@ -21,7 +21,7 @@ export default {
      console.log("filter.data", ctx.filter.data)
       this.$store.commit('initializeData', ctx.filter.data)
       //disables socket refresh
-      this.$store.commit('setBelongsTo')
+      this.$store.commit('setBelongsToGrid')
     }
     else {
       this.fetchData();

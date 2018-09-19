@@ -6,11 +6,12 @@ Vue.use(Vuex);
 
 const state = {
   data: [],
-  color: null
+  color: null,
+  belongsToGrid: false
 };
 
 export const mutations = {
-  fetchData(state, payload) {
+  initializeData(state, payload) {
     state.data = payload;
   },
   refreshData(state, data) {
@@ -20,13 +21,16 @@ export const mutations = {
   },
   addColor(state, data) {
     state.color = data;
+  },
+  setBelongsToGrid(state) {
+    state.belongsToGrid = true
   }
 };
 
 export const actions = {
   fetchData({ commit }) {
     axios.get('http://localhost:9000').then(res => {
-      commit('fetchData', res.data);
+      commit('initializeData', res.data);
     });
   },
   updateData({ commit }) {

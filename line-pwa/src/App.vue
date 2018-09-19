@@ -5,15 +5,29 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapMutations } from 'vuex';
 
 export default {
-  created() {
-    this.fetchData();
-    this.fetchColor();
-  },
+  name: 'app',
   methods: {
-    ...mapActions(['fetchData', 'fetchColor'])
+    ...mapActions(['fetchData', 'fetchColor']),
+    ...mapMutations(['initializeData', 'setBelongsToGrid'])
+  },
+  created() {
+    const localWindow = window.glue.windows.my();
+    const ctx = localWindow.context
+    console.log("ctx filter", ctx.filter)
+    if (ctx.filter) {
+     console.log("filter.data", ctx.filter.data)
+      this.$store.commit('initializeData', ctx.filter.data)
+      //disables socket refresh
+      this.$store.commit('setBelongsToGrid')
+    }
+    else {
+      this.fetchData();
+    }
+    this.fetchColor();
+
   }
 };
 </script>
