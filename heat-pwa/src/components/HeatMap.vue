@@ -51,10 +51,16 @@ export default {
         console.log('refresh!');
         this.updateData();
       };
+      /*
       this.$options.sockets.themeColor = data => {
         console.log(data);
         this.changeTheme(data.name);
       };
+      */
+    },
+    themeColor: function(data) {
+      debugger
+        this.changeTheme(data.name);
     }
   },
   methods: {

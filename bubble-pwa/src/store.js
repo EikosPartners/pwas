@@ -6,11 +6,13 @@ import jslinq from "jslinq";
 Vue.use(Vuex);
 
 const state = {
-  data: []
+  data: [],
+  color: null,
 };
 
 export const getters = {
-  data: state => state.data
+  data: state => state.data,
+  color: state => state.color
 };
 
 export const mutations = {
@@ -21,7 +23,10 @@ export const mutations = {
     const oldData = state.data;
     oldData.splice(0, 100);
     state.data = oldData.concat(data);
-  }
+  },
+  addColor(state, data) {
+    state.color = data;
+  },
 };
 
 export const actions = {
@@ -34,6 +39,15 @@ export const actions = {
     axios.get("http://localhost:9000/update").then(response => {
       commit("refreshData", response.data);
     });
+  },
+  fetchColor({ commit }) {
+    axios.get('http://localhost:9000/color').then(response => {
+      console.log(response);
+      commit('addColor', response.data.color);
+    });
+  },
+  changeTheme({ commit }, data) {
+    commit('addColor', data);
   }
 };
 

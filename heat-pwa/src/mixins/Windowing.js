@@ -33,10 +33,21 @@ var WindowingMixin = {
       // We can launch new windows from URL's
       myWindow.onFrameButtonClicked(function (buttonInfo) {
       if (buttonInfo.buttonId === 'search-button') {
-        window.glue.windows.open('Search', 'http://localhost:8081', {
-          relativeTo: myWindow.id,
-          realtivePosition: 'right'
-        })
+        let app = window.glue.appManager.application('JSCUserSettings');
+        const localWindow = window.glue.windows.my();
+        let windowConfig = {
+        };
+
+        // Launch the app and then wait for the return so that we can grab the instance Id
+        app
+          .start({}, windowConfig)
+          .then(instance => {
+            console.log(instance)
+            //localThis.gridInstance = instance
+          })
+          .catch( exception => {
+            console.log(exception)
+          });
       }
     });
   

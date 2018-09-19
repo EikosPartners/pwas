@@ -54,6 +54,8 @@ io.sockets.on('connection', function(socket) {
   });
   socket.on('themeColor', function(data) {
     colorObj.color = data.name;
+
+    console.log('Send to all listeners ' + data.name)
     io.emit('themeColor', data);
   });
 });

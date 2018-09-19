@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <theme-chooser/>
     <bubble-chart 
       :isDate="true" 
       @jsc_click="filterByDateAndSeverity" 
@@ -15,10 +14,9 @@
 <script>
 import {
   D3BubbleChart,
-  StyleTogglerMixin,
-  ThemeChooserComponent
+  StyleTogglerMixin
 } from 'jscatalyst';
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapState, mapActions } from 'vuex';
 import jslinq from 'jslinq';
 import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
@@ -27,8 +25,7 @@ import Windowing from '@/mixins/Windowing';
 export default {
   name: 'BubbleChart',
   components: {
-    bubbleChart: D3BubbleChart,
-    themeChooser: ThemeChooserComponent
+    bubbleChart: D3BubbleChart
   },
   mixins: [StyleTogglerMixin, Messaging, Windowing],
   data() {
@@ -38,6 +35,7 @@ export default {
   },
   computed: {
     ...mapGetters(['data']),
+    ...mapState(['color']),
     prettyData() {
       let bubbleData = new jslinq(this.data)
         .select(item => {
@@ -74,7 +72,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['updateData']),
+    ...mapActions(['updateData', 'changeTheme']),
     filterByDateAndSeverity(data) {
       let filter = {};
       filter.source = 'BubbleChart';
@@ -122,6 +120,12 @@ export default {
         day = '0' + day;
       }
       return month + '-' + day + '-' + year;
+    },
+    setTheme() {
+      this.$store.commit('changeColor', this.color);
+      if (this.$store.state.themeMod) {
+        this.chooseTheme(this.$store.state.themeMod.colorTheme);
+      }
     }
   },
   sockets: {
@@ -131,6 +135,9 @@ export default {
         console.log('refresh!');
         this.updateData();
       };
+    },
+    themeColor: function(data) {
+        this.changeTheme(data.name);
     }
   },
   created() {
@@ -143,6 +150,14 @@ export default {
       console.log('context update', context.data);
       this.output = context.data;
     });
+  },
+  watch: {
+    color(newData) {
+      console.log(newData);
+      if (newData) {
+        this.setTheme();
+      }
+    }
   }
 };
 </script>

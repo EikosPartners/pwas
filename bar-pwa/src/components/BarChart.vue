@@ -41,6 +41,7 @@ export default {
       return barData;
     },
     prettyData() {
+      debugger
       let barData = [];
       let sorted = this.sortData(this.data);
       for (let year in sorted) {
@@ -75,6 +76,11 @@ export default {
         console.log('fetchColor recieved', data);
         this.changeTheme(data.name);
       };
+    },
+    themeColor: function(data) {
+        debugger
+        console.log('fetchColor recieved', data);
+        this.changeTheme(data.name);
     }
   },
   methods: {
