@@ -24,7 +24,6 @@ export default {
 
     this.subscribe(contextName, (context, delta, removed) => {
       debugger
-      console.log('context update', context.filter);
       this.$store.commit('initializeData', context.filter.data)
     });
 

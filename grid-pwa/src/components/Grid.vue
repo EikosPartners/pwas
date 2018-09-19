@@ -22,7 +22,7 @@
     :enableSorting='trueVar'
     :enableFilter='trueVar'
     :gridReady='onGridReady'
-    :filterChanged='test'
+    :filterChanged='handleFilterChange'
     rowSelection='multiple'
   ></ag-grid-vue>
   </div>
@@ -142,7 +142,7 @@ export default {
   methods: {
     ...mapMutations(["setCurrentFilter"]),
     ...mapActions(["updateData"]),
-    test() {
+    handleFilterChange() {
       console.log("rows", this.gridApi.clientSideRowModel.rowsToDisplay)
       let filter = {}
       let gridData = new jslinq(this.gridApi.clientSideRowModel.rowsToDisplay)
@@ -239,9 +239,7 @@ export default {
 
         //convert date from grid display formatting to match what the server is sending
        filter.data = gridData.map(item => {
-         console.log("item.date", item.date)
           let dtA = item.date.split(" ")
-          console.log("dtA", dtA)
           let dateA = dtA[0].split("-")
           let dateString = dateA[2] + "-" + dateA[0] + "-" + dateA[1] + "T" + dtA[2] + ":" + dtA[3] + ":" + dtA[4] + ".000Z"
           return {
