@@ -22,7 +22,7 @@
     :enableSorting='trueVar'
     :enableFilter='trueVar'
     :gridReady='onGridReady'
-    :filterChanged='handleFilterChange'
+    :filterChanged='updateChildren'
     rowSelection='multiple'
   ></ag-grid-vue>
   </div>
@@ -142,12 +142,12 @@ export default {
   methods: {
     ...mapMutations(["setCurrentFilter"]),
     ...mapActions(["updateData"]),
-    handleFilterChange() {
-      console.log("rows", this.gridApi.clientSideRowModel.rowsToDisplay)
+    updateChildren() {
       let filter = {}
       let gridData = new jslinq(this.gridApi.clientSideRowModel.rowsToDisplay)
         .select ( i => { return i.data} ).items
       console.log('linq data', gridData.data)
+      if (gridData) {
         //convert date from grid display formatting to match what the server is sending
         filter.data = gridData.map(item => {
           let dtA = item.date.split(" ")
@@ -161,8 +161,10 @@ export default {
             severity: item.severity
           }
         })
-
-      debugger
+      } else {
+        //if no filter has been applied to the grid use full data set from store
+        filter.data = this.data
+      }
       window.glue.contexts.set('filteredGrid', {filter:filter})
     },
     onGridReady(params) {
@@ -261,9 +263,6 @@ export default {
       newChart.start(
         appContext
         )
-    },
-    updateChildren() {
-      console.log("update children")
     },
     parseDate(date) {
       let dateA = date.split("T")[0].split("-");
