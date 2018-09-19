@@ -24,7 +24,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['color', 'themeTrigger']),
+    ...mapState(['color', 'themeTrigger','belongsToGrid']),
     ...mapGetters(['data']),
     prettyData() {
       const pieLinqData = new jslinq(this.data)
@@ -100,8 +100,10 @@ export default {
     connect: function() {
       console.log('socket connected');
       this.$options.sockets.refresh = () => {
-        console.log('refresh!');
-        this.updateData();
+        if (!this.belongsToGrid) {
+          console.log('refresh!');
+          this.updateData();
+        }
       };
       this.$options.sockets.themeColor = data => {
         this.changeTheme(data.name);

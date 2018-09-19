@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapMutations } from 'vuex';
 import {
   ThemeChooserComponent
 } from 'jscatalyst';
@@ -13,16 +13,27 @@ import {
 export default {
   name: 'app',
   methods: {
-    ...mapActions(['fetchData', 'fetchColor'])
+    ...mapActions(['fetchData', 'fetchColor']),
+    ...mapMutations(['initializeData', 'setBelongsToGrid'])
   },
   created() {
-    this.fetchData();
+   const localWindow = window.glue.windows.my();
+    const ctx = localWindow.context
+    console.log("ctx filter", ctx.filter)
+    if (ctx.filter) {
+     console.log("filter.data", ctx.filter.data)
+      this.$store.commit('initializeData', ctx.filter.data)
+      //disables socket refresh
+      this.$store.commit('setBelongsToGrid')
+    }
+    else {
+      this.fetchData();
+    }
     this.fetchColor();
   },
   components: {
     themeChooser: ThemeChooserComponent
-  },
-
+  }
 };
 </script>
 
