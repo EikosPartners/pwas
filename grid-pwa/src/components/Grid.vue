@@ -4,7 +4,7 @@
     <span>Grid</span>
     <span class="current-filter">{{currentFilter}}</span>
     <button @click="removeFilter">Clear Filter</button>
-    <select v-model="selected">
+    <select class="select" v-model="selected">
       <option disabled value="">Select chart</option>
       <option value="JSCBar">BarChart</option>
       <option value="JSCBubble">Bubble Chart</option>
@@ -143,6 +143,15 @@ export default {
     ...mapMutations(["setCurrentFilter"]),
     ...mapActions(["updateData"]),
     updateChildren() {
+      debugger
+      if ( window.glue.windows.my().context === null ) {
+        return
+      }
+
+      if ( window.glue.windows.my().context.eventName === 'filterOnGrid' ) {
+        return
+      }
+
       let filter = {}
       let gridData = new jslinq(this.gridApi.clientSideRowModel.rowsToDisplay)
         .select ( i => { return i.data} ).items
@@ -179,6 +188,7 @@ export default {
       const ctx = localWindow.context
 
       this.subscribe(ctx.eventName, (context, delta, removed) => {
+
       this.removeFilter();
       // console.log('context', context)
       let source = this.formatSource(context.source);
@@ -254,12 +264,14 @@ export default {
         })
       }
 
+      window.glue.contexts.set('filteredGrid', {filter:filter})
+
       let appContext = {
         localContext:ctx,
-        contextName: 'filteredGrid', 
+        contextName: 'filteredGrid',
         filter:filter
         }
-
+      
       newChart.start(
         appContext
         )
@@ -286,10 +298,11 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 10vh;
+  /* min-height: 60px; */
 }
 .container {
   width: 100%;
-  height: 95vh;
   overflow: hidden;
 }
 
@@ -300,12 +313,18 @@ export default {
 
 .grid {
   width: 100%;
-  height: 85%;
+  height: 85vh;
 }
+.select {
+  padding: 0.3rem 0.6rem;
+  font-family: inherit;
+  font-size: 1.1rem;
+  background: White;
+  box-shadow: 0.1rem 0.1rem 0.4rem rgba(0, 0, 0, 0.3);
+} 
 
 button {
-  margin: 0.5rem;
-  padding: 0.5rem 1.2rem;
+  padding: 0.3rem 0.6rem;
   font-family: inherit;
   font-size: 1.1rem;
   background: rgb(220, 220, 220);

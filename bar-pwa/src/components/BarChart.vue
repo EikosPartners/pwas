@@ -162,15 +162,6 @@ export default {
   },
   created() {
     console.log(this.themeColorsComp);
-    // this.$store.commit('changeColor', 'Red');
-    // if (this.$store.state.themeMod) {
-    //   this.chooseTheme(this.$store.state.themeMod.colorTheme);
-    // }
-
-    this.subscribe('filterOnGrid', (context, delta, removed) => {
-      console.log('context update', context.data);
-      this.output = context.data;
-    });
   },
   watch: {
     color(newData) {

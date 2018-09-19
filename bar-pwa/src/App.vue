@@ -31,7 +31,7 @@ export default {
       this.$store.commit('initializeData', ctx.filter.data)
       this.$store.commit('setBelongsToGrid') //disables socket refresh
       localWindow.onContextUpdated((context, win) => console.log('update context:', context))
-    }
+   }
     else {
       this.fetchData();
     }
