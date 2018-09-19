@@ -26,8 +26,7 @@ export default {
       this.$store.commit('initializeData', context.filter.data)
     });
 
-    console.log("ctx filter", ctx.filter)
-    if (ctx) {
+    if (ctx.filter) {
       this.$store.commit('initializeData', ctx.filter.data)
       this.$store.commit('setBelongsToGrid') //disables socket refresh
     }
