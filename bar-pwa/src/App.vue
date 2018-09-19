@@ -24,16 +24,14 @@ export default {
 
     this.subscribe(contextName, (context, delta, removed) => {
       debugger
-      console.log('context update', context.filter.data);
+      console.log('context update', context.filter);
       this.$store.commit('initializeData', context.filter.data)
     });
 
-    console.log("ctx filter", ctx.filter)
-    if (ctx.filter) {
-     console.log("filter.data", ctx.filter.data)
+    console.log("ctx filter", ctx)
+    if (ctx) {
       this.$store.commit('initializeData', ctx.filter.data)
-      //disables socket refresh
-      this.$store.commit('setBelongsToGrid')
+      this.$store.commit('setBelongsToGrid') //disables socket refresh
       localWindow.onContextUpdated((context, win) => console.log('update context:', context))
     }
     else {

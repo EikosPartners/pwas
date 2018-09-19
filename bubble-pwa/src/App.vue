@@ -6,16 +6,27 @@
 
 <script>
 import { mapActions, mapMutations } from 'vuex';
+import Windowing from '@/mixins/Windowing';
+import Messaging from '@/mixins/Messaging';
 
 export default {
+  mixins: [Windowing, Messaging],
   name: 'app',
   methods: {
     ...mapActions(['fetchData']),
     ...mapMutations(['initializeData', 'setBelongsToGrid'])
   },
   created() {
-      const localWindow = window.glue.windows.my();
+    const localWindow = window.glue.windows.my();
     const ctx = localWindow.context
+    const contextName = ctx.contextName
+
+    this.subscribe(contextName, (context, delta, removed) => {
+      debugger
+      console.log('context update', context.filter.data);
+      this.$store.commit('initializeData', context.filter.data)
+    });
+
     console.log("ctx filter", ctx.filter)
     if (ctx.filter) {
      console.log("filter.data", ctx.filter.data)

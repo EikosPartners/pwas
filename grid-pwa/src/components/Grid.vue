@@ -39,8 +39,6 @@ export default {
   components: {
     AgGridVue
   }, 
-  //// Moved the mounted subscribe functionality to onGridReady()
- 
   mixins: [Messaging, Windowing],
   computed: {
 
@@ -145,16 +143,23 @@ export default {
     ...mapMutations(["setCurrentFilter"]),
     ...mapActions(["updateData"]),
     test() {
+      console.log("rows", this.gridApi.clientSideRowModel.rowsToDisplay)
       let filter = {}
-      filter.data = new jslinq(this.gridApi.clientSideRowModel.rowsToDisplay)
+      let gridData = new jslinq(this.gridApi.clientSideRowModel.rowsToDisplay)
         .select ( i => { return i.data} ).items
-
+      console.log('linq data', gridData.data)
         //convert date from grid display formatting to match what the server is sending
-        filter.data.forEach(item => {
+        filter.data = gridData.map(item => {
           let dtA = item.date.split(" ")
           let dateA = dtA[0].split("-")
           let dateString = dateA[2] + "-" + dateA[0] + "-" + dateA[1] + "T" + dtA[2] + ":" + dtA[3] + ":" + dtA[4] + ".000Z"
-          item.date = dateString
+          return {
+            date: dateString,
+            id: item.id,
+            project: item.project,
+            raisedBy: item.raisedBy,
+            severity: item.severity
+          }
         })
 
       debugger
@@ -173,7 +178,7 @@ export default {
 
       this.subscribe(ctx.eventName, (context, delta, removed) => {
       this.removeFilter();
-      console.log('context', context)
+      // console.log('context', context)
       let source = this.formatSource(context.source);
       this.setCurrentFilter(source);
       if (context.source === "BubbleChart") {
@@ -228,21 +233,28 @@ export default {
 
       if ( this.gridApi !== undefined || this.gridApi !== null ) {
         debugger
-        console.log( this.gridApi )
-        filter.data = new jslinq(this.gridApi.clientSideRowModel.rowsToDisplay)
+        // console.log( this.gridApi )
+        let gridData = new jslinq(this.gridApi.clientSideRowModel.rowsToDisplay)
         .select ( i => { return i.data} ).items
 
         //convert date from grid display formatting to match what the server is sending
-        filter.data.forEach(item => {
+       filter.data = gridData.map(item => {
+         console.log("item.date", item.date)
           let dtA = item.date.split(" ")
+          console.log("dtA", dtA)
           let dateA = dtA[0].split("-")
           let dateString = dateA[2] + "-" + dateA[0] + "-" + dateA[1] + "T" + dtA[2] + ":" + dtA[3] + ":" + dtA[4] + ".000Z"
-          item.date = dateString
+          return {
+            date: dateString,
+            id: item.id,
+            project: item.project,
+            raisedBy: item.raisedBy,
+            severity: item.severity
+          }
         })
       }
-      console.log("ctx", ctx)
 
-      let appContext ={
+      let appContext = {
         localContext:ctx,
         contextName: 'filteredGrid', 
         filter:filter
@@ -253,29 +265,7 @@ export default {
         )
     },
     updateChildren() {
-      const newChart = glue.appManager.application(this.selected)
-      const localWindow = window.glue.windows.my();
-
-      // Get the data set from this component
-      let filter = {
-      }
-
-      if ( this.gridApi !== undefined || this.gridApi !== null ) {
-        debugger
-        console.log( this.gridApi )
-        filter.data = new jslinq(this.gridApi.clientSideRowModel.rowsToDisplay)
-        .select ( i => { return i.data} ).items
-
-        //convert date from grid display formatting to match what the server is sending
-        filter.data.forEach(item => {
-          let dtA = item.date.split(" ")
-          let dateA = dtA[0].split("-")
-          let dateString = dateA[2] + "-" + dateA[0] + "-" + dateA[1] + "T" + dtA[2] + ":" + dtA[3] + ":" + dtA[4] + ".000Z"
-          item.date = dateString
-        })
-      }
-      console.log("ctx", ctx)
-      localWindow.updateContext(filter)
+      console.log("update children")
     },
     parseDate(date) {
       let dateA = date.split("T")[0].split("-");
