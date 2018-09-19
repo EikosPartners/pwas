@@ -22,6 +22,7 @@
     :enableSorting='trueVar'
     :enableFilter='trueVar'
     :gridReady='onGridReady'
+    :filterChanged='test'
     rowSelection='multiple'
   ></ag-grid-vue>
   </div>
@@ -68,6 +69,8 @@ export default {
       this.$options.sockets.refresh = () => {
         console.log("refresh!");
         this.updateData();
+        this.updateChildren()
+
       };
       this.$options.sockets.filterByDate = filter => {
         console.log("filter", filter);
@@ -141,9 +144,26 @@ export default {
   methods: {
     ...mapMutations(["setCurrentFilter"]),
     ...mapActions(["updateData"]),
+    test() {
+      let filter = {}
+      filter.data = new jslinq(this.gridApi.clientSideRowModel.rowsToDisplay)
+        .select ( i => { return i.data} ).items
+
+        //convert date from grid display formatting to match what the server is sending
+        filter.data.forEach(item => {
+          let dtA = item.date.split(" ")
+          let dateA = dtA[0].split("-")
+          let dateString = dateA[2] + "-" + dateA[0] + "-" + dateA[1] + "T" + dtA[2] + ":" + dtA[3] + ":" + dtA[4] + ".000Z"
+          item.date = dateString
+        })
+
+      debugger
+      window.glue.contexts.set('filteredGrid', {filter:filter})
+    },
     onGridReady(params) {
       this.gridApi = params.api;
       this.columnApi = params.columnApi;
+
       this.gridApi.sizeColumnsToFit();
       window.addEventListener("resize", () => {
         this.gridApi.sizeColumnsToFit();
@@ -220,7 +240,42 @@ export default {
           item.date = dateString
         })
       }
-      newChart.start({localContext:ctx, filter:filter})
+      console.log("ctx", ctx)
+
+      let appContext ={
+        localContext:ctx,
+        contextName: 'filteredGrid', 
+        filter:filter
+        }
+
+      newChart.start(
+        appContext
+        )
+    },
+    updateChildren() {
+      const newChart = glue.appManager.application(this.selected)
+      const localWindow = window.glue.windows.my();
+
+      // Get the data set from this component
+      let filter = {
+      }
+
+      if ( this.gridApi !== undefined || this.gridApi !== null ) {
+        debugger
+        console.log( this.gridApi )
+        filter.data = new jslinq(this.gridApi.clientSideRowModel.rowsToDisplay)
+        .select ( i => { return i.data} ).items
+
+        //convert date from grid display formatting to match what the server is sending
+        filter.data.forEach(item => {
+          let dtA = item.date.split(" ")
+          let dateA = dtA[0].split("-")
+          let dateString = dateA[2] + "-" + dateA[0] + "-" + dateA[1] + "T" + dtA[2] + ":" + dtA[3] + ":" + dtA[4] + ".000Z"
+          item.date = dateString
+        })
+      }
+      console.log("ctx", ctx)
+      localWindow.updateContext(filter)
     },
     parseDate(date) {
       let dateA = date.split("T")[0].split("-");
