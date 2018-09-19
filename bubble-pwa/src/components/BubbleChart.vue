@@ -35,7 +35,7 @@ export default {
   },
   computed: {
     ...mapGetters(['data']),
-    ...mapState(['color']),
+     ...mapState(['color','belongsToGrid']),
     prettyData() {
       let bubbleData = new jslinq(this.data)
         .select(item => {
@@ -132,8 +132,10 @@ export default {
     connect: function() {
       console.log('socket connected');
       this.$options.sockets.refresh = () => {
-        console.log('refresh!');
-        this.updateData();
+        if (!this.belongsToGrid) {
+          console.log('refresh!');
+          this.updateData();
+        }
       };
     },
     themeColor: function(data) {
