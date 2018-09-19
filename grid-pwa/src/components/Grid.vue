@@ -31,6 +31,7 @@ import { mapState, mapMutations, mapActions } from "vuex";
 import { AgGridVue } from "ag-grid-vue";
 import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
+import jslinq from 'jslinq'
 
 export default {
   name: "Grid",
@@ -200,7 +201,18 @@ export default {
       const newChart = glue.appManager.application(this.selected)
       const localWindow = window.glue.windows.my();
       const ctx = localWindow.context
-      newChart.start(ctx)
+
+      // Get the data set from this component
+      let filter = {
+      }
+
+      if ( this.gridApi !== undefined || this.gridApi !== null ) {
+        debugger
+        console.log( this.gridApi )
+        filter.data = new jslinq(this.gridApi.clientSideRowModel.rowsToDisplay)
+        .select ( i => { return i.data} ).items
+      }
+      newChart.start({localContext:ctx, filter:filter})
     },
     parseDate(date) {
       let dateA = date.split("T")[0].split("-");
