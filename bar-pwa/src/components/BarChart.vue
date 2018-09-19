@@ -30,7 +30,7 @@ export default {
   },
   computed: {
     ...mapGetters(['data', 'height']),
-    ...mapState(['color']),
+   ...mapState(['color','belongsToGrid']),
     barData() {
       const barData = [];
       let sorted = this.sortData(this.data);
@@ -69,8 +69,10 @@ export default {
     connect: function() {
       console.log('socket connected');
       this.$options.sockets.refresh = () => {
-        console.log('refresh!');
-        this.updateData();
+        if (!this.belongsToGrid) {
+          console.log('refresh!');
+          this.updateData();
+        }
       };
       this.$options.sockets.themeColor = data => {
         console.log('fetchColor recieved', data);
