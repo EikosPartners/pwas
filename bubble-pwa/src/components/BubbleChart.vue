@@ -12,15 +12,11 @@
 </template>
 
 <script>
-import {
-  D3BubbleChart,
-  StyleTogglerMixin
-} from 'jscatalyst';
+import { D3BubbleChart, StyleTogglerMixin } from 'jscatalyst';
 import { mapGetters, mapState, mapActions } from 'vuex';
 import jslinq from 'jslinq';
 import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
-
 
 export default {
   name: 'BubbleChart',
@@ -35,7 +31,7 @@ export default {
   },
   computed: {
     ...mapGetters(['data']),
-     ...mapState(['color','belongsToGrid']),
+    ...mapState(['color', 'belongsToGrid']),
     prettyData() {
       let bubbleData = new jslinq(this.data)
         .select(item => {
@@ -81,8 +77,8 @@ export default {
       filter.time = new Date();
       // console.log(filter);
       // this.$socket.emit('filterByDateAndSeverity', filter);
-       this.filter(filter, 'filterOnGrid');
-       // this.openContextWindow('Filter Results', 'http://localhost:9093', filter)
+      this.filter(filter, 'filterOnGrid');
+      // this.openContextWindow('Filter Results', 'http://localhost:9093', filter)
 
       // A Named object
       if (this.gridInstance === true) {
@@ -139,15 +135,10 @@ export default {
       };
     },
     themeColor: function(data) {
-        this.changeTheme(data.name);
+      this.changeTheme(data.name);
     }
   },
   created() {
-    this.$store.commit('changeColor', 'Pink');
-    if (this.$store.state.themeMod) {
-      this.chooseTheme(this.$store.state.themeMod.colorTheme);
-    }
-
     this.subscribe('filterOnGrid', (context, delta, removed) => {
       console.log('context update', context.data);
       this.output = context.data;

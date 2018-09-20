@@ -11,13 +11,12 @@ import 'jscatalyst/dist/jscatalyst.min.css';
 import { ThemePlugin } from 'jscatalyst';
 
 Vue.config.productionTip = false;
-
+Vue.use(Vuetify);
 Vue.use(VueSocketio, 'http://localhost:9000');
 Vue.use(ThemePlugin, {
   store,
-  themes: ['Blue', 'Pink', 'Green', 'Brown', 'Red', 'Grey']
+  custom: false
 });
-Vue.use(Vuetify);
 new Vue({
   store,
   render: h => h(App)

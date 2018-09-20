@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import App from './App.vue';
-import GlueNotAvailable from "./GlueNotAvailable.vue";
+import GlueNotAvailable from './GlueNotAvailable.vue';
 import router from './router';
 import store from './store';
 import './registerServiceWorker';
@@ -17,7 +17,7 @@ Vue.use(VueSocketio, 'http://localhost:9000');
 Vue.use(Vuetify);
 Vue.use(ThemePlugin, {
   store,
-  themes: ['Blue', 'Pink', 'Green', 'Brown', 'Red', 'Grey']
+  custom: false
 });
 // Initialize the Glue42 Environment
 

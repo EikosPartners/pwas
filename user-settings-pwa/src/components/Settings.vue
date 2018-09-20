@@ -1,13 +1,15 @@
 <template>
   <div class="settings">
     <theme-chooser @jsc_theme_change="themeHandler"/>
+    <button @click="handleLighting">Lightbulb</button>
   </div>
 </template>
 
 <script>
-import { ThemeChooserComponent } from 'jscatalyst';
+import { ThemeChooserComponent, StyleTogglerMixin } from 'jscatalyst';
 export default {
   name: 'Settings',
+  mixins: [StyleTogglerMixin],
   components: {
     themeChooser: ThemeChooserComponent
   },
@@ -19,6 +21,10 @@ export default {
   methods: {
     themeHandler(data) {
       this.$socket.emit('themeColor', data);
+    },
+    handleLighting(data) {
+      console.log(data);
+      this.toggleDark();
     }
   }
 };
