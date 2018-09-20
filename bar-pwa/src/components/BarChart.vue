@@ -221,9 +221,7 @@ export default {
   padding: 0.3rem 0.6rem;
   font-family: inherit;
   font-size: 1.1rem;
-  background: White;
   box-shadow: 0.1rem 0.1rem 0.4rem rgba(0, 0, 0, 0.3);
-  color: black;
 }
 
 p {

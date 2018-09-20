@@ -51,4 +51,15 @@ export default {
   color: #2c3e50;
   width: 100%;
 }
+
+
+  .theme--dark {
+    color: white;
+    background-color: grey;
+  }
+  
+  .theme--light {
+    color: black;
+    background-color: white;
+  }
 </style>

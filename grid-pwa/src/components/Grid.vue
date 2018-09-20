@@ -295,8 +295,6 @@ export default {
 </script>
 <style>
 .header {
-  background: rgb(66, 184, 221);
-  color: white;
   font-size: 1.5rem;
   padding: 0.5rem 2rem;
   display: flex;
