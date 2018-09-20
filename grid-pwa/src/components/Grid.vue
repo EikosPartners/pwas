@@ -2,6 +2,7 @@
 <div class="container">
   <div class="header">
     <span>Grid</span>
+     <span class="current-filter">Id: {{contextId}}</span>
     <span class="current-filter">{{currentFilter}}</span>
     <button @click="removeFilter">Clear Filter</button>
     <select class="select" v-model="selected">
@@ -42,7 +43,7 @@ export default {
   mixins: [Messaging, Windowing],
   computed: {
 
-    ...mapState(["data", "columns", "currentFilter"]),
+    ...mapState(["data", "columns", "currentFilter", "contextId"]),
     prettyData() {
       return this.data.map(item => {
         let prettyItem = {};

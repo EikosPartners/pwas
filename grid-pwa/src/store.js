@@ -7,7 +7,8 @@ Vue.use(Vuex);
 const state = {
   data: [],
   columns: [],
-  currentFilter: "No Filter"
+  currentFilter: "No Filter",
+  contextId: null
 };
 
 export const getters = {
@@ -49,6 +50,11 @@ export const mutations = {
     const oldData = state.data;
     oldData.splice(0, 100);
     state.data = oldData.concat(data);
+  },
+  setContextId(state, data) {
+    if (state.contextId === null) {
+      state.contextId = data
+    }
   }
 };
 

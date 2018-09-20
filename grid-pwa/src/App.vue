@@ -5,15 +5,18 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 
 export default {
   name: "app",
   methods: {
-    ...mapActions(["fetchData"])
+    ...mapActions(["fetchData"]),
+    ...mapMutations(["setContextId"])
   },
   created() {
     this.fetchData();
+    const IdNumber = Date.now()
+    this.$store.commit('setContextId', IdNumber)
   }
 };
 </script>
