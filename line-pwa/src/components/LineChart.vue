@@ -1,5 +1,10 @@
 <template>
     <div class="container">
+      <select v-if="!belongsToGrid" v-model="selected">
+      <option disabled value="">Select context</option>
+      <option v-for="(context, index) in availableContexts" :key="index">{{context}}</option>
+    </select>
+    <p v-if="!belongsToGrid">Subscribed to: {{selected}}</p>
       <line-chart 
         @jsc_click="filterByDate" 
         title="Ticket Severity by Date" 
@@ -22,12 +27,22 @@ export default {
  mixins: [StyleTogglerMixin, Messaging, Windowing],
   data() {
     return {
-      gridInstance: false
+      gridInstance: false,
+      selected: ""
     };
   },
   computed: {
     ...mapState(['color','belongsToGrid']),
-    ...mapGetters(['dataDV'])
+    ...mapGetters(['dataDV']),
+    availableContexts() {
+      let availableContexts = []
+      window.glue.contexts.all().forEach(context => {
+        if (context.includes('filteredGrid') && context !== "filteredGrid") {
+          availableContexts.push( context)
+        }
+      })
+      return availableContexts
+    }
   },
   sockets: {
     connect: function() {
@@ -100,16 +115,23 @@ export default {
       }
     }
   },
-  created() {
-    this.subscribe('filterOnGrid', (context, delta, removed) => {
-      console.log('context update', context.data);
-    });
-  },
+  // created() {
+  //   this.subscribe('filterOnGrid', (context, delta, removed) => {
+  //     console.log('context update', context.data);
+  //   });
+  // },
   watch: {
     color(newData) {
       console.log(newData);
       if (newData) {
         this.setTheme();
+      }
+    },
+    selected(newData) {
+      if (newData) {
+        this.subscribe(newData, (context, delta, removed) => {
+          this.$store.commit('initializeData', context.filter.data)
+        });
       }
     }
   }

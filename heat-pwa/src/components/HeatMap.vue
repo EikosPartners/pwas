@@ -56,7 +56,7 @@ export default {
         return heatData;
     },
     themeColorsComp() {
-      return this.$store.getters.themeColors;
+      return Object.values(this.$store.getters.themeColors);
     }
   },
   sockets: {
@@ -77,7 +77,7 @@ export default {
     },
     themeColor: function(data) {
       debugger
-        this.changeTheme(data.name);
+        this.changeTheme(data.name.toLowerCase());
     }
   },
   methods: {

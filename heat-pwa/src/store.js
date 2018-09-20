@@ -21,8 +21,7 @@ export const mutations = {
     state.data = data;
   },
   addColor(state, data) {
-    state.color = data;
-    debugger
+    state.color = data.toLowerCase();
   },
   refreshData(state, data) {
     const oldData = state.data;
