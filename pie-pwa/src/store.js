@@ -7,20 +7,26 @@ Vue.use(Vuex);
 const state = {
   data: [],
   color: null,
+  lighting: null,
   belongsToGrid: false
 };
 
-export const getters = { 
-  data: state => state.data, 
-  color: state => state.color, 
-  belongsToGrid: state => state.belongsToGrid };
+export const getters = {
+  data: state => state.data,
+  color: state => state.color,
+  lighting: state => state.lighting,
+  belongsToGrid: state => state.belongsToGrid
+};
 
 export const mutations = {
   initializeData(state, data) {
     state.data = data;
   },
-  addColor(state, data) {
-    state.color = data;
+  setColor(state, color) {
+    state.color = color;
+  },
+  setLighting(state, lighting) {
+    state.lighting = lighting;
   },
   refreshData(state, data) {
     const oldData = state.data;
@@ -28,7 +34,7 @@ export const mutations = {
     state.data = oldData.concat(data);
   },
   setBelongsToGrid(state) {
-    state.belongsToGrid = true
+    state.belongsToGrid = true;
   }
 };
 
@@ -41,7 +47,8 @@ export const actions = {
   fetchColor({ commit }) {
     axios.get('http://localhost:9000/color').then(resp => {
       console.log(resp);
-      commit('addColor', resp.data.color);
+      commit('setColor', resp.data.color);
+      commit('setLighting', resp.data.lighting);
     });
   },
   updateData({ commit }) {
@@ -50,7 +57,7 @@ export const actions = {
     });
   },
   changeTheme({ commit }, data) {
-    commit('addColor', data);
+    commit('setColor', data);
   }
 };
 

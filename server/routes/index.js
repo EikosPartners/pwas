@@ -6,7 +6,7 @@ let router = express.Router();
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
-let colorObj = { action: 'changeColor', color: 'Blue' };
+let colorObj = { action: 'changeColor', color: 'Blue', lighting: 'light' };
 
 let data = seed.generateDataSet(500);
 let refreshTime = 20000;

@@ -11,7 +11,6 @@ import jslinq from 'jslinq';
 import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
 
-
 export default {
   name: 'PieChart',
   components: {
@@ -24,7 +23,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['color', 'themeTrigger','belongsToGrid']),
+    ...mapState(['color', 'lighting', 'belongsToGrid']),
     ...mapGetters(['data']),
     prettyData() {
       const pieLinqData = new jslinq(this.data)
@@ -108,6 +107,9 @@ export default {
       this.$options.sockets.themeColor = data => {
         this.changeTheme(data.name);
       };
+      this.$options.sockets.themeLighting = data => {
+        this.toggleDark();
+      };
     }
   },
   created() {
@@ -120,6 +122,13 @@ export default {
     color(newData) {
       if (newData) {
         this.setTheme();
+      }
+    },
+    lighting(newData) {
+      if (newData) {
+        if (newData === 'dark') {
+          this.toggleDark();
+        }
       }
     }
   }

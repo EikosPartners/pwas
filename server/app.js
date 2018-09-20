@@ -55,8 +55,12 @@ io.sockets.on('connection', function(socket) {
   socket.on('themeColor', function(data) {
     colorObj.color = data.name;
 
-    console.log('Send to all listeners ' + data.name)
+    console.log('Send to all listeners ' + data.name);
     io.emit('themeColor', data);
+  });
+  socket.on('themeLighting', function(data) {
+    colorObj.lighting = data;
+    io.emit('themeLighting', data);
   });
 });
 module.exports = server;

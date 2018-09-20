@@ -5,9 +5,16 @@
 </template>
 <script>
 import Settings from './components/Settings.vue';
+import { mapActions } from 'vuex';
 export default {
   components: {
     Settings
+  },
+  methods: {
+    ...mapActions(['fetchColor'])
+  },
+  created() {
+    this.fetchColor();
   }
 };
 </script>

@@ -6,9 +6,7 @@
 
 <script>
 import { mapActions, mapMutations } from 'vuex';
-import {
-  ThemeChooserComponent
-} from 'jscatalyst';
+import { ThemeChooserComponent } from 'jscatalyst';
 import Windowing from '@/mixins/Windowing';
 import Messaging from '@/mixins/Messaging';
 
@@ -20,24 +18,25 @@ export default {
     ...mapMutations(['initializeData', 'setBelongsToGrid'])
   },
   created() {
-   const localWindow = window.glue.windows.my();
-    const ctx = localWindow.context
-    const contextName = ctx.contextName
+    this.fetchColor();
+    const localWindow = window.glue.windows.my();
+    const ctx = localWindow.context;
+    const contextName = ctx.contextName;
 
     this.subscribe(contextName, (context, delta, removed) => {
-      debugger
-      this.$store.commit('initializeData', context.filter.data)
+      debugger;
+      this.$store.commit('initializeData', context.filter.data);
     });
 
     if (ctx.filter) {
-      this.$store.commit('initializeData', ctx.filter.data)
-      this.$store.commit('setBelongsToGrid') //disables socket refresh
-      localWindow.onContextUpdated((context, win) => console.log('update context:', context))
-    }
-    else {
+      this.$store.commit('initializeData', ctx.filter.data);
+      this.$store.commit('setBelongsToGrid'); //disables socket refresh
+      localWindow.onContextUpdated((context, win) =>
+        console.log('update context:', context)
+      );
+    } else {
       this.fetchData();
     }
-    this.fetchColor();
   },
   components: {
     themeChooser: ThemeChooserComponent
