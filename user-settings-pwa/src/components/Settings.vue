@@ -1,6 +1,6 @@
 <template>
   <div class="settings">
-    <toolbar @jsc_theme_change="themeHandler" @jsc_ld_change="lightingHandler"/>
+    <toolbar title="User Settings" @jsc_theme_change="themeHandler" @jsc_ld_change="lightingHandler"/>
   </div>
 </template>
 
