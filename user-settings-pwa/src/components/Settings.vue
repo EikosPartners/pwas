@@ -1,18 +1,27 @@
 <template>
   <div class="settings">
-    <toolbar title="User Settings" @jsc_theme_change="themeHandler" @jsc_ld_change="lightingHandler"/>
+    <toolbar title="User Settings" :logoLight="lightLogo" :logoDark="darkLogo" @jsc_theme_change="themeHandler" @jsc_ld_change="lightingHandler"/>
   </div>
 </template>
 
 <script>
 import { ThemeChooserComponent, StyleTogglerMixin, Toolbar } from 'jscatalyst';
 import { mapState } from 'vuex';
+import logoLight from '../../static/ep-logo-yellow.png';
+import logoDark from '../../static/ep-logo-black.png';
+
 export default {
   name: 'Settings',
   mixins: [StyleTogglerMixin],
   components: {
     themeChooser: ThemeChooserComponent,
     toolbar: Toolbar
+  },
+  data() {
+    return {
+      lightLogo: logoLight,
+      darkLogo: logoDark
+    };
   },
   computed: {
     ...mapState(['color', 'lighting'])
