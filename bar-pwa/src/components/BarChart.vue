@@ -4,7 +4,7 @@
       <option disabled value="">Select context</option>
       <option v-for="(context, index) in availableContexts" :key="index">{{context}}</option>
     </select>
-    <p>{{selected}}</p>
+    <p v-if="!belongsToGrid">Subscribed to: {{selected}}</p>
     <bar-chart
       @jsc_click="filterByMonth"
       :dataModel='prettyData'
