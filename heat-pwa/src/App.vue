@@ -17,25 +17,28 @@ export default {
     ...mapMutations(['initializeData', 'setBelongsToGrid'])
   },
   created() {
+    this.fetchColor();
+
     const localWindow = window.glue.windows.my();
     const ctx = localWindow.context
     const contextName = ctx.contextName
 
-     this.subscribe(contextName, (context, delta, removed) => {
+    if (contextName) {
+      this.$store.commit('setBelongsToGrid') //disables socket refresh
+    }
+
+    this.subscribe(contextName, (context, delta, removed) => {
       debugger
       this.$store.commit('initializeData', context.filter.data)
     });
 
     if (ctx.filter) {
       this.$store.commit('initializeData', ctx.filter.data)
-      this.$store.commit('setBelongsToGrid') //disables socket refresh
       localWindow.onContextUpdated((context, win) => console.log('update context:', context))
     }
     else {
       this.fetchData();
     }
-    this.fetchColor();
-
     this.enableOptions();
   }
 };

@@ -1,7 +1,12 @@
 <template>
   <div class="container">
+    <select v-if="!belongsToGrid" v-model="selected">
+      <option disabled value="">Select context</option>
+      <option v-for="(context, index) in availableContexts" :key="index">{{context}}</option>
+    </select>
+    <p v-if="!belongsToGrid">Subscribed to: {{selected}}</p>
     <heat-map
-        v-if="themeColorsComp.length > 0"
+        v-if="themeColorsComp && themeColorsComp.length > 0"
         @jsc_click="filterByDate"
         :dataModel='heatData'
         title='Number of Tickets by Date'
@@ -25,12 +30,22 @@ export default {
   mixins: [StyleTogglerMixin, Messaging, Windowing],
   data() {
     return {
-      gridInstance: false
+      gridInstance: false,
+      selected: ""
     };
   },
   computed: {
     ...mapGetters(['data']),
     ...mapState(['color','belongsToGrid']),
+    availableContexts() {
+      let availableContexts = []
+      window.glue.contexts.all().forEach(context => {
+        if (context.includes('filteredGrid') && context !== "filteredGrid") {
+          availableContexts.push( context)
+        }
+      })
+      return availableContexts
+    },
     heatData() {
       const heatData = [];
         let sorted = this.sortData(this.data);
@@ -41,7 +56,7 @@ export default {
         return heatData;
     },
     themeColorsComp() {
-      return this.$store.state.themeMod.themeColors;
+      return this.$store.getters.themeColors;
     }
   },
   sockets: {
@@ -140,7 +155,14 @@ export default {
       }
     },
     themeColorsComp(well) {
-      this.draw;
+      // this.draw;
+    },
+    selected(newData) {
+      if (newData) {
+        this.subscribe(newData, (context, delta, removed) => {
+          this.$store.commit('initializeData', context.filter.data)
+        });
+      }
     }
   }
 };
