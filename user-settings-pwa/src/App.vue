@@ -5,16 +5,20 @@
 </template>
 <script>
 import Settings from './components/Settings.vue';
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 export default {
   components: {
     Settings
   },
   methods: {
-    ...mapActions(['fetchColor'])
+    ...mapActions(['fetchColor']),
+    ...mapGetters(['color' , 'lighting'])
   },
   created() {
     this.fetchColor();
+    let theme = {color: this.color, lighting: this.lighting}
+
+    window.glue.contexts.set('globalTheme', theme)
   }
 };
 </script>

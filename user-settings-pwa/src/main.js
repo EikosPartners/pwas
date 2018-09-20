@@ -17,7 +17,19 @@ Vue.use(ThemePlugin, {
   store,
   custom: false
 });
-new Vue({
-  store,
-  render: h => h(App)
-}).$mount('#app');
+
+Glue({})
+  .then(glue => {
+    window.glue = glue;
+
+    new Vue({
+      store,
+      render: h => h(App)
+    }).$mount('#app');
+  })
+  .catch(err => {
+    new Vue({
+      store,
+      render: h => h(App)
+    }).$mount('#app');
+  });
