@@ -8,6 +8,7 @@ import VueSocketio from 'vue-socket.io';
 import Vuetify from 'vuetify';
 import linqjs from 'linqjs';
 
+import "../node_modules/vuetify/dist/vuetify.min.css";
 import 'jscatalyst/dist/jscatalyst.min.css';
 import { ThemePlugin } from 'jscatalyst';
 

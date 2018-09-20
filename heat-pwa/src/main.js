@@ -6,6 +6,8 @@ import store from './store';
 import './registerServiceWorker';
 import VueSocketio from 'vue-socket.io';
 import Vuetify from 'vuetify';
+
+import "../node_modules/vuetify/dist/vuetify.min.css";
 import 'jscatalyst/dist/jscatalyst.min.css';
 import { ThemePlugin } from 'jscatalyst';
 
