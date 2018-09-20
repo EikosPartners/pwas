@@ -1,5 +1,10 @@
 <template>
   <div class="container">
+    <select v-if="!belongsToGrid" v-model="selected">
+      <option disabled value="">Select context</option>
+      <option v-for="context in availableContexts">{{context}}</option>
+    </select>
+    <p>{{selected}}</p>
     <bar-chart
       @jsc_click="filterByMonth"
       :dataModel='prettyData'
@@ -25,12 +30,22 @@ export default {
   mixins: [StyleTogglerMixin, Messaging, Windowing],
   data() {
     return {
-      gridInstance: false
+      gridInstance: false,
+      selected: ""
     };
   },
   computed: {
     ...mapGetters(['data', 'height']),
    ...mapState(['color','belongsToGrid']),
+    availableContexts() {
+      let availableContexts = []
+      window.glue.contexts.all().forEach(context => {
+        if (context.includes('filteredGrid') && context !== "filteredGrid") {
+          availableContexts.push( context)
+        }
+      })
+      return availableContexts
+    },
     barData() {
       const barData = [];
       let sorted = this.sortData(this.data);
@@ -167,6 +182,13 @@ export default {
     color(newData) {
       if (newData) {
         this.setTheme();
+      }
+    },
+    selected(newData) {
+      if (newData) {
+        this.subscribe(newData, (context, delta, removed) => {
+          this.$store.commit('initializeData', context.filter.data)
+        });
       }
     }
   }
