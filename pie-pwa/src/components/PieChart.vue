@@ -1,10 +1,12 @@
 <template>
-    <div class="container">
-      <select v-if="!belongsToGrid" v-model="selected">
-      <option disabled value="">Select context</option>
-      <option v-for="(context, index) in availableContexts" :key="index">{{context}}</option>
-    </select>
-    <p v-if="!belongsToGrid">Subscribed to: {{selected}}</p>        
+     <div class="container">
+    <div v-if="!belongsToGrid" class="header">
+      <select class="select" v-model="selected">
+        <option disabled value="">Select context</option>
+        <option v-for="(context, index) in availableContexts" :key="index">{{context}}</option>
+      </select>
+      <p>Subscribed to: {{selected}}</p>
+    </div>   
     <pie-chart :dataModel="prettyData"  @jsc_click="filterByProject" title="Tickets per Project"/>
     </div>
 </template>
@@ -160,6 +162,29 @@ export default {
 .container {
   width: 90%;
   padding: 0 5%;
-  height: 90vh;
+  height: 80vh;
+}
+
+.header {
+  font-size: 1.5rem;
+  padding: 0.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 10vh;
+  /* min-height: 60px; */
+}
+
+.select {
+  padding: 0.3rem 0.6rem;
+  font-family: inherit;
+  font-size: 1.1rem;
+  background: White;
+  box-shadow: 0.1rem 0.1rem 0.4rem rgba(0, 0, 0, 0.3);
+  color: black;
+}
+
+p {
+  font-size: 0.9rem;
 }
 </style>
