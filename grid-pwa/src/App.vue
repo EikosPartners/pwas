@@ -49,4 +49,32 @@ export default {
     color: black;
     background-color: white;
   }
+
+  .blue {
+    background-color: #D5E9cb;
+  }
+
+  .pink {
+    background-color: #edb7a7;
+  }
+
+  .brown {
+    background-color: #fbea85;
+  }
+
+  .green {
+    background-color: #efee69;
+  }
+
+  .red {
+    background-color: #e6b0aa;
+  }
+
+  .grey {
+    background-color: #d5d8dc;
+  }
+
+  .yellow {
+    background-color: #ffe57f;
+  }
 </style>
