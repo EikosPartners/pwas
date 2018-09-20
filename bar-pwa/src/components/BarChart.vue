@@ -38,7 +38,7 @@ export default {
   },
   computed: {
     ...mapGetters(['data', 'height']),
-    ...mapState(['color', 'belongsToGrid']),
+    ...mapState(['color', 'belongsToGrid', 'lighting']),
     availableContexts() {
       let availableContexts = [];
       window.glue.contexts.all().forEach(context => {
@@ -90,19 +90,16 @@ export default {
           this.updateData();
         }
       };
-      this.$options.sockets.themeColor = data => {
-        console.log('fetchColor recieved', data);
-        this.changeTheme(data.name);
-      };
-      this.$options.sockets.themeLighting = data => {
-        console.log(data);
-        this.toggleDark();
-      };
+    },
+    themeLighting(data) {
+      console.log(data);
+      this.toggleDark();
+    },
+
+    themeColor(data) {
+      console.log('fetchColor recieved', data);
+      this.changeTheme(data.name);
     }
-    // themeColor: function(data) {
-    //   console.log('fetchColor recieved', data);
-    //   this.changeTheme(data.name);
-    // }
   },
   methods: {
     ...mapActions(['updateData', 'fetchColor', 'changeTheme']),
@@ -174,7 +171,6 @@ export default {
     },
     setTheme() {
       this.$store.commit('changeColor', this.color);
-      console.log(this.color);
       if (this.$store.state.themeMod) {
         this.chooseTheme(this.$store.state.themeMod.colorTheme);
       }
@@ -233,5 +229,4 @@ export default {
 p {
   font-size: 0.9rem;
 }
- 
 </style>
