@@ -2,7 +2,7 @@
 <div class="container">
   <div class="header">
     <span>Grid</span>
-     <span class="current-filter">Id: {{contextId}}</span>
+     <span class="current-context">Id: {{contextId}}</span>
     <span class="current-filter">{{currentFilter}}</span>
     <button @click="removeFilter">Clear Filter</button>
     <select class="select" v-model="selected">
@@ -314,6 +314,12 @@ export default {
   padding: 0 0 0 20em;
   font-size: 0.6em;
 }
+
+.current-context {
+  padding: 0 0 0 5em;
+  font-size: 0.6em;
+}
+
 
 .grid {
   width: 100%;
