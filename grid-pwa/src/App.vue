@@ -17,6 +17,8 @@ export default {
     this.fetchData();
     const IdNumber = Date.now()
     this.$store.commit('setContextId', `${IdNumber}`)
+    const uniqueName = 'filteredGrid' + IdNumber
+    window.glue.contexts.set(uniqueName, {})
   }
 };
 </script>

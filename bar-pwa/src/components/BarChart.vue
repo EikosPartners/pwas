@@ -2,7 +2,7 @@
   <div class="container">
     <select v-if="!belongsToGrid" v-model="selected">
       <option disabled value="">Select context</option>
-      <option v-for="context in availableContexts">{{context}}</option>
+      <option v-for="(context, index) in availableContexts" :key="index">{{context}}</option>
     </select>
     <p>{{selected}}</p>
     <bar-chart
