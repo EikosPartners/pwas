@@ -23,6 +23,10 @@ export default {
     const ctx = localWindow.context;
     const contextName = ctx.contextName;
 
+    if (contextName) {
+      this.$store.commit('setBelongsToGrid') //disables socket refresh
+    }
+
     this.subscribe(contextName, (context, delta, removed) => {
       debugger;
       this.$store.commit('initializeData', context.filter.data);
@@ -30,7 +34,6 @@ export default {
 
     if (ctx.filter) {
       this.$store.commit('initializeData', ctx.filter.data);
-      this.$store.commit('setBelongsToGrid'); //disables socket refresh
       localWindow.onContextUpdated((context, win) =>
         console.log('update context:', context)
       );

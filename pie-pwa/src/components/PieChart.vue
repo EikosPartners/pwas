@@ -1,6 +1,11 @@
 <template>
-    <div class="container">        
-      <pie-chart :dataModel="prettyData"  @jsc_click="filterByProject" title="Tickets per Project"/>
+    <div class="container">
+      <select v-if="!belongsToGrid" v-model="selected">
+      <option disabled value="">Select context</option>
+      <option v-for="(context, index) in availableContexts" :key="index">{{context}}</option>
+    </select>
+    <p v-if="!belongsToGrid">Subscribed to: {{selected}}</p>        
+    <pie-chart :dataModel="prettyData"  @jsc_click="filterByProject" title="Tickets per Project"/>
     </div>
 </template>
 
@@ -19,12 +24,22 @@ export default {
   mixins: [StyleTogglerMixin, Messaging, Windowing],
   data() {
     return {
-      gridInstance: false
+      gridInstance: false,
+      selected: ""
     };
   },
   computed: {
     ...mapState(['color', 'lighting', 'belongsToGrid']),
     ...mapGetters(['data']),
+    availableContexts() {
+      let availableContexts = []
+      window.glue.contexts.all().forEach(context => {
+        if (context.includes('filteredGrid') && context !== "filteredGrid") {
+          availableContexts.push( context)
+        }
+      })
+      return availableContexts
+    },
     prettyData() {
       const pieLinqData = new jslinq(this.data)
         .select(d => {
@@ -112,12 +127,12 @@ export default {
       };
     }
   },
-  created() {
-    this.subscribe('filterOnGrid', (context, delta, removed) => {
-      console.log('context update', context.data);
-      this.output = context.data;
-    });
-  },
+  // created() {
+  //   this.subscribe('filterOnGrid', (context, delta, removed) => {
+  //     console.log('context update', context.data);
+  //     this.output = context.data;
+  //   });
+  // },
   watch: {
     color(newData) {
       if (newData) {
@@ -129,6 +144,13 @@ export default {
         if (newData === 'dark') {
           this.toggleDark();
         }
+      }
+    },
+    selected(newData) {
+      if (newData) {
+        this.subscribe(newData, (context, delta, removed) => {
+          this.$store.commit('initializeData', context.filter.data)
+        });
       }
     }
   }
