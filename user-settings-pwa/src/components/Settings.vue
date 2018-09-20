@@ -24,7 +24,6 @@ export default {
   },
   methods: {
     themeHandler(data) {
-      console.log(data);
       this.$socket.emit('themeColor', data);
     },
     lightingHandler(data) {

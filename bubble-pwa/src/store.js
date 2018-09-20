@@ -1,20 +1,22 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import axios from "axios";
-import jslinq from "jslinq";
+import Vue from 'vue';
+import Vuex from 'vuex';
+import axios from 'axios';
+import jslinq from 'jslinq';
 
 Vue.use(Vuex);
 
 const state = {
   data: [],
   color: null,
+  lighting: null,
   belongsToGrid: false
 };
 
-export const getters = { 
-  data: state => state.data, 
-  color: state => state.color, 
-  belongsToGrid: state => state.belongsToGrid 
+export const getters = {
+  data: state => state.data,
+  color: state => state.color,
+  lighting: state => state.lighting,
+  belongsToGrid: state => state.belongsToGrid
 };
 
 export const mutations = {
@@ -26,33 +28,36 @@ export const mutations = {
     oldData.splice(0, 100);
     state.data = oldData.concat(data);
   },
-  addColor(state, data) {
-    state.color = data;
+  setColor(state, color) {
+    state.color = color;
+  },
+  setLighting(state, lighting) {
+    state.lighting = lighting;
   },
   setBelongsToGrid(state) {
-    state.belongsToGrid = true
+    state.belongsToGrid = true;
   }
 };
 
 export const actions = {
   fetchData({ commit }) {
-    axios.get("http://localhost:9000").then(response => {
-      commit("initializeData", response.data);
+    axios.get('http://localhost:9000').then(response => {
+      commit('initializeData', response.data);
     });
   },
   updateData({ commit }) {
-    axios.get("http://localhost:9000/update").then(response => {
-      commit("refreshData", response.data);
+    axios.get('http://localhost:9000/update').then(response => {
+      commit('refreshData', response.data);
     });
   },
   fetchColor({ commit }) {
     axios.get('http://localhost:9000/color').then(response => {
-      console.log(response);
-      commit('addColor', response.data.color);
+      commit('setColor', response.data.color);
+      commit('setLighting', response.data.lighting);
     });
   },
   changeTheme({ commit }, data) {
-    commit('addColor', data);
+    commit('setColor', data);
   }
 };
 

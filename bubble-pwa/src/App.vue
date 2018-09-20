@@ -13,27 +13,27 @@ export default {
   mixins: [Windowing, Messaging],
   name: 'app',
   methods: {
-    ...mapActions(['fetchData']),
+    ...mapActions(['fetchData', 'fetchColor']),
     ...mapMutations(['initializeData', 'setBelongsToGrid'])
   },
   created() {
+    this.fetchColor();
     const localWindow = window.glue.windows.my();
-    const ctx = localWindow.context
-    const contextName = ctx.contextName
+    const ctx = localWindow.context;
+    const contextName = ctx.contextName;
 
     if (contextName) {
-      this.$store.commit('setBelongsToGrid') //disables socket refresh
+      this.$store.commit('setBelongsToGrid'); //disables socket refresh
     }
 
     this.subscribe(contextName, (context, delta, removed) => {
-      debugger
-      this.$store.commit('initializeData', context.filter.data)
+      debugger;
+      this.$store.commit('initializeData', context.filter.data);
     });
 
     if (ctx.filter) {
-      this.$store.commit('initializeData', ctx.filter.data)
-    }
-    else {
+      this.$store.commit('initializeData', ctx.filter.data);
+    } else {
       this.fetchData();
     }
   }

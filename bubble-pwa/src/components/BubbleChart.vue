@@ -32,20 +32,20 @@ export default {
   data() {
     return {
       gridInstance: false,
-      selected: ""
+      selected: ''
     };
   },
   computed: {
     ...mapGetters(['data']),
-    ...mapState(['color', 'belongsToGrid']),
+    ...mapState(['color', 'belongsToGrid', 'lighting']),
     availableContexts() {
-      let availableContexts = []
+      let availableContexts = [];
       window.glue.contexts.all().forEach(context => {
-        if (context.includes('filteredGrid') && context !== "filteredGrid") {
-          availableContexts.push( context)
+        if (context.includes('filteredGrid') && context !== 'filteredGrid') {
+          availableContexts.push(context);
         }
-      })
-      return availableContexts
+      });
+      return availableContexts;
     },
     prettyData() {
       let bubbleData = new jslinq(this.data)
@@ -149,24 +149,30 @@ export default {
         }
       };
     },
-    themeColor: function(data) {
+    themeColor(data) {
       this.changeTheme(data.name);
+    },
+    themeLighting(data) {
+      this.toggleDark();
     }
-  },
-  created() {
-    console.log(this.themeColorsComp);
   },
   watch: {
     color(newData) {
-      console.log(newData);
       if (newData) {
         this.setTheme();
+      }
+    },
+    lighting(newData) {
+      if (newData) {
+        if (newData === 'dark') {
+          this.toggleDark();
+        }
       }
     },
     selected(newData) {
       if (newData) {
         this.subscribe(newData, (context, delta, removed) => {
-          this.$store.commit('initializeData', context.filter.data)
+          this.$store.commit('initializeData', context.filter.data);
         });
       }
     }
