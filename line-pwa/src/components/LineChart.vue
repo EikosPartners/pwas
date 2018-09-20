@@ -24,24 +24,24 @@ export default {
   components: {
     lineChart: D3LineChart
   },
- mixins: [StyleTogglerMixin, Messaging, Windowing],
+  mixins: [StyleTogglerMixin, Messaging, Windowing],
   data() {
     return {
       gridInstance: false,
-      selected: ""
+      selected: ''
     };
   },
   computed: {
-    ...mapState(['color','belongsToGrid']),
+    ...mapState(['color', 'belongsToGrid', 'lighting']),
     ...mapGetters(['dataDV']),
     availableContexts() {
-      let availableContexts = []
+      let availableContexts = [];
       window.glue.contexts.all().forEach(context => {
-        if (context.includes('filteredGrid') && context !== "filteredGrid") {
-          availableContexts.push( context)
+        if (context.includes('filteredGrid') && context !== 'filteredGrid') {
+          availableContexts.push(context);
         }
-      })
-      return availableContexts
+      });
+      return availableContexts;
     }
   },
   sockets: {
@@ -51,11 +51,14 @@ export default {
         this.changeTheme(data.name);
       };
       this.$options.sockets.refresh = () => {
-       if (!this.belongsToGrid) {
+        if (!this.belongsToGrid) {
           console.log('refresh!');
           this.updateData();
         }
       };
+    },
+    themeLighting() {
+      this.toggleDark();
     }
   },
   methods: {
@@ -68,7 +71,7 @@ export default {
       filter.time = new Date();
 
       this.filter(filter, 'filterOnGrid');
-       // this.openContextWindow('Filter Results', 'http://localhost:9093', filter)
+      // this.openContextWindow('Filter Results', 'http://localhost:9093', filter)
 
       // A Named object
       if (this.gridInstance === true) {
@@ -93,7 +96,6 @@ export default {
 
         this.gridInstance = true;
       }
-      
     },
     formatDate(dateObj) {
       let date = new Date(dateObj);
@@ -122,15 +124,21 @@ export default {
   // },
   watch: {
     color(newData) {
-      console.log(newData);
       if (newData) {
         this.setTheme();
+      }
+    },
+    lighting(newData) {
+      if (newData) {
+        if (newData === 'dark') {
+          this.toggleDark();
+        }
       }
     },
     selected(newData) {
       if (newData) {
         this.subscribe(newData, (context, delta, removed) => {
-          this.$store.commit('initializeData', context.filter.data)
+          this.$store.commit('initializeData', context.filter.data);
         });
       }
     }

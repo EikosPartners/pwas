@@ -1,6 +1,6 @@
 import 'jscatalyst/dist/jscatalyst.min.css';
 import Vue from 'vue';
-import GlueNotAvailable from "./GlueNotAvailable.vue";
+import GlueNotAvailable from './GlueNotAvailable.vue';
 import Vuetify from 'vuetify';
 import { ThemePlugin } from 'jscatalyst';
 import App from './App.vue';
@@ -18,7 +18,7 @@ Vue.use(VueSocketio, 'http://localhost:9000');
 Vue.use(Vuetify);
 Vue.use(ThemePlugin, {
   store,
-  themes: ['Blue', 'Pink', 'Green', 'Brown', 'Red', 'Grey']
+  custom: false
 });
 
 // Initialize the Glue42 Environment
