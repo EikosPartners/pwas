@@ -31,20 +31,20 @@ export default {
   data() {
     return {
       gridInstance: false,
-      selected: ""
+      selected: ''
     };
   },
   computed: {
     ...mapGetters(['data', 'height']),
-   ...mapState(['color','belongsToGrid']),
+    ...mapState(['color', 'belongsToGrid']),
     availableContexts() {
-      let availableContexts = []
+      let availableContexts = [];
       window.glue.contexts.all().forEach(context => {
-        if (context.includes('filteredGrid') && context !== "filteredGrid") {
-          availableContexts.push( context)
+        if (context.includes('filteredGrid') && context !== 'filteredGrid') {
+          availableContexts.push(context);
         }
-      })
-      return availableContexts
+      });
+      return availableContexts;
     },
     barData() {
       const barData = [];
@@ -56,7 +56,6 @@ export default {
       return barData;
     },
     prettyData() {
-      debugger
       let barData = [];
       let sorted = this.sortData(this.data);
       for (let year in sorted) {
@@ -93,18 +92,21 @@ export default {
         console.log('fetchColor recieved', data);
         this.changeTheme(data.name);
       };
-    },
-    themeColor: function(data) {
-        debugger
-        console.log('fetchColor recieved', data);
-        this.changeTheme(data.name);
+      this.$options.sockets.themeLighting = data => {
+        console.log(data);
+        this.toggleDark();
+      };
     }
+    // themeColor: function(data) {
+    //   console.log('fetchColor recieved', data);
+    //   this.changeTheme(data.name);
+    // }
   },
   methods: {
     ...mapActions(['updateData', 'fetchColor', 'changeTheme']),
     filterByMonth(data) {
       let filter = {};
-      filter.source = "BarChart";
+      filter.source = 'BarChart';
       filter.dataSource = '/';
       filter.data = data.x;
       filter.time = new Date();
@@ -170,24 +172,30 @@ export default {
     },
     setTheme() {
       this.$store.commit('changeColor', this.color);
+      console.log(this.color);
       if (this.$store.state.themeMod) {
         this.chooseTheme(this.$store.state.themeMod.colorTheme);
       }
     }
   },
-  created() {
-    console.log(this.themeColorsComp);
-  },
+
   watch: {
     color(newData) {
       if (newData) {
         this.setTheme();
       }
     },
+    lighting(newData) {
+      if (newData) {
+        if (newData === 'dark') {
+          this.toggleDark();
+        }
+      }
+    },
     selected(newData) {
       if (newData) {
         this.subscribe(newData, (context, delta, removed) => {
-          this.$store.commit('initializeData', context.filter.data)
+          this.$store.commit('initializeData', context.filter.data);
         });
       }
     }

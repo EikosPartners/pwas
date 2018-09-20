@@ -25,20 +25,20 @@ export default {
   data() {
     return {
       gridInstance: false,
-      selected: ""
+      selected: ''
     };
   },
   computed: {
     ...mapState(['color', 'lighting', 'belongsToGrid']),
     ...mapGetters(['data']),
     availableContexts() {
-      let availableContexts = []
+      let availableContexts = [];
       window.glue.contexts.all().forEach(context => {
-        if (context.includes('filteredGrid') && context !== "filteredGrid") {
-          availableContexts.push( context)
+        if (context.includes('filteredGrid') && context !== 'filteredGrid') {
+          availableContexts.push(context);
         }
-      })
-      return availableContexts
+      });
+      return availableContexts;
     },
     prettyData() {
       const pieLinqData = new jslinq(this.data)
@@ -149,7 +149,7 @@ export default {
     selected(newData) {
       if (newData) {
         this.subscribe(newData, (context, delta, removed) => {
-          this.$store.commit('initializeData', context.filter.data)
+          this.$store.commit('initializeData', context.filter.data);
         });
       }
     }
