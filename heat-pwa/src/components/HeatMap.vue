@@ -31,29 +31,29 @@ export default {
   data() {
     return {
       gridInstance: false,
-      selected: ""
+      selected: ''
     };
   },
   computed: {
     ...mapGetters(['data']),
-    ...mapState(['color','belongsToGrid']),
+    ...mapState(['color', 'lighting', 'belongsToGrid']),
     availableContexts() {
-      let availableContexts = []
+      let availableContexts = [];
       window.glue.contexts.all().forEach(context => {
-        if (context.includes('filteredGrid') && context !== "filteredGrid") {
-          availableContexts.push( context)
+        if (context.includes('filteredGrid') && context !== 'filteredGrid') {
+          availableContexts.push(context);
         }
-      })
-      return availableContexts
+      });
+      return availableContexts;
     },
     heatData() {
       const heatData = [];
-        let sorted = this.sortData(this.data);
-        for (let date in sorted) {
-          let dataObj = { date: date, volume: sorted[date] };
-          heatData.push(dataObj);
-        }
-        return heatData;
+      let sorted = this.sortData(this.data);
+      for (let date in sorted) {
+        let dataObj = { date: date, volume: sorted[date] };
+        heatData.push(dataObj);
+      }
+      return heatData;
     },
     themeColorsComp() {
       return Object.values(this.$store.getters.themeColors);
@@ -68,16 +68,12 @@ export default {
           this.updateData();
         }
       };
-      /*
-      this.$options.sockets.themeColor = data => {
-        console.log(data);
-        this.changeTheme(data.name);
-      };
-      */
     },
     themeColor: function(data) {
-      debugger
-        this.changeTheme(data.name.toLowerCase());
+      this.changeTheme(data.name.toLowerCase());
+    },
+    themeLighting() {
+      this.toggleDark();
     }
   },
   methods: {
@@ -154,13 +150,17 @@ export default {
         this.setTheme();
       }
     },
-    themeColorsComp(well) {
-      // this.draw;
+    lighting(newData) {
+      if (newData) {
+        if (newData === 'dark') {
+          this.toggleDark();
+        }
+      }
     },
     selected(newData) {
       if (newData) {
         this.subscribe(newData, (context, delta, removed) => {
-          this.$store.commit('initializeData', context.filter.data)
+          this.$store.commit('initializeData', context.filter.data);
         });
       }
     }
