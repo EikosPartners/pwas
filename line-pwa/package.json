@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "jscatalyst": "^1.2.1",
+    "jscatalyst": "^1.2.2",
     "material-design-icons-iconfont": "^3.0.3",
     "register-service-worker": "^1.0.0",
     "vue": "^2.5.17",

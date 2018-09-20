@@ -1,17 +1,19 @@
 <template>
   <div class="settings">
+    <toolbar></toolbar>
     <theme-chooser @jsc_theme_change="themeHandler"/>
     <button @click="handleLighting">Lightbulb</button>
   </div>
 </template>
 
 <script>
-import { ThemeChooserComponent, StyleTogglerMixin } from 'jscatalyst';
+import { ThemeChooserComponent, StyleTogglerMixin, Toolbar } from 'jscatalyst';
 export default {
   name: 'Settings',
   mixins: [StyleTogglerMixin],
   components: {
-    themeChooser: ThemeChooserComponent
+    themeChooser: ThemeChooserComponent,
+    toolbar: Toolbar
   },
   sockets: {
     connect() {
