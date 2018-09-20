@@ -16,7 +16,7 @@ export default {
   created() {
     this.fetchData();
     const IdNumber = Date.now()
-    this.$store.commit('setContextId', IdNumber)
+    this.$store.commit('setContextId', `${IdNumber}`)
   }
 };
 </script>
