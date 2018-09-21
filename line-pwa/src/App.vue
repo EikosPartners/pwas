@@ -14,7 +14,7 @@ export default {
   name: 'app',
   methods: {
     ...mapActions(['fetchData', 'fetchColor']),
-    ...mapMutations(['initializeData', 'setBelongsToGrid'])
+    ...mapMutations(['initializeData', 'setBelongsToGrid', 'setSelected'])
   },
   created() {
     this.fetchColor();
@@ -25,7 +25,8 @@ export default {
 
     if (contextName) {
       this.$store.commit('setBelongsToGrid'); //disables socket refresh
-    }
+      this.$store.commit('setSelected', contextName)
+  }
 
     this.subscribe(contextName, (context, delta, removed) => {
       debugger;

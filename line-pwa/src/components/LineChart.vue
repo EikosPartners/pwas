@@ -30,12 +30,19 @@ export default {
   mixins: [StyleTogglerMixin, Messaging, Windowing],
   data() {
     return {
-      gridInstance: false,
-      selected: ''
+      gridInstance: false
     };
   },
   computed: {
     ...mapState(['color', 'belongsToGrid', 'lighting']),
+    selected: {
+      get() {
+        return this.$store.state.selected
+      },
+      set(value) {
+        this.$store.commit('setSelected', value)
+      }
+    },
     ...mapGetters(['dataDV']),
     availableContexts() {
       let availableContexts = [];
