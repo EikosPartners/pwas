@@ -44,22 +44,33 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style>
+
+body {
+  font-family: 'Roboto', sans-serif !important;
+}
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   width: 100%;
 }
 
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  font-size: calc(0.3em + 1vw);
+}
+
 .theme--dark {
-    color: white;
-    background-color: grey;
-  }
-  
-  .theme--light {
-    color: black;
-    background-color: white;
-  }
+  color: white;
+  background-color: grey;
+}
+
+.theme--light {
+  color: black;
+  background-color: white;
+}
 </style>

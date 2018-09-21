@@ -1,17 +1,18 @@
 <template>
-  <div class="container">
-    <div v-if="!belongsToGrid" class="header">
-      <select class="select" v-model="selected">
-        <option disabled value="">Select context</option>
-        <option v-for="(context, index) in availableContexts" :key="index">{{context}}</option>
-      </select>
-      <p>Subscribed to: {{selected}}</p>
+   <div class="container">
+    <div :class="['header', `${color}-selected`]">
+      <span>Number of Tickets by Date</span>
+      <span class="current-context">Subscribed:
+        <select class="select" v-model="selected">
+          <option disabled value="">Select context</option>
+          <option v-for="(context, index) in availableContexts" :key="index">{{context}}</option>
+        </select>
+      </span>
     </div>
     <heat-map
         v-if="themeColorsComp && themeColorsComp.length > 0"
         @jsc_click="filterByDate"
         :dataModel='heatData'
-        title='Number of Tickets by Date'
         xaxis-label="date"
         yaxis-label="volume"
       ></heat-map>
@@ -176,8 +177,13 @@ export default {
   height: 80vh;
 }
 
+.current-context {
+  font-size: 1.1rem;
+  margin: 0 0.6rem;
+}
+
 .header {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   padding: 0.5rem 2rem;
   display: flex;
   justify-content: space-between;
@@ -187,13 +193,39 @@ export default {
 }
 
 .select {
-  padding: 0.3rem 0.6rem;
+  padding: 0.3rem;
   font-family: inherit;
   font-size: 1.1rem;
   box-shadow: 0.1rem 0.1rem 0.4rem rgba(0, 0, 0, 0.3);
+  background-color: white;
+  color: black;
 }
 
-p {
-  font-size: 0.9rem;
-}
+ .blue-selected {
+    background-color: #2da8c9;
+  }
+
+  .pink-selected {
+    background-color: #ba5288;
+  }
+
+  .brown-selected {
+    background-color: #e29755;
+  }
+
+  .green-selected {
+    background-color: #53a976;
+  }
+
+  .red-selected {
+    background-color: #c0392b;
+  }
+
+  .grey-selected {
+    background-color: #566573;
+  }
+
+  .yellow-selected {
+    background-color: #ffff20;
+  }
 </style>

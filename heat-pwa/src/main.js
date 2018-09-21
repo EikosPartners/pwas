@@ -9,6 +9,8 @@ import Vuetify from 'vuetify';
 
 import "../node_modules/vuetify/dist/vuetify.min.css";
 import 'jscatalyst/dist/jscatalyst.min.css';
+import "typeface-roboto";
+
 import { ThemePlugin } from 'jscatalyst';
 
 Vue.config.productionTip = false;
