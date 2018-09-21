@@ -33,13 +33,20 @@ export default {
   mixins: [StyleTogglerMixin, Messaging, Windowing],
   data() {
     return {
-      gridInstance: false,
-      selected: ''
+      gridInstance: false
     };
   },
   computed: {
     ...mapGetters(['data', 'height']),
     ...mapState(['color', 'belongsToGrid', 'lighting']),
+    selected: {
+      get() {
+        return this.$store.state.selected
+      },
+      set(value) {
+        this.$store.commit('setSelected', value)
+      }
+    },
     availableContexts() {
       let availableContexts = [];
       window.glue.contexts.all().forEach(context => {

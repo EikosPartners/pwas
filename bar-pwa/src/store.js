@@ -8,7 +8,8 @@ const state = {
   data: [],
   color: null,
   lighting: null,
-  belongsToGrid: false
+  belongsToGrid: false,
+  selected: ''
 };
 
 export const getters = {
@@ -35,6 +36,9 @@ export const mutations = {
   },
   setBelongsToGrid(state) {
     state.belongsToGrid = true;
+  },
+  setSelected(state, data) {
+    state.selected = data
   }
 };
 
@@ -51,7 +55,6 @@ export const actions = {
   },
   fetchColor({ commit }) {
     axios.get('http://localhost:9000/color').then(response => {
-      console.log(response);
       commit('setColor', response.data.color);
       commit('setLighting', response.data.lighting);
     });
