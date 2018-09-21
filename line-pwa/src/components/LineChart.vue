@@ -1,15 +1,16 @@
 <template>
     <div class="container">
-    <div v-if="!belongsToGrid" class="header">
-      <select class="select" v-model="selected">
-        <option disabled value="">Select context</option>
-        <option v-for="(context, index) in availableContexts" :key="index">{{context}}</option>
-      </select>
-      <p>Subscribed to: {{selected}}</p>
+    <div :class="['header', `${color}-selected`]">
+      <span>Ticket Severity by Date</span>
+      <span class="current-context">Subscribed:
+        <select class="select" v-model="selected">
+          <option disabled value="">Select context</option>
+          <option v-for="(context, index) in availableContexts" :key="index">{{context}}</option>
+        </select>
+      </span>
     </div>
       <line-chart 
         @jsc_click="filterByDate" 
-        title="Ticket Severity by Date" 
         :dataModel="dataDV"
       />
     </div>
@@ -49,9 +50,6 @@ export default {
   sockets: {
     connect: function() {
       console.log('socket connected');
-      this.$options.sockets.themeColor = data => {
-        this.changeTheme(data.name);
-      };
       this.$options.sockets.refresh = () => {
         if (!this.belongsToGrid) {
           console.log('refresh!');
@@ -61,6 +59,11 @@ export default {
     },
     themeLighting() {
       this.toggleDark();
+    },
+
+    themeColor(data) {
+      console.log('fetchColor recieved', data);
+      this.changeTheme(data.name);
     }
   },
   methods: {
@@ -155,8 +158,13 @@ export default {
   height: 80vh;
 }
 
+.current-context {
+  font-size: 1.1rem;
+  margin: 0 0.6rem;
+}
+
 .header {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   padding: 0.5rem 2rem;
   display: flex;
   justify-content: space-between;
@@ -166,14 +174,40 @@ export default {
 }
 
 .select {
-  padding: 0.3rem 0.6rem;
+  padding: 0.3rem;
   font-family: inherit;
   font-size: 1.1rem;
   box-shadow: 0.1rem 0.1rem 0.4rem rgba(0, 0, 0, 0.3);
+  background-color: white;
+  color: black;
 }
 
-p {
-  font-size: 0.9rem;
-}
+ .blue-selected {
+    background-color: #2da8c9;
+  }
+
+  .pink-selected {
+    background-color: #ba5288;
+  }
+
+  .brown-selected {
+    background-color: #e29755;
+  }
+
+  .green-selected {
+    background-color: #53a976;
+  }
+
+  .red-selected {
+    background-color: #c0392b;
+  }
+
+  .grey-selected {
+    background-color: #566573;
+  }
+
+  .yellow-selected {
+    background-color: #ffff20;
+  }
 </style>
 
