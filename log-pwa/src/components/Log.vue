@@ -1,5 +1,22 @@
 <template>
-  <div class="container">
+  <div v-if="usingGlue" class="container">
+    <div class="header">Message Log</div>
+    <transition-group appear tag="ul" name="bluein" v-if="data.length > 0">
+      <li v-for="(ctx, i) in data" :key = "i" class="log-item">
+        <span class="outer-span">
+          <span>Source:</span>
+          {{ctx.name}}
+        </span>
+        <span class="outer-span">
+          <span>Filtered Change</span>
+        </span>
+      </li>
+    </transition-group>
+    <ul v-else>
+      <li>Log Empty</li>
+    </ul>
+  </div>
+  <div v-else class="container">
     <div class="header">Message Log</div>
         <transition-group appear tag="ul" name="bluein" v-if="data.length > 0">
           <li v-for="(msg, i) in data" :key = "i" class="log-item">
@@ -13,7 +30,7 @@
             </span>
             <span v-if="typeof msg.data === 'object' " class="outer-span">
               <span>Filtered By:</span>
-              {{msg.data.date}} & {{msg.data.severity}}
+              {{msg.data.date}} and {{msg.data.severity}}
             </span>
             <span v-else class="outer-span">
               <span>Filtered By:</span>
@@ -41,11 +58,30 @@ export default {
   mixins: [Messaging, Windowing],
   data() {
     return {
-      gridInstance: false
+      gridInstance: false,
+      usingGlue: true
     };
   },
+  mounted() {
+    this.availableContexts.forEach((ctx) => {
+      this.subscribe(ctx, (context, delta, removed) => {
+        console.log('context update', context);
+        this.addData(context)
+      });
+      console.log(ctx, "subscribed?")
+    })
+  },
   computed: {
-    ...mapGetters(["data"])
+    ...mapGetters(["data"]),
+     availableContexts() {
+      let availableContexts = [];
+      window.glue.contexts.all().forEach(context => {
+        if (context.includes('filteredGrid') && context !== 'filteredGrid') {
+          availableContexts.push(context);
+        }
+      });
+      return availableContexts;
+    }
   },
   methods: {
     // ...mapActions(["fetchData"]),
@@ -86,12 +122,7 @@ export default {
         this.addData(filter);
       };
     }
-  },
-  created() {
-    this.subscribe('filterOnGrid', (context, delta, removed) => {
-      console.log('context update', context.data);
-    });
-  },
+  }
 };
 </script>
 

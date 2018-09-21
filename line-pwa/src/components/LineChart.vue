@@ -122,11 +122,6 @@ export default {
       }
     }
   },
-  // created() {
-  //   this.subscribe('filterOnGrid', (context, delta, removed) => {
-  //     console.log('context update', context.data);
-  //   });
-  // },
   watch: {
     color(newData) {
       if (newData) {

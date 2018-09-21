@@ -177,7 +177,7 @@ export default {
       }
 
       const uniqueName = 'filteredGrid' + this.contextId
-      window.glue.contexts.set(uniqueName, {filter:filter})
+      window.glue.contexts.set(uniqueName, {filter:filter, name:uniqueName})
     },
     onGridReady(params) {
       this.gridApi = params.api;
@@ -269,7 +269,7 @@ export default {
       const uniqueName = 'filteredGrid' + this.contextId
       console.log(uniqueName)
 
-      window.glue.contexts.set(uniqueName, {filter:filter})
+      window.glue.contexts.set(uniqueName, {filter:filter, name:uniqueName})
       let appContext = {
         localContext:ctx,
         contextName: uniqueName,
