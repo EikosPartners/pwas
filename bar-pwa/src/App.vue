@@ -52,14 +52,21 @@ export default {
   width: 100%;
 }
 
+* {
+  box-sizing: border-box;
+}
 
-  .theme--dark {
-    color: white;
-    background-color: grey;
-  }
-  
-  .theme--light {
-    color: black;
-    background-color: white;
-  }
+:root {
+  font-size: calc(0.3em + 1vw);
+}
+
+.theme--dark {
+  color: white;
+  background-color: grey;
+}
+
+.theme--light {
+  color: black;
+  background-color: white;
+}
 </style>
