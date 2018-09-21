@@ -8,13 +8,17 @@ const state = {
   data: [],
   columns: [],
   currentFilter: "No Filter",
-  contextId: null
+  contextId: null,
+  color: null,
+  lighting: null
 };
 
 export const getters = {
   data: state => state.data,
   columns: state => state.columns,
-  currentFilter: state => state.currentFilter
+  currentFilter: state => state.currentFilter,
+  color: state => state.color,
+  lighting: state => state.lighting,
 };
 
 export const mutations = {
@@ -27,6 +31,12 @@ export const mutations = {
     } else {
       state.currentFilter = "No Filter";
     }
+  },
+  setColor(state, color) {
+    state.color = color;
+  },
+  setLighting(state, lighting) {
+    state.lighting = lighting;
   },
   generateColumns(state, data) {
     if (data.length > 0) {
@@ -69,6 +79,15 @@ export const actions = {
     axios.get("http://localhost:9000/update").then(response => {
       commit("refreshData", response.data);
     });
+  },
+  fetchColor({ commit }) {
+    axios.get('http://localhost:9000/color').then(response => {
+      commit('setColor', response.data.color);
+      commit('setLighting', response.data.lighting);
+    });
+  },
+  changeTheme({ commit }, data) {
+    commit('setColor', data);
   }
 };
 

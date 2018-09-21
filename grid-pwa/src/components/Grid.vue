@@ -1,6 +1,6 @@
 <template>
 <div class="container">
-  <div class="header">
+  <div :class="['header', `${color}-selected`]">
     <span>Grid</span>
      <span class="current-context">Id: {{contextId}}</span>
     <span class="current-filter">{{currentFilter}}</span>
@@ -17,7 +17,7 @@
   </div>
   <ag-grid-vue
     id='Grid'
-    class='ag-theme-balham grid'
+    class='ag-theme-material grid'
     :columnDefs='columns'
     :rowData='prettyData'
     :enableSorting='trueVar'
@@ -31,6 +31,7 @@
 <script>
 import { mapState, mapMutations, mapActions } from "vuex";
 import { AgGridVue } from "ag-grid-vue";
+import { StyleTogglerMixin } from 'jscatalyst';
 import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
 import jslinq from 'jslinq'
@@ -40,10 +41,9 @@ export default {
   components: {
     AgGridVue
   }, 
-  mixins: [Messaging, Windowing],
+  mixins: [Messaging, Windowing, StyleTogglerMixin],
   computed: {
-
-    ...mapState(["data", "columns", "currentFilter", "contextId"]),
+    ...mapState(["data", "columns", "currentFilter", "contextId", 'color', 'lighting']),
     prettyData() {
       return this.data.map(item => {
         let prettyItem = {};
@@ -138,11 +138,20 @@ export default {
         let source = this.formatSource(filter.source);
         this.setCurrentFilter(source);
       };
-    }
+    },
+    themeLighting(data) {
+      console.log(data);
+      this.toggleDark();
+    },
+
+    themeColor(data) {
+      console.log('fetchColor recieved', data);
+      this.changeTheme(data.name);
+    }  
   },
   methods: {
     ...mapMutations(["setCurrentFilter"]),
-    ...mapActions(["updateData"]),
+    ...mapActions(['updateData', 'fetchColor', 'changeTheme']),
     updateChildren() {
       debugger
       if ( window.glue.windows.my().context === null ) {
@@ -289,13 +298,33 @@ export default {
     formatSource(sourceApp) {
       let withSpaces = sourceApp.replace(/([A-Z])/g, " $1");
       return withSpaces.charAt(0).toUpperCase() + withSpaces.slice(1);
+    },
+    setTheme() {
+      this.$store.commit('changeColor', this.color);
+      if (this.$store.state.themeMod) {
+        this.chooseTheme(this.$store.state.themeMod.colorTheme);
+      }
+    }
+  },
+  watch: {
+    color(newData) {
+      if (newData) {
+        this.setTheme();
+      }
+    },
+    lighting(newData) {
+      if (newData) {
+        if (newData === 'dark') {
+          this.toggleDark();
+        }
+      }
     }
   }
 };
 </script>
 <style>
 .header {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   padding: 0.5rem 2rem;
   display: flex;
   justify-content: space-between;
@@ -313,9 +342,14 @@ export default {
   font-size: 0.6em;
 }
 
-.current-context {
+/* .current-context {
   padding: 0 0 0 5em;
   font-size: 0.6em;
+} */
+
+.current-context {
+  font-size: 1.1rem;
+  margin: 0 0.6rem;
 }
 
 
@@ -329,17 +363,46 @@ export default {
   font-size: 1.1rem;
   background: White;
   box-shadow: 0.1rem 0.1rem 0.4rem rgba(0, 0, 0, 0.3);
+  color: black;
 } 
 
 button {
   padding: 0.3rem 0.6rem;
   font-family: inherit;
   font-size: 1.1rem;
-  background: rgb(220, 220, 220);
+  background: rgb(220, 220, 220) !important;
   box-shadow: 0.1rem 0.1rem 0.4rem rgba(0, 0, 0, 0.3);
 }
 
 button:focus {
   outline: 0;
 }
+
+ .blue-selected {
+    background-color: #2da8c9;
+  }
+
+  .pink-selected {
+    background-color: #ba5288;
+  }
+
+  .brown-selected {
+    background-color: #e29755;
+  }
+
+  .green-selected {
+    background-color: #53a976;
+  }
+
+  .red-selected {
+    background-color: #c0392b;
+  }
+
+  .grey-selected {
+    background-color: #566573;
+  }
+
+  .yellow-selected {
+    background-color: #ffff20;
+  }
 </style>
