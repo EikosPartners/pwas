@@ -120,13 +120,15 @@ export default {
           console.log('refresh!');
           this.updateData();
         }
-      };
-      this.$options.sockets.themeColor = data => {
-        this.changeTheme(data.name);
-      };
-      this.$options.sockets.themeLighting = data => {
-        this.toggleDark();
-      };
+      }
+    },
+    themeLighting(data) {
+      console.log(data);
+      this.toggleDark();
+    },
+    themeColor(data) {
+      console.log('fetchColor recieved', data);
+      this.changeTheme(data.name);
     }
   },
   // created() {
