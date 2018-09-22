@@ -5,8 +5,15 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
-  name: "app"
+  name: "app",
+  methods: {
+    ...mapActions(["fetchColor"])
+  },
+   created() {
+    this.fetchColor();
+  }
 };
 </script>
 
@@ -14,6 +21,10 @@ export default {
 <style>
 * {
   box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif !important;
 }
 
 :root {
@@ -25,7 +36,18 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  /* color: #2c3e50; */
   width: 100%;
 }
+
+.theme--dark {
+  color: white;
+  background-color: grey;
+}
+
+.theme--light {
+  color: black;
+  background-color: white;
+}
+
 </style>

@@ -1,19 +1,26 @@
-import "jscatalyst/dist/jscatalyst.min.css";
 import Vue from "vue";
-import GlueNotAvailable from "./GlueNotAvailable.vue";
-import Vuetify from "vuetify";
-// import { ThemePlugin } from "jscatalyst";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
-import VueSocketio from "vue-socket.io";
-
+import GlueNotAvailable from "./GlueNotAvailable.vue";
 import "./registerServiceWorker";
+import VueSocketio from "vue-socket.io";
+import Vuetify from "vuetify";
+
+import "jscatalyst/dist/jscatalyst.min.css";
+import "../node_modules/vuetify/dist/vuetify.min.css";
+import "typeface-roboto";
+
+import { ThemePlugin } from "jscatalyst";
 
 Vue.config.productionTip = false;
 
 Vue.use(VueSocketio, "http://localhost:9000");
 Vue.use(Vuetify);
+Vue.use(ThemePlugin, {
+  store,
+  custom: false
+});
 
 // Initialize the Glue42 Environment
 

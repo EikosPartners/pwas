@@ -1,7 +1,9 @@
 <template>
   <div v-if="usingGlue" class="container">
-    <div class="header">Message Log</div>
-    <transition-group appear tag="ul" name="bluein" v-if="data.length > 0">
+    <div :class="['header', `${color}-selected`]">
+      <span>Grid</span>
+    </div>
+    <transition-group appear tag="ul" :name="`${color}in`" v-if="data.length > 0">
       <li v-for="(ctx, i) in data" :key = "i" class="log-item">
         <span class="outer-span">
           <span>Source:</span>
@@ -17,8 +19,10 @@
     </ul>
   </div>
   <div v-else class="container">
-    <div class="header">Message Log</div>
-        <transition-group appear tag="ul" name="bluein" v-if="data.length > 0">
+   <div :class="['header', `${color}-selected`]">
+      <span>Grid</span>
+    </div>
+        <transition-group appear tag="ul" :name="`${color}in`" v-if="data.length > 0">
           <li v-for="(msg, i) in data" :key = "i" class="log-item">
             <span class="outer-span">
               <span>Sent:</span>
@@ -49,13 +53,14 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapMutations } from "vuex";
+import {  mapState, mapGetters, mapActions, mapMutations } from "vuex";
+import { StyleTogglerMixin } from 'jscatalyst';
 import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
 
 export default {
   name: "Log",
-  mixins: [Messaging, Windowing],
+  mixins: [Messaging, Windowing, StyleTogglerMixin],
   data() {
     return {
       gridInstance: false,
@@ -65,13 +70,12 @@ export default {
   mounted() {
     this.availableContexts.forEach((ctx) => {
       this.subscribe(ctx, (context, delta, removed) => {
-        console.log('context update', context);
         this.addData(context)
       });
-      console.log(ctx, "subscribed?")
     })
   },
   computed: {
+    ...mapState(['color', 'lighting']),
     ...mapGetters(["data"]),
      availableContexts() {
       let availableContexts = [];
@@ -84,7 +88,7 @@ export default {
     }
   },
   methods: {
-    // ...mapActions(["fetchData"]),
+    ...mapActions(['fetchColor', 'changeTheme']),
     ...mapMutations(["addData"]),
     formatSource(sourceApp) {
       let withSpaces = sourceApp.replace(/([A-Z])/g, " $1");
@@ -96,6 +100,26 @@ export default {
       let hms = timeA[0].split(":").join(" ");
       // return dateA[1] + "-" + dateA[2] + "-" + dateA[0] + " : " + hms;
       return timeA[0];
+    },
+    setTheme() {
+      this.$store.commit('changeColor', this.color);
+      if (this.$store.state.themeMod) {
+        this.chooseTheme(this.$store.state.themeMod.colorTheme);
+      }
+    }
+  },
+  watch: {
+    color(newData) {
+      if (newData) {
+        this.setTheme();
+      }
+    },
+    lighting(newData) {
+      if (newData) {
+        if (newData === 'dark') {
+          this.toggleDark();
+        }
+      }
     }
   },
   sockets: {
@@ -121,35 +145,34 @@ export default {
         console.log("filter", filter);
         this.addData(filter);
       };
-    }
+    },
+    themeLighting(data) {
+      console.log(data);
+      this.toggleDark();
+    },
+
+    themeColor(data) {
+      console.log('fetchColor recieved', data);
+      this.changeTheme(data.name);
+    }  
   }
 };
 </script>
 
 <style >
 .header {
-  background: rgb(66, 184, 221);
-  color: white;
-  font-size: 1.5rem;
-  padding: 1rem;
+  font-size: 1.2rem;
+  padding: 0.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 10vh;
 }
 
 .log-item {
   border-bottom: 0.1rem dotted grey;
   padding-top: 0.5rem;
   font-size: 0.7rem;
-  background-color: white;
-}
-
-.bluein-enter {
-  background-color: rgba(66, 184, 221, 0.5);
-}
-.bluein-enter-active {
-  transition: background-color 1.5s ease-in-out;
-  background-color: rgba(66, 184, 221, 0.5);
-}
-
-.bluein-enter-to {
   background-color: white;
 }
 
@@ -162,7 +185,7 @@ ul {
 ul,
 li {
   margin-left: 0;
-  padding-left: 0;
+  padding-left: 0 !important;
 }
 
 li {
@@ -183,6 +206,7 @@ span span {
 .outer-span {
   display: flex;
   justify-content: flex-start;
+  padding-left: 1rem;
   width: 25%;
 }
 
@@ -191,4 +215,110 @@ span span {
   padding: 0 5%;
   height: 90vh;
 }
+
+.blue-selected {
+  background-color: #2da8c9;
+}
+
+.bluein-enter {
+  background-color:rgba(45,167,201, 0.5)
+}
+.bluein-enter-active {
+  transition: background-color 1.5s ease-in-out;
+  background-color:rgba(45,167,201, 0.5)
+}
+.bluein-enter-to {
+  background-color: white;
+}
+
+.pink-selected {
+  background-color: #ba5288;
+}
+
+.pinkin-enter {
+  background-color:rgba(184, 82, 136, 0.5)
+}
+.pinkin-enter-active {
+  transition: background-color 1.5s ease-in-out;
+  background-color:rgba(184, 82, 136, 0.5)
+}
+.pinkin-enter-to {
+  background-color: white;
+}
+
+.brown-selected {
+  background-color: #e29755;
+}
+
+.brownin-enter {
+  background-color:rgba(226, 151, 85, 0.5)
+}
+.brownin-enter-active {
+  transition: background-color 1.5s ease-in-out;
+  background-color:rgba(226, 151, 85, 0.5)
+}
+.brownin-enter-to {
+  background-color: white;
+}
+
+.green-selected {
+  background-color: #53a976;
+}
+
+.greenin-enter {
+  background-color:rgba(83, 169, 118, 0.5)
+}
+.greenin-enter-active {
+  transition: background-color 1.5s ease-in-out;
+  background-color:rgba(83, 169, 118, 0.5)
+}
+.greenin-enter-to {
+  background-color: white;
+}
+
+.red-selected {
+  background-color: #c0392b;
+}
+
+.redin-enter {
+  background-color:rgba(192, 57, 43, 0.5)
+}
+.redin-enter-active {
+  transition: background-color 1.5s ease-in-out;
+  background-color:rgba(192, 57, 43, 0.5)
+}
+.redin-enter-to {
+  background-color: white;
+}
+
+.grey-selected {
+  background-color: #566573;
+}
+
+.greyin-enter {
+  background-color:rgba(86, 101, 115, 0.5)
+}
+.greyin-enter-active {
+  transition: background-color 1.5s ease-in-out;
+  background-color:rgba(86, 101, 115, 0.5)
+}
+.greyin-enter-to {
+  background-color: white;
+}
+
+.yellow-selected {
+  background-color: #ffff20;
+}
+
+.yellowin-enter {
+  background-color:rgba(255, 255, 32, 0.5)
+}
+.yellowin-enter-active {
+  transition: background-color 1.5s ease-in-out;
+  background-color:rgba(255, 255, 32, 0.5)
+}
+.yellowin-enter-to {
+  background-color: white;
+}
+
 </style>
