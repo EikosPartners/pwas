@@ -4,7 +4,7 @@
     <span>Grid</span>
      <span class="current-context">Id: {{contextId}}</span>
     <span class="current-filter">{{currentFilter}}</span>
-    <button @click="removeFilter">Clear Filter</button>
+    <button class="header-button" @click="removeFilter">Clear Filter</button>
     <select class="select" v-model="selected">
       <option disabled value="">Select chart</option>
       <option value="JSCBar">BarChart</option>
@@ -13,20 +13,20 @@
       <option value="JSCLine">Line Chart</option>
       <option value="JSCPie">Pie Chart</option>
     </select>
-     <button @click="openNewChart">Open</button>
+     <button class="header-button" @click="openNewChart">Open</button>
   </div>
-  <ag-grid-vue
-    id='Grid'
-    class='ag-theme-material grid'
-    :columnDefs='columns'
-    :rowData='prettyData'
-    :enableSorting='trueVar'
-    :enableFilter='trueVar'
-    :gridReady='onGridReady'
-    :filterChanged='updateChildren'
-    rowSelection='multiple'
-  ></ag-grid-vue>
-  </div>
+    <ag-grid-vue
+      id='Grid'
+      class="grid ag-theme-material"
+      :columnDefs='columns'
+      :rowData='prettyData'
+      :enableSorting='trueVar'
+      :enableFilter='trueVar'
+      :gridReady='onGridReady'
+      :filterChanged='updateChildren'
+      rowSelection='multiple'
+    ></ag-grid-vue>
+</div>
 </template>
 <script>
 import { mapState, mapMutations, mapActions } from "vuex";
@@ -153,7 +153,6 @@ export default {
     ...mapMutations(["setCurrentFilter"]),
     ...mapActions(['updateData', 'fetchColor', 'changeTheme']),
     updateChildren() {
-      debugger
       if ( window.glue.windows.my().context === null ) {
         return
       }
@@ -256,7 +255,6 @@ export default {
       }
 
       if ( this.gridApi !== undefined || this.gridApi !== null ) {
-        debugger
         // console.log( this.gridApi )
         let gridData = new jslinq(this.gridApi.clientSideRowModel.rowsToDisplay)
         .select ( i => { return i.data} ).items
@@ -330,7 +328,6 @@ export default {
   justify-content: space-between;
   align-items: center;
   height: 10vh;
-  /* min-height: 60px; */
 }
 .container {
   width: 100%;
@@ -342,21 +339,16 @@ export default {
   font-size: 0.6em;
 }
 
-/* .current-context {
-  padding: 0 0 0 5em;
-  font-size: 0.6em;
-} */
-
 .current-context {
   font-size: 1.1rem;
   margin: 0 0.6rem;
 }
 
-
 .grid {
   width: 100%;
   height: 85vh;
 }
+
 .select {
   padding: 0.3rem 0.6rem;
   font-family: inherit;
@@ -366,7 +358,7 @@ export default {
   color: black;
 } 
 
-button {
+.header-button {
   padding: 0.3rem 0.6rem;
   font-family: inherit;
   font-size: 1.1rem;
@@ -374,35 +366,35 @@ button {
   box-shadow: 0.1rem 0.1rem 0.4rem rgba(0, 0, 0, 0.3);
 }
 
-button:focus {
+.header-button:focus {
   outline: 0;
 }
 
- .blue-selected {
-    background-color: #2da8c9;
-  }
+.blue-selected {
+  background-color: #2da8c9;
+}
 
-  .pink-selected {
-    background-color: #ba5288;
-  }
+.pink-selected {
+  background-color: #ba5288;
+}
 
-  .brown-selected {
-    background-color: #e29755;
-  }
+.brown-selected {
+  background-color: #e29755;
+}
 
-  .green-selected {
-    background-color: #53a976;
-  }
+.green-selected {
+  background-color: #53a976;
+}
 
-  .red-selected {
-    background-color: #c0392b;
-  }
+.red-selected {
+  background-color: #c0392b;
+}
 
-  .grey-selected {
-    background-color: #566573;
-  }
+.grey-selected {
+  background-color: #566573;
+}
 
-  .yellow-selected {
-    background-color: #ffff20;
-  }
+.yellow-selected {
+  background-color: #ffff20;
+}
 </style>
