@@ -65,88 +65,88 @@ export default {
   sockets: {
     connect: function() {
       console.log("socket connected");
-      this.$options.sockets.refresh = () => {
-        console.log("refresh!");
-        this.updateData();
-        this.updateChildren()
-
+    },
+    filterByDate(filter) {
+      console.log("filter", filter);
+      this.removeFilter();
+      this.setQuickFilter(filter.data);
+      let source = this.formatSource(filter.source);
+      this.setCurrentFilter(source);
+    },
+    filterByProject(filter) {
+      console.log("filter", filter);
+      this.removeFilter();
+      this.setQuickFilter(filter.data);
+      let source = this.formatSource(filter.source);
+      this.setCurrentFilter(source);
+    },
+    filterBySeverity(filter) {
+      console.log("filter", filter);
+      this.removeFilter();
+      this.setQuickFilter(filter.data);
+      let source = this.formatSource(filter.source);
+      this.setCurrentFilter(source);
+    },
+    filterByRaisedBy(filter) {
+      console.log("filter", filter);
+      this.removeFilter();
+      this.setQuickFilter(filter.data);
+      let source = this.formatSource(filter.source);
+      this.setCurrentFilter(source);
+    },
+    filterByDateAndSeverity(filter) {
+      console.log("filter", filter);
+      this.removeFilter();
+      let filterObject = {
+        date: {
+          type: "contains",
+          filter: `${filter.data.date}`
+        },
+        severity: {
+          type: "contains",
+          filter: `${filter.data.severity}`
+        }
       };
-      this.$options.sockets.filterByDate = filter => {
-        console.log("filter", filter);
-        this.removeFilter();
-        this.setQuickFilter(filter.data);
-        let source = this.formatSource(filter.source);
-        this.setCurrentFilter(source);
-      };
-      this.$options.sockets.filterByProject = filter => {
-        console.log("filter", filter);
-        this.removeFilter();
-        this.setQuickFilter(filter.data);
-        let source = this.formatSource(filter.source);
-        this.setCurrentFilter(source);
-      };
-      this.$options.sockets.filterBySeverity = filter => {
-        console.log("filter", filter);
-        this.removeFilter();
-        this.setQuickFilter(filter.data);
-        let source = this.formatSource(filter.source);
-        this.setCurrentFilter(source);
-      };
-      this.$options.sockets.filterByRaisedBy = filter => {
-        console.log("filter", filter);
-        this.removeFilter();
-        this.setQuickFilter(filter.data);
-        let source = this.formatSource(filter.source);
-        this.setCurrentFilter(source);
-      };
-      this.$options.sockets.filterByDateAndSeverity = filter => {
-        console.log("filter", filter);
-        this.removeFilter();
-        let filterObject = {
-          date: {
-            type: "contains",
-            filter: `${filter.data.date}`
+      this.gridApi.setFilterModel(filterObject);
+      let source = this.formatSource(filter.source);
+      this.setCurrentFilter(source);
+    },
+    filterByMonth(filter) {
+      console.log("filter", filter);
+      let month = filter.data.split("/")[0] + "-";
+      let year = "-" + filter.data.split("/")[1];
+      this.removeFilter();
+      let filterObject = {
+        date: {
+          condition1: {
+            type: "startsWith",
+            filter: month
           },
-          severity: {
+          condition2: {
             type: "contains",
-            filter: `${filter.data.severity}`
-          }
-        };
-        this.gridApi.setFilterModel(filterObject);
-        let source = this.formatSource(filter.source);
-        this.setCurrentFilter(source);
+            filter: year
+          },
+          operator: "AND"
+        }
       };
-      this.$options.sockets.filterByMonth = filter => {
-        console.log("filter", filter);
-        let month = filter.data.split("/")[0] + "-";
-        let year = "-" + filter.data.split("/")[1];
-        this.removeFilter();
-        let filterObject = {
-          date: {
-            condition1: {
-              type: "startsWith",
-              filter: month
-            },
-            condition2: {
-              type: "contains",
-              filter: year
-            },
-            operator: "AND"
-          }
-        };
-        this.gridApi.setFilterModel(filterObject);
-        let source = this.formatSource(filter.source);
-        this.setCurrentFilter(source);
-      };
+      this.gridApi.setFilterModel(filterObject);
+      let source = this.formatSource(filter.source);
+      this.setCurrentFilter(source);
     },
     themeLighting(data) {
       console.log(data);
       this.toggleDark();
     },
-
     themeColor(data) {
       console.log('fetchColor recieved', data);
       this.changeTheme(data.name);
+    },
+    refresh(data) {
+      if (!window.glue.windows.my().context.filter) {
+        console.log("refresh!");
+        this.updateData();
+        this.updateChildren()
+      }
     }  
   },
   methods: {
@@ -201,7 +201,7 @@ export default {
       this.subscribe(ctx.eventName, (context, delta, removed) => {
 
       this.removeFilter();
-      // console.log('context', context)
+      console.log('context', context)
       let source = this.formatSource(context.source);
       this.setCurrentFilter(source);
       if (context.source === "BubbleChart") {
