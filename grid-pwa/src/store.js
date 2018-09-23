@@ -60,6 +60,7 @@ export const mutations = {
     const oldData = state.data;
     oldData.splice(0, 100);
     state.data = oldData.concat(data);
+    console.log('store updated')
   },
   setContextId(state, data) {
     if (state.contextId === null) {

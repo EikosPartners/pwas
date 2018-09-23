@@ -102,7 +102,7 @@ export default {
 
       // A Named object
       if (this.gridInstance === true) {
-        debugger;
+        // debugger;
         // Can we pass the instance an updated context here?
       } else {
         let app = window.glue.appManager.application('JSCDataGrid');

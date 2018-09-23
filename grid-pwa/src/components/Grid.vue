@@ -145,7 +145,7 @@ export default {
       if (!window.glue.windows.my().context.filter) {
         console.log("refresh!");
         this.updateData();
-        this.updateChildren()
+        // this.updateChildren()
       }
     }  
   },
@@ -158,6 +158,7 @@ export default {
       }
 
       if ( window.glue.windows.my().context.eventName === 'filterOnGrid' ) {
+        console.log('filteredGrid')
         return
       }
 
@@ -186,6 +187,7 @@ export default {
 
       const uniqueName = 'filteredGrid' + this.contextId
       window.glue.contexts.set(uniqueName, {filter:filter, name:uniqueName})
+      console.log('passed to children')
     },
     onGridReady(params) {
       this.gridApi = params.api;
@@ -315,6 +317,11 @@ export default {
         if (newData === 'dark') {
           this.toggleDark();
         }
+      }
+    },
+    data(newData) {
+      if (newData) {
+          this.updateChildren()
       }
     }
   }
