@@ -142,11 +142,8 @@ export default {
       this.changeTheme(data.name);
     },
     refresh(data) {
-      if (!window.glue.windows.my().context.filter) {
-        console.log("refresh!");
-        this.updateData();
-        // this.updateChildren()
-      }
+      console.log("refresh!");
+      this.updateData();
     }  
   },
   methods: {
