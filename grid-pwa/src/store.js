@@ -1,13 +1,13 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import axios from "axios";
+import Vue from 'vue';
+import Vuex from 'vuex';
+import axios from 'axios';
 
 Vue.use(Vuex);
 
 const state = {
   data: [],
   columns: [],
-  currentFilter: "No Filter",
+  currentFilter: 'No Filter',
   contextId: null,
   color: null,
   lighting: null
@@ -18,7 +18,7 @@ export const getters = {
   columns: state => state.columns,
   currentFilter: state => state.currentFilter,
   color: state => state.color,
-  lighting: state => state.lighting,
+  lighting: state => state.lighting
 };
 
 export const mutations = {
@@ -29,26 +29,27 @@ export const mutations = {
     if (data) {
       state.currentFilter = data;
     } else {
-      state.currentFilter = "No Filter";
+      state.currentFilter = 'No Filter';
     }
   },
   setColor(state, color) {
     state.color = color;
   },
   setLighting(state, lighting) {
+    console.log(lighting);
     state.lighting = lighting;
   },
   generateColumns(state, data) {
     if (data.length > 0) {
       const keys = Object.keys(data[0]);
-      const i = keys.indexOf("id");
+      const i = keys.indexOf('id');
       keys.splice(i, 1);
       state.columns = keys.map(key => {
         return {
           headerName: key,
           field: key,
           filterParams: {
-            newRowsAction: "keep"
+            newRowsAction: 'keep'
           }
         };
       });
@@ -60,25 +61,25 @@ export const mutations = {
     const oldData = state.data;
     oldData.splice(0, 100);
     state.data = oldData.concat(data);
-    console.log('store updated')
+    console.log('store updated');
   },
   setContextId(state, data) {
     if (state.contextId === null) {
-      state.contextId = data
+      state.contextId = data;
     }
   }
 };
 
 export const actions = {
   fetchData({ commit }) {
-    axios.get("http://localhost:9000").then(response => {
-      commit("initializeData", response.data);
-      commit("generateColumns", response.data);
+    axios.get('http://localhost:9000').then(response => {
+      commit('initializeData', response.data);
+      commit('generateColumns', response.data);
     });
   },
   updateData({ commit }) {
-    axios.get("http://localhost:9000/update").then(response => {
-      commit("refreshData", response.data);
+    axios.get('http://localhost:9000/update').then(response => {
+      commit('refreshData', response.data);
     });
   },
   fetchColor({ commit }) {
@@ -89,6 +90,9 @@ export const actions = {
   },
   changeTheme({ commit }, data) {
     commit('setColor', data);
+  },
+  changeLighting({ commit }, data) {
+    commit('setLighting', data);
   }
 };
 

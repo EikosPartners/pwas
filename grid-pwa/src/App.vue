@@ -1,31 +1,38 @@
 <template>
-  <div id="app">
+  <div id="app" :class="computedClass">
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-import { mapActions, mapMutations } from "vuex";
+import { mapActions, mapMutations, mapState } from 'vuex';
+import { StyleTogglerMixin } from 'jscatalyst';
 
 export default {
-  name: "app",
+  name: 'app',
   methods: {
-    ...mapActions(["fetchData", "fetchColor"]),
-    ...mapMutations(["setContextId"])
+    ...mapActions(['fetchData', 'fetchColor']),
+    ...mapMutations(['setContextId'])
   },
+  mixins: [StyleTogglerMixin],
   created() {
     this.fetchColor();
     this.fetchData();
-    const IdNumber = Date.now()
-    this.$store.commit('setContextId', `${IdNumber}`)
-    const uniqueName = 'filteredGrid' + IdNumber
-    window.glue.contexts.set(uniqueName, {})
+    const IdNumber = Date.now();
+    this.$store.commit('setContextId', `${IdNumber}`);
+    const uniqueName = 'filteredGrid' + IdNumber;
+    window.glue.contexts.set(uniqueName, {});
+  },
+  computed: {
+    ...mapState(['lighting']),
+    computedClass() {
+      return 'theme--' + this.lighting;
+    }
   }
 };
 </script>
 
 <style>
-
 body {
   font-family: 'Roboto', sans-serif !important;
 }
@@ -46,12 +53,11 @@ body {
 
 .theme--dark {
   color: white;
-  background-color: grey;
+  background-color: #303030;
 }
 
 .theme--light {
   color: black;
   background-color: white;
 }
-
 </style>
