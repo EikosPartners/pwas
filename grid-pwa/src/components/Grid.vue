@@ -177,6 +177,10 @@ export default {
       'changeTheme',
       'changeLighting'
     ]),
+    modelUpdated(params) {
+       this.gridApi = params.api;
+       this.updateChildren()
+    },
     updateChildren() {
       if (window.glue.windows.my().context === null) {
         return;
