@@ -1,6 +1,6 @@
 <template>
 <div class="container">
-  <div :class="['header', `${color}-selected`]" :style="styleObject">
+  <div :class="['header']" :style="styleObject">
     <span>Grid</span>
      <span class="current-context">Id: {{contextId}}</span>
     <span class="current-filter">{{currentFilter}}</span>
@@ -435,33 +435,6 @@ export default {
   outline: 0;
 }
 
-.blue-selected {
-  background-color: #2da8c9;
-}
-
-.pink-selected {
-  background-color: #ba5288;
-}
-
-.brown-selected {
-  background-color: #e29755;
-}
-
-.green-selected {
-  background-color: #53a976;
-}
-
-.red-selected {
-  background-color: #c0392b;
-}
-
-.grey-selected {
-  background-color: #566573;
-}
-
-.yellow-selected {
-  background-color: #ffff20;
-}
 .ag-theme-dark {
   font-family: Roboto, sans-serif !important;
 }
