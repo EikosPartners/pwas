@@ -1,18 +1,25 @@
 <template>
-  <div id="app">
+  <div id="app" :class="computedClass">
     <router-view/>
   </div>
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapState } from 'vuex';
 export default {
-  name: "app",
+  name: 'app',
   methods: {
-    ...mapActions(["fetchColor"])
+    ...mapActions(['fetchColor'])
   },
-   created() {
+  created() {
     this.fetchColor();
+  },
+  computed: {
+    ...mapState(['lighting']),
+    computedClass() {
+      console.log(this.lighting);
+      return 'theme--' + this.lighting;
+    }
   }
 };
 </script>
@@ -32,22 +39,20 @@ body {
 }
 
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  /* color: #2c3e50; */
   width: 100%;
 }
 
 .theme--dark {
   color: white;
-  background-color: grey;
+  background-color: #303030;
 }
 
 .theme--light {
   color: black;
   background-color: white;
 }
-
 </style>
