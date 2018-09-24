@@ -71,19 +71,19 @@ export default {
   },
   sockets: {
     connect: function() {
-      console.log('socket connected');
-      this.$options.sockets.refresh = () => {
-        if (!this.belongsToGrid) {
-          console.log('refresh!');
-          this.updateData();
-        }
-      };
+      console.log("socket Connected!")
     },
     themeColor: function(data) {
       this.changeTheme(data.name.toLowerCase());
     },
     themeLighting() {
       this.toggleDark();
+    },
+    refresh() {
+      if (!this.belongsToGrid) {
+        console.log('refresh!');
+        this.updateData();
+      }
     }
   },
   methods: {
@@ -150,7 +150,7 @@ export default {
   },
   created() {
     this.subscribe('filterOnGrid', (context, delta, removed) => {
-      console.log('context update', context.data);
+      console.log('context update', context);
       this.output = context.data;
     });
   },

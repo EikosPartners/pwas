@@ -23,6 +23,7 @@
       :rowHeight='48'
       :enableSorting='trueVar'
       :enableFilter='trueVar'
+      :modelUpdated="modelUpdated"
       :gridReady='onGridReady'
       :filterChanged='updateChildren'
       rowSelection='multiple'
@@ -224,17 +225,13 @@ export default {
         filter.data = this.data;
       }
 
-      const uniqueName = 'filteredGrid' + this.contextId;
-      window.glue.contexts.set(uniqueName, {
-        filter: filter,
-        name: uniqueName
-      });
-      console.log('passed to children');
+      const uniqueName = 'filteredGrid' + this.contextId
+      window.glue.contexts.set(uniqueName, {filter:filter, name:uniqueName})
     },
     onGridReady(params) {
       this.gridApi = params.api;
       this.columnApi = params.columnApi;
-
+      console.log('gridApi', this.gridApi)
       this.gridApi.sizeColumnsToFit();
       window.addEventListener('resize', () => {
         this.gridApi.sizeColumnsToFit();
@@ -244,40 +241,36 @@ export default {
 
       this.subscribe(ctx.eventName, (context, delta, removed) => {
         this.removeFilter();
-        console.log('context', context);
+        console.log('subscribe context', context)
         let source = this.formatSource(context.source);
         this.setCurrentFilter(source);
-        if (context.source === 'BubbleChart') {
-          console.log('bubble chart', context);
+        if (context.source === "BubbleChart") {
+          console.log("bubble chart", context);
           let filterObject = {
             date: {
-              type: 'contains',
+              type: "contains",
               filter: `${context.data.date}`
             },
             severity: {
-              type: 'contains',
+              type: "contains",
               filter: `${context.data.severity}`
             }
           };
           this.gridApi.setFilterModel(filterObject);
-        } else if (context.source === 'BarChart') {
-          console.log('bar chart', context);
-          let month = context.data.split('/')[0] + '-';
-          let year = '-' + context.data.split('/')[1];
+        }
+        else if (context.source === "BarChart") {
+          console.log("bar chart", context);
+          let month = context.data.split("/")[0] + "-";
+          let year = "-" + context.data.split("/")[1];
 
-          let filterObject = {
-            date: {
-              condition1: { type: 'startsWith', filter: month },
-              condition2: { type: 'contains', filter: year },
-              operator: 'AND'
-            }
-          };
+          let filterObject = { date: { condition1: { type: "startsWith", filter: month }, condition2: { type: "contains", filter: year }, operator: "AND" } };
 
           this.gridApi.setFilterModel(filterObject);
-        } else {
+        } 
+        else {
           this.setQuickFilter(context.data);
         }
-      });
+      })
     },
     setQuickFilter(data) {
       if (this.gridApi) {
@@ -297,9 +290,9 @@ export default {
       const ctx = localWindow.context;
 
       // Get the data set from this component
-      let filter = {};
-
-      if (this.gridApi !== undefined || this.gridApi !== null) {
+      let filter = {
+      }
+      if ( this.gridApi !== undefined || this.gridApi !== null ) {
         // console.log( this.gridApi )
         let gridData = new jslinq(
           this.gridApi.clientSideRowModel.rowsToDisplay
@@ -333,8 +326,7 @@ export default {
           };
         });
       }
-      const uniqueName = 'filteredGrid' + this.contextId;
-      console.log(uniqueName);
+      const uniqueName = 'filteredGrid' + this.contextId
 
       window.glue.contexts.set(uniqueName, {
         filter: filter,
@@ -366,6 +358,11 @@ export default {
     }
   },
   watch: {
+    data(newData) {
+      if (newData) {
+        // this.updateChildren()
+      }
+    },
     color(newData) {
       if (newData) {
         this.setTheme();
@@ -381,11 +378,6 @@ export default {
         }
       }
     },
-    data(newData) {
-      if (newData) {
-        this.updateChildren();
-      }
-    }
   }
 };
 </script>

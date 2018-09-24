@@ -13,7 +13,7 @@ var myMixin = {
     filter: function(filter, name) {
 
       if ( window.glue != undefined ) {
-        console.log('GLUE42: Filtering message ' + filter);
+        console.log('GLUE42: Filtering message ', filter, name);
         if ( name !== undefined ) {
           window.glue.contexts.set(name, filter);
         }
@@ -22,7 +22,7 @@ var myMixin = {
         }
       }
       else {
-        console.log('WEBSockets: Filtering message ' + filter);
+        console.log('WEBSockets: Filtering message ', filter);
         this.$socket.emit('filterByDate', filter);
       }
     }
