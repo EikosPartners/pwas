@@ -227,7 +227,6 @@ span span {
 .container {
   width: 90%;
   padding: 0 5%;
-  height: 90vh;
 }
 
 .blue-selected {
