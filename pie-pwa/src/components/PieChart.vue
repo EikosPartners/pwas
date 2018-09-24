@@ -1,6 +1,6 @@
 <template>
    <div class="container">
-    <div :class="['header', `${color}-selected`]">
+    <div :class="['header']" :style="styleObj">
       <span>Tickets per Project</span>
       <span class="current-context">Subscribed:
         <select class="select" v-model="selected">
@@ -36,7 +36,18 @@ export default {
   },
   computed: {
     ...mapState(['color', 'lighting', 'belongsToGrid']),
-    ...mapGetters(['data']),
+    ...mapGetters(['data', 'themeColors']),
+    styleObj(){
+      let background, text
+      if (this.$store.state.themeMod.displayTheme === 'light') {
+        background = this.themeColors.vuetifyLight
+        text = '#000'
+      } else {
+        background = this.themeColors.vuetifyDark
+        text = '#fff'
+      }
+      return {backgroundColor: background, color: text}
+    },
     selected: {
       get() {
         return this.$store.state.selected
