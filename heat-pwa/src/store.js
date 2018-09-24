@@ -22,6 +22,7 @@ export const getters = {
 export const mutations = {
   initializeData(state, data) {
     state.data = data;
+    console.log("store updated", state.data);
   },
   setColor(state, color) {
     state.color = color;
@@ -33,6 +34,7 @@ export const mutations = {
     const oldData = state.data;
     oldData.splice(0, 100);
     state.data = oldData.concat(data);
+    console.log("store updated", state.data.length);
   },
   setBelongsToGrid(state) {
     state.belongsToGrid = true;

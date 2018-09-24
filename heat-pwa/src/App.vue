@@ -18,7 +18,7 @@ export default {
   },
   created() {
     this.fetchColor();
-
+    //this is the grid specific local context it opens with
     const localWindow = window.glue.windows.my();
     const ctx = localWindow.context
     const contextName = ctx.contextName
@@ -28,18 +28,20 @@ export default {
       this.$store.commit('setSelected', contextName)
     }
 
-    this.subscribe(contextName, (context, delta, removed) => {
-      debugger
-      this.$store.commit('initializeData', context.filter.data)
-    });
 
     if (ctx.filter) {
       this.$store.commit('initializeData', ctx.filter.data)
       localWindow.onContextUpdated((context, win) => console.log('update context:', context))
     }
     else {
+      console.log("fetching")
       this.fetchData();
     }
+    this.subscribe(contextName, (context, delta, removed) => {
+      // debugger
+      console.log('subscribe', context.filter.data) 
+      this.$store.commit('initializeData', context.filter.data)
+    });
     this.enableOptions();
   }
 };
