@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-    <div :class="['header', `${color}-selected`]">
+    <div :class="['header']" :style="styleObj">
       <span>Ticket Severity by Date</span>
       <span class="current-context">Subscribed:
         <select class="select" v-model="selected">
@@ -35,6 +35,18 @@ export default {
   },
   computed: {
     ...mapState(['color', 'belongsToGrid', 'lighting']),
+    ...mapGetters(['dataDV', 'themeColors']),
+    styleObj(){
+      let background, text
+      if (this.$store.state.themeMod.displayTheme === 'light') {
+        background = this.themeColors.vuetifyLight
+        text = '#000'
+      } else {
+        background = this.themeColors.vuetifyDark
+        text = '#fff'
+      }
+      return {backgroundColor: background, color: text}
+    },
     selected: {
       get() {
         return this.$store.state.selected
@@ -43,7 +55,6 @@ export default {
         this.$store.commit('setSelected', value)
       }
     },
-    ...mapGetters(['dataDV']),
     availableContexts() {
       let availableContexts = [];
       window.glue.contexts.all().forEach(context => {
