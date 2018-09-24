@@ -70,6 +70,6 @@
     "jslinq": "^1.0.21",
     "material-design-icons-iconfont": "^3.0.3",
     "typeface-roboto": "0.0.54",
-    "vuetify": "^1.2.3"
+    "vuetify": "^1.2.4"
   }
 }
