@@ -77,7 +77,7 @@ export const actions = {
     });
   },
   updateData({ commit }) {
-    axios.get('http://localhost:9000/update').then(response => {
+    axios.get('http://localhost:9000/metrics').then(response => {
       commit('refreshData', response.data);
     });
   },

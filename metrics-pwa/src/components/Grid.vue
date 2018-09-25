@@ -28,12 +28,17 @@
       :filterChanged='updateChildren'
       rowSelection='multiple'
     ></ag-grid-vue>
+
+    <pie-chart style="height:300px" class="grid ag-theme-material"
+    :dataModel="prettyDataForPieChart"  
+    @jsc_click="filterByProject" 
+    />
 </div>
 </template>
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex';
 import { AgGridVue } from 'ag-grid-vue';
-import { StyleTogglerMixin } from 'jscatalyst';
+import { D3PieChart, StyleTogglerMixin } from 'jscatalyst';
 import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
 import jslinq from 'jslinq';
@@ -41,7 +46,8 @@ import jslinq from 'jslinq';
 export default {
   name: 'Grid',
   components: {
-    AgGridVue
+    AgGridVue,
+    pieChart: D3PieChart
   },
   mixins: [Messaging, Windowing, StyleTogglerMixin],
   computed: {
@@ -56,13 +62,38 @@ export default {
     prettyData() {
       return this.data.map(item => {
         let prettyItem = {};
-        prettyItem.date = this.parseDate(item.date);
-        prettyItem.project = item.project;
-        prettyItem.raisedBy = item.raisedBy;
-        prettyItem.severity = item.severity;
-        prettyItem.id = item.id;
+        prettyItem.start = this.parseDate(item.start);
+        prettyItem.timestamp = this.parseDate(item.timestamp);
+        prettyItem.application = item.application;
+        prettyItem.user = item.user;
+        prettyItem.os = item.os;
+        prettyItem.severity = 1;
+        //prettyItem.id = item.id;
         return prettyItem;
       });
+    },
+    prettyDataForPieChart() {
+      const pieLinqData = new jslinq(this.data)
+        .select(d => {
+          return {
+            label: d.application,
+            value: d.severity
+          };
+        })
+        .groupBy(d => {
+          return d.label;
+        });
+      let temp = pieLinqData.items.map(i => {
+        return i;
+      });
+      const finalData = [];
+      temp.forEach(i => {
+        finalData.push({
+          label: i.key,
+          value: i.count
+        });
+      });
+      return finalData;
     },
     styleObject() {
       if (this.lighting === 'dark') {
