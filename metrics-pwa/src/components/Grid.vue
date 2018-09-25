@@ -29,16 +29,29 @@
       rowSelection='multiple'
     ></ag-grid-vue>
 
-    <pie-chart style="height:300px" class="grid ag-theme-material"
+<div style="height:500px" > 
+
+    <bar-chart style="width:50%;height:50%" class="grid ag-theme-material"
+      @jsc_click="filterByMonth"
+      :dataModel='prettyDataForBarChart'
+      xaxisLabel="Application"
+      yaxisLabel="Number of Actions"
+      :xAxisAngle='45'
+    ></bar-chart>
+
+    <pie-chart style="width:50%;height:50%" class="grid ag-theme-material"
     :dataModel="prettyDataForPieChart"  
     @jsc_click="filterByProject" 
     />
+
+</div>
+
 </div>
 </template>
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex';
 import { AgGridVue } from 'ag-grid-vue';
-import { D3PieChart, StyleTogglerMixin } from 'jscatalyst';
+import { D3BarChart, D3PieChart, StyleTogglerMixin } from 'jscatalyst';
 import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
 import jslinq from 'jslinq';
@@ -47,7 +60,8 @@ export default {
   name: 'Grid',
   components: {
     AgGridVue,
-    pieChart: D3PieChart
+    pieChart: D3PieChart,
+    barChart: D3BarChart
   },
   mixins: [Messaging, Windowing, StyleTogglerMixin],
   computed: {
@@ -59,6 +73,24 @@ export default {
       'color',
       'lighting'
     ]),
+    prettyDataForBarChart() {
+
+// Done
+
+      const linqData = new jslinq(this.data)
+        .select(d => {
+          return {
+            x: d.application,
+            y: d.severity
+          };
+        })
+        .groupBy(d => {
+          return d.x;
+        }).select( d => { return {x:d.key, y: d.count}})
+
+    debugger
+      return linqData;
+    },
     prettyData() {
       return this.data.map(item => {
         let prettyItem = {};

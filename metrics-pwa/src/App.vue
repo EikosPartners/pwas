@@ -1,7 +1,7 @@
 <template>
-  <div id="app" :class="computedClass">
+  <v-app id="app" :class="computedClass">
     <router-view></router-view>
-  </div>
+  </v-app>
 </template>
 
 <script>
