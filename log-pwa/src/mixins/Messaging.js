@@ -11,7 +11,8 @@ var myMixin = {
       })
     },
     unsubscribe: function(key) {
-      window.glue.contexts.unsubscribe(key)
+      //throwing an error that this function doesn't exist
+      // window.glue.contexts.unsubscribe(key)
     },
     filter: function(filter, name) {
 
