@@ -43,7 +43,8 @@ export default {
       this.$store.commit('initializeData', context.filter.data)
     });
     }
-    
+
+// Setup the button on the toolbar
     this.enableOptions();
   }
 };

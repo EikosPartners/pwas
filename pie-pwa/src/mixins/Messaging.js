@@ -1,28 +1,25 @@
 var myMixin = {
-  created: function() {
-  },
+  created: function () {},
   methods: {
     // Subscribe to the named event passed in
-    subscribe: function(name, subscriber) {
-      if ( name === undefined ) return
+    subscribe: function (name, subscriber) {
+      if (name === undefined) return
       window.glue.contexts.subscribe(name, (context, delta, removed) => {
-        if ( subscriber !== undefined ) {
+        if (subscriber !== undefined) {
           subscriber(context, delta, removed)
         }
       })
     },
-    filter: function(filter, name) {
+    filter: function (filter, name) {
 
-      if ( window.glue != undefined ) {
+      if (window.glue != undefined) {
         console.log('GLUE42: Filtering message ' + filter);
-        if ( name !== undefined ) {
+        if (name !== undefined) {
           window.glue.contexts.set(name, filter);
-        }
-        else {
+        } else {
           window.glue.contexts.set('filter', filter);
         }
-      }
-      else {
+      } else {
         console.log('WEBSockets: Filtering message ' + filter);
         this.$socket.emit('filterByProject', filter);
       }

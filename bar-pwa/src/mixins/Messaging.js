@@ -4,10 +4,7 @@ var myMixin = {
   methods: {
     // Subscribe to the named event passed in
     subscribe: function(name, subscriber) {
-      debugger  
       if ( name === undefined ) {
-        console.log('shared context can not be null ' + name)
-        
         return;
       }
 

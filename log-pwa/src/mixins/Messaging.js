@@ -4,11 +4,14 @@ var myMixin = {
   methods: {
     // Subscribe to the named event passed in
     subscribe: function(name, subscriber) {
-      window.glue.contexts.subscribe(name, (context, delta, removed) => {
+      return window.glue.contexts.subscribe(name, (context, delta, removed) => {
         if ( subscriber !== undefined ) {
           subscriber(context, delta, removed)
         }
       })
+    },
+    unsubscribe: function(key) {
+      window.glue.contexts.unsubscribe(key)
     },
     filter: function(filter, name) {
 

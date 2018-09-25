@@ -2,6 +2,7 @@ let express = require('express');
 // let data = require("../data/example.json");
 let bodyParser = require('body-parser');
 let seed = require('../data/seed.js');
+let metrics = require('../data/metrics.js');
 let router = express.Router();
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
@@ -27,10 +28,15 @@ router.get('/color', (req, res) => {
   res.send(colorObj);
 });
 
+router.get('/metrics', (req, res) => {
+  res.send(metrics.aquireMetrics());
+});
+
 router.post('/color', (req, res) => {
   colorObj.color = req.body.color;
   res.send('Complete');
 });
+
 module.exports = {
   colorObj,
   router
