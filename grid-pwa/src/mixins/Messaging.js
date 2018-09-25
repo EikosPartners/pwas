@@ -6,6 +6,7 @@ var myMixin = {
   // },
   methods: {
     subscribe: function(name, subscriber) {
+      if ( name === undefined ) return
       window.glue.contexts.subscribe(name, (context, delta, removed) => {
         if ( subscriber !== undefined ) {
           subscriber(context, delta, removed)

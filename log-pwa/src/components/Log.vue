@@ -1,7 +1,8 @@
 <template>
+<div>
   <div v-if="usingGlue" class="container">
     <div :class="['header', `${color}-selected`]" :style="styleObject">
-      <span>Log</span>
+      <span>Shared Contexts</span>
     </div>
     <transition-group appear tag="ul" :name="`${color}in`" v-if="data.length > 0">
       <li v-for="(ctx, i) in data" :key = "i" class="log-item">
@@ -15,7 +16,7 @@
       </li>
     </transition-group>
     <ul v-else>
-      <li>Log Empty</li>
+      <li>No Shared Contexts</li>
     </ul>
   </div>
   <div v-else class="container">
@@ -50,6 +51,7 @@
       <li>Log Empty</li>
     </ul>
   </div>
+  </div>
 </template>
 
 <script>
@@ -64,26 +66,55 @@ export default {
   data() {
     return {
       gridInstance: false,
-      usingGlue: true
+      usingGlue: true,
+      currentContexts: [],
     };
   },
   mounted() {
     this.availableContexts.forEach(ctx => {
-      this.subscribe(ctx, (context, delta, removed) => {
-        this.addData(context);
+      const key = this.subscribe(ctx, (context, delta, removed) => {
+        debugger
+        this.addData(context + JSON.stringify(delta));
       });
+
+      this.currentContexts.push({name:ctx, key:key})
     });
+
+    window.setInterval( () => {
+      debugger
+
+      this.currentContexts.forEach(ctx=>{
+        this.unsubscribe(ctx.key)
+      })
+
+      debugger
+
+      this.currentContexts = []
+
+      this.availableContexts.forEach(ctx => {
+        const key = this.subscribe(ctx, (context, delta, removed) => {
+          debugger
+          this.addData(context + JSON.stringify(delta));
+        });
+
+        this.currentContexts.push({name:ctx, key:key})
+      });
+
+    }, 5000)
   },
   computed: {
     ...mapState(['color', 'lighting']),
     ...mapGetters(['data']),
     availableContexts() {
+
+      debugger
       let availableContexts = [];
       window.glue.contexts.all().forEach(context => {
-        if (context.includes('filteredGrid') && context !== 'filteredGrid') {
-          availableContexts.push(context);
-        }
+        availableContexts.push(context);
       });
+
+      // Where are all of the contexts ?
+
       return availableContexts;
     },
     styleObject() {

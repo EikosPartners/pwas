@@ -243,6 +243,8 @@ export default {
       const localWindow = window.glue.windows.my();
       const ctx = localWindow.context;
 
+    if ( ctx.eventName !== undefined ) {
+
       this.subscribe(ctx.eventName, (context, delta, removed) => {
         this.removeFilter();
         console.log('subscribe context', context)
@@ -275,6 +277,7 @@ export default {
           this.setQuickFilter(context.data);
         }
       })
+    }
     },
     setQuickFilter(data) {
       if (this.gridApi) {

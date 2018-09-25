@@ -4,6 +4,13 @@ var myMixin = {
   methods: {
     // Subscribe to the named event passed in
     subscribe: function(name, subscriber) {
+      debugger  
+      if ( name === undefined ) {
+        console.log('shared context can not be null ' + name)
+        
+        return;
+      }
+
       window.glue.contexts.subscribe(name, (context, delta, removed) => {
         if ( subscriber !== undefined ) {
           subscriber(context, delta, removed)

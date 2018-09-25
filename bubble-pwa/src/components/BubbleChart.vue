@@ -191,7 +191,7 @@ export default {
       }
     },
     selected(newData) {
-      if (newData) {
+      if (newData && newData !== undefined) {
         this.subscribe(newData, (context, delta, removed) => {
           this.$store.commit('initializeData', context.filter.data);
         });

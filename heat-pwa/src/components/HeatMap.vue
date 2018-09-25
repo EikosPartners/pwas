@@ -3,7 +3,7 @@
     <div :class="['header']" :style="styleObj">
       <span>Number of Tickets by Date</span>
       <span class="current-context">Subscribed:
-        <select class="select" v-model="selected">
+        <select class="select" v-model="selected" v-on:click="populate">
           <option disabled value="">Select context</option>
           <option v-for="(context, index) in availableContexts" :key="index">{{context}}</option>
         </select>
@@ -33,7 +33,8 @@ export default {
   mixins: [StyleTogglerMixin, Messaging, Windowing],
   data() {
     return {
-      gridInstance: false
+      gridInstance: false,
+      availableContexts: [],
     };
   },
   computed: {
@@ -57,15 +58,6 @@ export default {
       set(value) {
         this.$store.commit('setSelected', value)
       }
-    },
-    availableContexts() {
-      let availableContexts = [];
-      window.glue.contexts.all().forEach(context => {
-        if (context.includes('filteredGrid') && context !== 'filteredGrid') {
-          availableContexts.push(context);
-        }
-      });
-      return availableContexts;
     },
     heatData() {
       const heatData = [];
@@ -98,6 +90,16 @@ export default {
     }
   },
   methods: {
+    populate() {
+      debugger
+      let local = [];
+      window.glue.contexts.all().forEach(context => {
+        if (context.includes('filteredGrid') && context !== 'filteredGrid') {
+          local.push(context);
+        }
+      });
+      this.availableContexts = local
+    },
     ...mapActions(['updateData', 'changeTheme']),
     filterByDate(data) {
       let filter = {};

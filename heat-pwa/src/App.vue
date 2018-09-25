@@ -23,11 +23,10 @@ export default {
     const ctx = localWindow.context
     const contextName = ctx.contextName
 
-    if (contextName) {
+    if (contextName !== undefined) {
       this.$store.commit('setBelongsToGrid') //disables socket refresh
       this.$store.commit('setSelected', contextName)
     }
-
 
     if (ctx.filter) {
       this.$store.commit('initializeData', ctx.filter.data)
@@ -37,11 +36,14 @@ export default {
       console.log("fetching")
       this.fetchData();
     }
+    if ( contextName !== undefined ) {
     this.subscribe(contextName, (context, delta, removed) => {
       // debugger
       console.log('subscribe', context.filter.data) 
       this.$store.commit('initializeData', context.filter.data)
     });
+    }
+    
     this.enableOptions();
   }
 };
