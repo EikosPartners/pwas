@@ -1,0 +1,246 @@
+[{
+    "activityTarget": {
+        "enabled": true
+    },
+    "allowMultiple": true,
+    "caption": "JSC Bar",
+    "customProperties": {
+        "includeInClientWorkspace": "true",
+        "includeInCanvas": true
+    },
+    "details": {
+        "height": 270,
+        "loader": {
+            "background": "#1a2b30",
+            "size": 2
+        },
+        "mode": "tab",
+        "backgroundColor": "#1a2b30",
+        "title": "JSC Bar",
+        "url": "http://localhost:9090/",
+        "width": 620
+    },
+    "disabled": false,
+    "hidden": false,
+    "name": "JSCBar",
+    "title": "JSC Bar",
+    "type": "window"
+},
+{
+    "activityTarget": {
+        "enabled": true
+    },
+    "allowMultiple": true,
+    "caption": "JSC Bubble",
+    "customProperties": {
+        "includeInClientWorkspace": "true",
+        "includeInCanvas": true
+    },
+    "details": {
+        "height": 270,
+        "loader": {
+            "background": "#1a2b30",
+            "size": 2
+        },
+        "mode": "html",
+        "title": "Bubble",
+        "url": "http://localhost:9091/",
+        "width": 620
+    },
+    "disabled": false,
+    "hidden": false,
+    "name": "JSCBubble",
+    "title": "JSC Bubble",
+    "type": "window"
+},
+{
+    "activityTarget": {
+        "enabled": true
+    },
+    "allowMultiple": true,
+    "caption": "JSC Line",
+    "customProperties": {
+        "includeInClientWorkspace": "true",
+        "includeInCanvas": true
+
+    },
+    "details": {
+        "height": 270,
+        "loader": {
+            "background": "#1a2b30",
+            "size": 2
+        },
+        "mode": "html",
+        "title": "Line",
+        "url": "http://localhost:9092/",
+        "width": 620
+    },
+    "disabled": false,
+    "hidden": false,
+    "name": "JSCLine",
+    "title": "JSC Line",
+    "type": "window"
+},
+{
+    "activityTarget": {
+        "enabled": true
+    },
+    "allowMultiple": true,
+    "caption": "JSC Data Grid",
+    "customProperties": {
+        "includeInClientWorkspace": "true",
+        "includeInCanvas": true
+    },
+    "details": {
+        "height": 270,
+        "loader": {
+            "background": "#1a2b30",
+            "size": 2
+        },
+        "mode": "tab",
+        "title": "Data Grid",
+        "url": "http://localhost:9093/",
+        "width": 620
+    },
+    "disabled": false,
+    "hidden": false,
+    "name": "JSCDataGrid",
+    "title": "JSC Data Grid",
+    "type": "window"
+},
+{
+    "activityTarget": {
+        "enabled": true
+    },
+    "allowMultiple": true,
+    "caption": "JSC Heat Map",
+    "customProperties": {
+        "includeInClientWorkspace": "true",
+        "includeInCanvas": true
+    },
+    "details": {
+        "height": 270,
+        "loader": {
+            "background": "#1a2b30",
+            "size": 2
+        },
+        "mode": "tab",
+        "title": "JSC Heat Map",
+        "url": "http://localhost:9094/",
+        "width": 620
+    },
+    "disabled": false,
+    "hidden": false,
+    "name": "JSCHeatMap",
+    "title": "JSC Heat Map",
+    "type": "window"
+},
+{
+    "activityTarget": {
+        "enabled": true
+    },
+    "allowMultiple": true,
+    "caption": "JSC Pie",
+    "customProperties": {
+        "includeInClientWorkspace": "true",
+        "includeInCanvas": true
+    },
+    "details": {
+        "height": 270,
+        "loader": {
+            "background": "#1a2b30",
+            "size": 2
+        },
+        "mode": "html",
+        "title": "Pie",
+        "url": "http://localhost:9095/",
+        "width": 620
+    },
+    "disabled": false,
+    "hidden": false,
+    "name": "JSCPie",
+    "title": "JSC Pie",
+    "type": "window"
+},
+{
+    "activityTarget": {
+        "enabled": true
+    },
+    "allowMultiple": false,
+    "caption": "JSC Event Logging",
+    "customProperties": {
+        "includeInClientWorkspace": "true",
+        "includeInCanvas": true
+    },
+    "details": {
+        "height": 270,
+        "loader": {
+            "background": "#1a2b30",
+            "size": 2
+        },
+        "mode": "html",
+        "title": "Event Logging",
+        "url": "http://localhost:9096/",
+        "width": 620
+    },
+    "disabled": false,
+    "hidden": false,
+    "name": "JSCLogging",
+    "title": "JSC Event Logging",
+    "type": "window"
+},
+{
+    "activityTarget": {
+        "enabled": true
+    },
+    "allowMultiple": false,
+    "caption": "JSC User Settings",
+    "customProperties": {
+        "includeInClientWorkspace": "true",
+        "includeInCanvas": false
+    },
+    "details": {
+        "height": 270,
+        "loader": {
+            "background": "#1a2b30",
+            "size": 2
+        },
+        "mode": "html",
+        "title": "User Settings",
+        "url": "http://localhost:9097/",
+        "width": 620
+    },
+    "disabled": false,
+    "hidden": false,
+    "name": "JSCUserSettings",
+    "title": "JSC User Settings",
+    "type": "window"
+},
+{
+    "activityTarget": {
+        "enabled": true
+    },
+    "allowMultiple": false,
+    "caption": "JSC Metrics",
+    "customProperties": {
+        "includeInClientWorkspace": "true",
+        "includeInCanvas": false
+    },
+    "details": {
+        "height": 270,
+        "loader": {
+            "background": "#1a2b30",
+            "size": 2
+        },
+        "mode": "html",
+        "title": "Metrics",
+        "url": "http://localhost:9098/",
+        "width": 620
+    },
+    "disabled": false,
+    "hidden": false,
+    "name": "JSCMetrics",
+    "title": "JSC Metrics",
+    "type": "window"
+}    
+]
