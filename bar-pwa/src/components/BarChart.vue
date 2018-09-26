@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <!-- <div :class="['header']" :style="styleObj">
+    <div :class="['header']" :style="styleObj">
       <span>Number of Tickets by Month</span>
       <span class="current-context">Subscribed:
         <select class="select" v-model="selected">
@@ -8,7 +8,7 @@
           <option v-for="(context, index) in availableContexts" :key="index">{{context}}</option>
         </select>
       </span>
-    </div> -->
+    </div>
     <bar-chart
       @jsc_click="filterByMonth"
       :dataModel='barDataProject'
