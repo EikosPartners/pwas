@@ -10,7 +10,7 @@ import Vuetify from 'vuetify';
 import 'jscatalyst/dist/jscatalyst.min.css';
 import '../node_modules/vuetify/dist/vuetify.min.css';
 import '../node_modules/material-design-icons-iconfont/dist/material-design-icons.css'; // Ensure you are using css-loader
-import 'typeface-roboto'
+import 'typeface-roboto';
 
 import { ThemePlugin } from 'jscatalyst';
 

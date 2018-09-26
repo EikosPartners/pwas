@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div :class="['header']" :style="styleObj">
+    <!-- <div :class="['header']" :style="styleObj">
       <span>Number of Tickets by Month</span>
       <span class="current-context">Subscribed:
         <select class="select" v-model="selected">
@@ -8,10 +8,10 @@
           <option v-for="(context, index) in availableContexts" :key="index">{{context}}</option>
         </select>
       </span>
-    </div>
+    </div> -->
     <bar-chart
       @jsc_click="filterByMonth"
-      :dataModel='prettyData'
+      :dataModel='barDataProject'
       xaxisLabel="Date"
       yaxisLabel="Number of Tickets"
       :xAxisAngle='45'
@@ -39,23 +39,23 @@ export default {
   computed: {
     ...mapGetters(['data', 'height', 'themeColors']),
     ...mapState(['color', 'belongsToGrid', 'lighting']),
-    styleObj(){
-      let background, text
+    styleObj() {
+      let background, text;
       if (this.$store.state.themeMod.displayTheme === 'light') {
-        background = this.themeColors.vuetifyLight
-        text = '#000'
+        background = this.themeColors.vuetifyLight;
+        text = '#000';
       } else {
-        background = this.themeColors.vuetifyDark
-        text = '#fff'
+        background = this.themeColors.vuetifyDark;
+        text = '#fff';
       }
-      return {backgroundColor: background, color: text}
+      return { backgroundColor: background, color: text };
     },
     selected: {
       get() {
-        return this.$store.state.selected
+        return this.$store.state.selected;
       },
       set(value) {
-        this.$store.commit('setSelected', value)
+        this.$store.commit('setSelected', value);
       }
     },
     availableContexts() {
@@ -67,17 +67,22 @@ export default {
       });
       return availableContexts;
     },
-    barData() {
-      const barData = [];
-      let sorted = this.sortData(this.data);
-      for (let date in sorted) {
-        let dataObj = { x: date, y: sorted[date] };
-        barData.push(dataObj);
-      }
-      return barData;
-    },
+
+    // Deprecated
+
+    // barData() {
+    //   const barData = [];
+    //   let sorted = this.sortData(this.data);
+    //   for (let date in sorted) {
+    //     let dataObj = { x: date, y: sorted[date] };
+    //     barData.push(dataObj);
+    //   }
+    //   return barData;
+    // },
+
     prettyData() {
       let barData = [];
+      console.log(this.data);
       let sorted = this.sortData(this.data);
       for (let year in sorted) {
         let oneYearData = [];
@@ -98,17 +103,43 @@ export default {
       }
 
       return barData;
+    },
+
+    barDataProject() {
+      let barLinqData = new jslinq(this.data)
+        .select(d => {
+          return {
+            x: d.project,
+            severity: d.severity
+          };
+        })
+        .groupBy(d => {
+          return d.x;
+        });
+      let temp = barLinqData.items.map(i => {
+        return i;
+      });
+      console.log(temp);
+      const finalData = [];
+      temp.forEach(i => {
+        console.log(i);
+        finalData.push({
+          x: i.key,
+          y: i.count
+        });
+      });
+      return finalData;
     }
   },
   sockets: {
-    connect: function() {
+    connect() {
       console.log('socket connected');
-      this.$options.sockets.refresh = () => {
-        if (!this.belongsToGrid) {
-          console.log('refresh!');
-          this.updateData();
-        }
-      };
+    },
+    refresh() {
+      if (!this.belongsToGrid) {
+        console.log('refresh!');
+        this.updateData();
+      }
     },
     themeLighting(data) {
       console.log(data);
@@ -250,31 +281,31 @@ export default {
   color: black;
 }
 
- .blue-selected {
-    background-color: #2da8c9;
-  }
+.blue-selected {
+  background-color: #2da8c9;
+}
 
-  .pink-selected {
-    background-color: #ba5288;
-  }
+.pink-selected {
+  background-color: #ba5288;
+}
 
-  .brown-selected {
-    background-color: #e29755;
-  }
+.brown-selected {
+  background-color: #e29755;
+}
 
-  .green-selected {
-    background-color: #53a976;
-  }
+.green-selected {
+  background-color: #53a976;
+}
 
-  .red-selected {
-    background-color: #c0392b;
-  }
+.red-selected {
+  background-color: #c0392b;
+}
 
-  .grey-selected {
-    background-color: #566573;
-  }
+.grey-selected {
+  background-color: #566573;
+}
 
-  .yellow-selected {
-    background-color: #ffff20;
-  }
+.yellow-selected {
+  background-color: #ffff20;
+}
 </style>
