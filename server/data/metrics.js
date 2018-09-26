@@ -1,6 +1,8 @@
 let jslinq = require("jslinq");
 let fs = require('fs')
-let metrics_log='C:\\Users\\latti\\AppData\\Local\\Tick42\\GlueDesktop\\assets\\gw\\metrics.json'
+
+//let metrics_log='C:\\Users\\latti\\AppData\\Local\\Tick42\\GlueDesktop\\assets\\gw\\metrics.json'
+let metrics_log='.\\data\\metrics.json'
 
 function parseDate(date) {
   let dateA = date.split('T')[0].split('-');
