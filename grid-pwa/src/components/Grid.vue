@@ -351,7 +351,8 @@ export default {
         contextName: uniqueName,
         filter: filter
       };
-
+      debugger
+      // console.log(JSON.stringify(appContext))
       newChart.start(appContext);
     },
     parseDate(date) {

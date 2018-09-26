@@ -1,56 +1,72 @@
+// <template>
+// <div>
+//   <div v-if="usingGlue" class="container">
+//     <div :class="['header', `${color}-selected`]" :style="styleObject">
+//       <span>Shared Contexts</span>
+//     </div>
+//     <transition-group appear tag="ul" :name="`${color}in`" v-if="data.length > 0">
+//       <li v-for="(ctx, i) in data" :key = "i" class="log-item">
+//         <span class="outer-span">
+//           <span>Source:</span>
+//           {{ctx.name}}
+//         </span>
+//         <span class="outer-span">
+//           <span>Filtered Change</span>
+//         </span>
+//       </li>
+//     </transition-group>
+//     <ul v-else>
+//       <li>No Shared Contexts</li>
+//     </ul>
+//   </div>
+//   <div v-else class="container">
+//    <div :class="['header', `${color}-selected`]">
+//       <span>Log</span>
+//     </div>
+//         <transition-group appear tag="ul" :name="`${color}in`" v-if="data.length > 0">
+//           <li v-for="(msg, i) in data" :key = "i" class="log-item">
+//             <span class="outer-span">
+//               <span>Sent:</span>
+//               {{parseDate(msg.time)}}
+//             </span>
+//             <span class="outer-span">
+//               <span>Source App:</span>
+//               {{formatSource(msg.source)}}
+//             </span>
+//             <span v-if="typeof msg.data === 'object' " class="outer-span">
+//               <span>Filtered By:</span>
+//               {{msg.data.date}} and {{msg.data.severity}}
+//             </span>
+//             <span v-else class="outer-span">
+//               <span>Filtered By:</span>
+//               {{msg.data}}
+//             </span>
+//             <span class="outer-span">
+//               <span>Data Source:</span>
+//               "{{msg.dataSource}}"
+//             </span>
+//           </li>
+//         </transition-group>
+//     <ul v-else>
+//       <li>Log Empty</li>
+//     </ul>
+//   </div>
+//   </div>
+// </template>
+
 <template>
-<div>
-  <div v-if="usingGlue" class="container">
-    <div :class="['header', `${color}-selected`]" :style="styleObject">
-      <span>Shared Contexts</span>
+  <div>
+    <div v-if="usingGlue" class="container">
+      <div class="header" :style="styleObject">
+        <span>Shared Contexts</span>
+      </div>
+      <transition-group appear tag="ul" :name="`${color}in`" v-if="data.length > 0">
+        <context-item  v-for="(ctx, i) in currentContexts" :key = "i" class="log-item" :context="ctx"></context-item>
+      </transition-group>
+      <ul v-else>
+//       <li>No Shared Contexts</li>
+//     </ul>
     </div>
-    <transition-group appear tag="ul" :name="`${color}in`" v-if="data.length > 0">
-      <li v-for="(ctx, i) in data" :key = "i" class="log-item">
-        <span class="outer-span">
-          <span>Source:</span>
-          {{ctx.name}}
-        </span>
-        <span class="outer-span">
-          <span>Filtered Change</span>
-        </span>
-      </li>
-    </transition-group>
-    <ul v-else>
-      <li>No Shared Contexts</li>
-    </ul>
-  </div>
-  <div v-else class="container">
-   <div :class="['header', `${color}-selected`]">
-      <span>Log</span>
-    </div>
-        <transition-group appear tag="ul" :name="`${color}in`" v-if="data.length > 0">
-          <li v-for="(msg, i) in data" :key = "i" class="log-item">
-            <span class="outer-span">
-              <span>Sent:</span>
-              {{parseDate(msg.time)}}
-            </span>
-            <span class="outer-span">
-              <span>Source App:</span>
-              {{formatSource(msg.source)}}
-            </span>
-            <span v-if="typeof msg.data === 'object' " class="outer-span">
-              <span>Filtered By:</span>
-              {{msg.data.date}} and {{msg.data.severity}}
-            </span>
-            <span v-else class="outer-span">
-              <span>Filtered By:</span>
-              {{msg.data}}
-            </span>
-            <span class="outer-span">
-              <span>Data Source:</span>
-              "{{msg.dataSource}}"
-            </span>
-          </li>
-        </transition-group>
-    <ul v-else>
-      <li>Log Empty</li>
-    </ul>
-  </div>
   </div>
 </template>
 
@@ -59,9 +75,13 @@ import { mapState, mapGetters, mapActions, mapMutations } from 'vuex';
 import { StyleTogglerMixin } from 'jscatalyst';
 import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
+import contextItem from '@/components/CtxItem';
 
 export default {
   name: 'Log',
+  components: {
+    contextItem: contextItem
+  },
   mixins: [Messaging, Windowing, StyleTogglerMixin],
   data() {
     return {
@@ -73,7 +93,7 @@ export default {
   mounted() {
     this.availableContexts.forEach(ctx => {
       const key = this.subscribe(ctx, (context, delta, removed) => {
-        debugger
+        // debugger
         this.addData(context + JSON.stringify(delta));
       });
 
@@ -81,19 +101,19 @@ export default {
     });
 
     window.setInterval( () => {
-      debugger
-
+      
       this.currentContexts.forEach(ctx=>{
+      // debugger
         this.unsubscribe(ctx.key)
       })
 
-      debugger
+      // debugger
 
       this.currentContexts = []
 
       this.availableContexts.forEach(ctx => {
         const key = this.subscribe(ctx, (context, delta, removed) => {
-          debugger
+          // debugger
           this.addData(context + JSON.stringify(delta));
         });
 
@@ -107,7 +127,7 @@ export default {
     ...mapGetters(['data']),
     availableContexts() {
 
-      debugger
+      // debugger
       let availableContexts = [];
       window.glue.contexts.all().forEach(context => {
         availableContexts.push(context);
