@@ -1,20 +1,34 @@
 <template>
-<div class="container">
-  <div :class="['header']" :style="styleObject">
-    <span>Grid</span>
-     <span class="current-context">Id: {{contextId}}</span>
-    <span class="current-filter">{{currentFilter}}</span>
-    <button class="header-button" @click="removeFilter">Clear Filter</button>
-    <select class="select" v-model="selected">
-      <option disabled value="">Select chart</option>
-      <option value="JSCBar">BarChart</option>
-      <option value="JSCBubble">Bubble Chart</option>
-      <option value="JSCHeatMap">Heat Map</option>
-      <option value="JSCLine">Line Chart</option>
-      <option value="JSCPie">Pie Chart</option>
-    </select>
-     <button class="header-button" @click="openNewChart">Open</button>
-  </div>
+<v-container grid-list-md fluid fill-height>
+  <v-layout row wrap> 
+    <v-flex xs12>
+      <div :class="['header']" :style="styleObject">
+        <span>Grid</span>
+        <span class="current-context">Id: {{contextId}}</span>
+        <span class="current-filter">{{currentFilter}}</span>
+        <button class="header-button" @click="removeFilter">Clear Filter</button>
+        <select class="select" v-model="selected">
+          <option disabled value="">Select chart</option>
+          <option value="JSCBar">BarChart</option>
+          <option value="JSCBubble">Bubble Chart</option>
+          <option value="JSCHeatMap">Heat Map</option>
+          <option value="JSCLine">Line Chart</option>
+          <option value="JSCPie">Pie Chart</option>
+        </select>
+        <button class="header-button" @click="openNewChart">Open</button>
+      </div>
+    </v-flex>
+
+    <v-flex xs12>
+<v-tabs grow>
+  <v-tab ripple key="data">Data</v-tab>
+
+  <v-tab ripple key="visuals">Visuals</v-tab>
+
+  <v-tab-item key="data">
+    <v-layout fill-height row wrap>
+        <v-flex xs12>
+
     <ag-grid-vue
       id='Grid'
       class="grid ag-theme-material"
@@ -26,38 +40,49 @@
       :modelUpdated="modelUpdated"
       :gridReady='onGridReady'
       :filterChanged='updateChildren'
-      rowSelection='multiple'
-    ></ag-grid-vue>
+      rowSelection='multiple'/>
+          </v-flex>
 
-<div style="height:500px" > 
+      </v-layout>
+  </v-tab-item>
 
-    <bar-chart style="width:50%;height:50%" class="grid ag-theme-material"
+  <v-tab-item key="visuals">
+    <v-layout fill-height row wrap>
+<v-flex xs6>
+    <bar-chart class="ag-theme-material"
       @jsc_click="filterByMonth"
       :dataModel='prettyDataForBarChart'
       xaxisLabel="Application"
       yaxisLabel="Number of Actions"
-      :xAxisAngle='45'
-    ></bar-chart>
-
-    <pie-chart style="width:50%;height:50%" class="grid ag-theme-material"
+      :xAxisAngle='45'/>
+</v-flex>
+<v-flex xs6>
+    <pie-chart class="ag-theme-material"
     :dataModel="prettyDataForPieChart"  
     @jsc_click="filterByProject" 
     />
+</v-flex>
 
-</div>
+    </v-layout>
+  </v-tab-item>
+</v-tabs>
+    </v-flex>
 
-</div>
+
+
+</v-layout>
+</v-container>
 </template>
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex';
-import { AgGridVue } from 'ag-grid-vue';
-import { D3BarChart, D3PieChart, StyleTogglerMixin } from 'jscatalyst';
-import Messaging from '@/mixins/Messaging';
-import Windowing from '@/mixins/Windowing';
-import jslinq from 'jslinq';
+import { mapState, mapMutations, mapActions } from "vuex";
+import { AgGridVue } from "ag-grid-vue";
+import { D3BarChart, D3PieChart, StyleTogglerMixin } from "jscatalyst";
+import Messaging from "@/mixins/Messaging";
+import Windowing from "@/mixins/Windowing";
+import jslinq from "jslinq";
 
 export default {
-  name: 'Grid',
+  name: "Grid",
   components: {
     AgGridVue,
     pieChart: D3PieChart,
@@ -66,16 +91,15 @@ export default {
   mixins: [Messaging, Windowing, StyleTogglerMixin],
   computed: {
     ...mapState([
-      'data',
-      'columns',
-      'currentFilter',
-      'contextId',
-      'color',
-      'lighting'
+      "data",
+      "columns",
+      "currentFilter",
+      "contextId",
+      "color",
+      "lighting"
     ]),
     prettyDataForBarChart() {
-
-// Done
+      // Done
 
       const linqData = new jslinq(this.data)
         .select(d => {
@@ -86,9 +110,12 @@ export default {
         })
         .groupBy(d => {
           return d.x;
-        }).select( d => { return {x:d.key, y: d.count}})
+        })
+        .select(d => {
+          return { x: d.key, y: d.count };
+        });
 
-    debugger
+      debugger;
       return linqData;
     },
     prettyData() {
@@ -128,15 +155,15 @@ export default {
       return finalData;
     },
     styleObject() {
-      if (this.lighting === 'dark') {
+      if (this.lighting === "dark") {
         return {
           backgroundColor: this.$store.getters.themeColors.vuetifyDark,
-          color: '#fff'
+          color: "#fff"
         };
       } else {
         return {
           backgroundColor: this.$store.getters.themeColors.vuetifyLight,
-          color: '#000'
+          color: "#000"
         };
       }
     }
@@ -144,51 +171,51 @@ export default {
   data() {
     return {
       trueVar: true,
-      selected: ''
+      selected: ""
     };
   },
   sockets: {
     connect: function() {
-      console.log('socket connected');
+      console.log("socket connected");
     },
     filterByDate(filter) {
-      console.log('filter', filter);
+      console.log("filter", filter);
       this.removeFilter();
       this.setQuickFilter(filter.data);
       let source = this.formatSource(filter.source);
       this.setCurrentFilter(source);
     },
     filterByProject(filter) {
-      console.log('filter', filter);
+      console.log("filter", filter);
       this.removeFilter();
       this.setQuickFilter(filter.data);
       let source = this.formatSource(filter.source);
       this.setCurrentFilter(source);
     },
     filterBySeverity(filter) {
-      console.log('filter', filter);
+      console.log("filter", filter);
       this.removeFilter();
       this.setQuickFilter(filter.data);
       let source = this.formatSource(filter.source);
       this.setCurrentFilter(source);
     },
     filterByRaisedBy(filter) {
-      console.log('filter', filter);
+      console.log("filter", filter);
       this.removeFilter();
       this.setQuickFilter(filter.data);
       let source = this.formatSource(filter.source);
       this.setCurrentFilter(source);
     },
     filterByDateAndSeverity(filter) {
-      console.log('filter', filter);
+      console.log("filter", filter);
       this.removeFilter();
       let filterObject = {
         date: {
-          type: 'contains',
+          type: "contains",
           filter: `${filter.data.date}`
         },
         severity: {
-          type: 'contains',
+          type: "contains",
           filter: `${filter.data.severity}`
         }
       };
@@ -197,21 +224,21 @@ export default {
       this.setCurrentFilter(source);
     },
     filterByMonth(filter) {
-      console.log('filter', filter);
-      let month = filter.data.split('/')[0] + '-';
-      let year = '-' + filter.data.split('/')[1];
+      console.log("filter", filter);
+      let month = filter.data.split("/")[0] + "-";
+      let year = "-" + filter.data.split("/")[1];
       this.removeFilter();
       let filterObject = {
         date: {
           condition1: {
-            type: 'startsWith',
+            type: "startsWith",
             filter: month
           },
           condition2: {
-            type: 'contains',
+            type: "contains",
             filter: year
           },
-          operator: 'AND'
+          operator: "AND"
         }
       };
       this.gridApi.setFilterModel(filterObject);
@@ -224,33 +251,33 @@ export default {
       this.toggleDark();
     },
     themeColor(data) {
-      console.log('fetchColor recieved', data);
+      console.log("fetchColor recieved", data);
       this.changeTheme(data.name);
     },
     refresh(data) {
-      console.log('refresh!');
+      console.log("refresh!");
       this.updateData();
     }
   },
   methods: {
-    ...mapMutations(['setCurrentFilter']),
+    ...mapMutations(["setCurrentFilter"]),
     ...mapActions([
-      'updateData',
-      'fetchColor',
-      'changeTheme',
-      'changeLighting'
+      "updateData",
+      "fetchColor",
+      "changeTheme",
+      "changeLighting"
     ]),
     modelUpdated(params) {
-       this.gridApi = params.api;
-       this.updateChildren()
+      this.gridApi = params.api;
+      this.updateChildren();
     },
     updateChildren() {
       if (window.glue.windows.my().context === null) {
         return;
       }
 
-      if (window.glue.windows.my().context.eventName === 'filterOnGrid') {
-        console.log('filteredGrid');
+      if (window.glue.windows.my().context.eventName === "filterOnGrid") {
+        console.log("filteredGrid");
         return;
       }
 
@@ -260,25 +287,25 @@ export default {
       ).select(i => {
         return i.data;
       }).items;
-      console.log('linq data', gridData.data);
+      console.log("linq data", gridData.data);
       if (gridData) {
         //convert date from grid display formatting to match what the server is sending
         filter.data = gridData.map(item => {
-          let dtA = item.date.split(' ');
-          let dateA = dtA[0].split('-');
+          let dtA = item.date.split(" ");
+          let dateA = dtA[0].split("-");
           let dateString =
             dateA[2] +
-            '-' +
+            "-" +
             dateA[0] +
-            '-' +
+            "-" +
             dateA[1] +
-            'T' +
+            "T" +
             dtA[2] +
-            ':' +
+            ":" +
             dtA[3] +
-            ':' +
+            ":" +
             dtA[4] +
-            '.000Z';
+            ".000Z";
           return {
             date: dateString,
             id: item.id,
@@ -292,55 +319,61 @@ export default {
         filter.data = this.data;
       }
 
-      const uniqueName = 'filteredGrid' + this.contextId
-      window.glue.contexts.set(uniqueName, {filter:filter, name:uniqueName})
+      const uniqueName = "filteredGrid" + this.contextId;
+      window.glue.contexts.set(uniqueName, {
+        filter: filter,
+        name: uniqueName
+      });
     },
     onGridReady(params) {
       this.gridApi = params.api;
       this.columnApi = params.columnApi;
-      console.log('gridApi', this.gridApi)
+      console.log("gridApi", this.gridApi);
       this.gridApi.sizeColumnsToFit();
-      window.addEventListener('resize', () => {
+      window.addEventListener("resize", () => {
         this.gridApi.sizeColumnsToFit();
       });
       const localWindow = window.glue.windows.my();
       const ctx = localWindow.context;
 
-    if ( ctx.eventName !== undefined ) {
+      if (ctx.eventName !== undefined) {
+        this.subscribe(ctx.eventName, (context, delta, removed) => {
+          this.removeFilter();
+          console.log("subscribe context", context);
+          let source = this.formatSource(context.source);
+          this.setCurrentFilter(source);
+          if (context.source === "BubbleChart") {
+            console.log("bubble chart", context);
+            let filterObject = {
+              date: {
+                type: "contains",
+                filter: `${context.data.date}`
+              },
+              severity: {
+                type: "contains",
+                filter: `${context.data.severity}`
+              }
+            };
+            this.gridApi.setFilterModel(filterObject);
+          } else if (context.source === "BarChart") {
+            console.log("bar chart", context);
+            let month = context.data.split("/")[0] + "-";
+            let year = "-" + context.data.split("/")[1];
 
-      this.subscribe(ctx.eventName, (context, delta, removed) => {
-        this.removeFilter();
-        console.log('subscribe context', context)
-        let source = this.formatSource(context.source);
-        this.setCurrentFilter(source);
-        if (context.source === "BubbleChart") {
-          console.log("bubble chart", context);
-          let filterObject = {
-            date: {
-              type: "contains",
-              filter: `${context.data.date}`
-            },
-            severity: {
-              type: "contains",
-              filter: `${context.data.severity}`
-            }
-          };
-          this.gridApi.setFilterModel(filterObject);
-        }
-        else if (context.source === "BarChart") {
-          console.log("bar chart", context);
-          let month = context.data.split("/")[0] + "-";
-          let year = "-" + context.data.split("/")[1];
+            let filterObject = {
+              date: {
+                condition1: { type: "startsWith", filter: month },
+                condition2: { type: "contains", filter: year },
+                operator: "AND"
+              }
+            };
 
-          let filterObject = { date: { condition1: { type: "startsWith", filter: month }, condition2: { type: "contains", filter: year }, operator: "AND" } };
-
-          this.gridApi.setFilterModel(filterObject);
-        } 
-        else {
-          this.setQuickFilter(context.data);
-        }
-      })
-    }
+            this.gridApi.setFilterModel(filterObject);
+          } else {
+            this.setQuickFilter(context.data);
+          }
+        });
+      }
     },
     setQuickFilter(data) {
       if (this.gridApi) {
@@ -360,9 +393,8 @@ export default {
       const ctx = localWindow.context;
 
       // Get the data set from this component
-      let filter = {
-      }
-      if ( this.gridApi !== undefined || this.gridApi !== null ) {
+      let filter = {};
+      if (this.gridApi !== undefined || this.gridApi !== null) {
         // console.log( this.gridApi )
         let gridData = new jslinq(
           this.gridApi.clientSideRowModel.rowsToDisplay
@@ -372,21 +404,21 @@ export default {
 
         //convert date from grid display formatting to match what the server is sending
         filter.data = gridData.map(item => {
-          let dtA = item.date.split(' ');
-          let dateA = dtA[0].split('-');
+          let dtA = item.date.split(" ");
+          let dateA = dtA[0].split("-");
           let dateString =
             dateA[2] +
-            '-' +
+            "-" +
             dateA[0] +
-            '-' +
+            "-" +
             dateA[1] +
-            'T' +
+            "T" +
             dtA[2] +
-            ':' +
+            ":" +
             dtA[3] +
-            ':' +
+            ":" +
             dtA[4] +
-            '.000Z';
+            ".000Z";
           return {
             date: dateString,
             id: item.id,
@@ -396,7 +428,7 @@ export default {
           };
         });
       }
-      const uniqueName = 'filteredGrid' + this.contextId
+      const uniqueName = "filteredGrid" + this.contextId;
 
       window.glue.contexts.set(uniqueName, {
         filter: filter,
@@ -411,17 +443,17 @@ export default {
       newChart.start(appContext);
     },
     parseDate(date) {
-      let dateA = date.split('T')[0].split('-');
-      let timeA = date.split('T')[1].split('.');
-      let hms = timeA[0].split(':').join(' ');
-      return dateA[1] + '-' + dateA[2] + '-' + dateA[0] + ' : ' + hms;
+      let dateA = date.split("T")[0].split("-");
+      let timeA = date.split("T")[1].split(".");
+      let hms = timeA[0].split(":").join(" ");
+      return dateA[1] + "-" + dateA[2] + "-" + dateA[0] + " : " + hms;
     },
     formatSource(sourceApp) {
-      let withSpaces = sourceApp.replace(/([A-Z])/g, ' $1');
+      let withSpaces = sourceApp.replace(/([A-Z])/g, " $1");
       return withSpaces.charAt(0).toUpperCase() + withSpaces.slice(1);
     },
     setTheme() {
-      this.$store.commit('changeColor', this.color);
+      this.$store.commit("changeColor", this.color);
       if (this.$store.state.themeMod) {
         this.chooseTheme(this.$store.state.themeMod.colorTheme);
       }
@@ -441,13 +473,13 @@ export default {
     lighting(newData) {
       if (newData) {
         console.log(newData);
-        if (newData === 'dark') {
+        if (newData === "dark") {
           console.log(here);
           console.log(this);
           this.toggleDark();
         }
       }
-    },
+    }
   }
 };
 </script>
@@ -460,10 +492,12 @@ export default {
   align-items: center;
   height: 10vh;
 }
+/*
 .container {
   width: 100%;
   overflow: hidden;
 }
+*/
 
 .current-filter {
   padding: 0 0 0 20em;
@@ -476,7 +510,6 @@ export default {
 }
 
 .grid {
-  width: 100%;
   height: 85vh;
 }
 
