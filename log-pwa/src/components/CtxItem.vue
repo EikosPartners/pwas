@@ -1,16 +1,29 @@
 <template>
-  <li v-html="parseContext"></li>
+  <li class="context-li">
+    <button @click="toggleClicked">X</button>
+    <span>{{contextName}}</span>
+    <context-detail v-if="clicked" :contextName="contextName"></context-detail>
+  </li>
 </template>
 <script>
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex';
 import { StyleTogglerMixin } from 'jscatalyst';
+import contextDetail from '@/components/CtxDetail.vue'
 import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
 
 export default {
   name: 'ContextItem',
   mixins: [Messaging, Windowing, StyleTogglerMixin],
-  props: ['context'],
+  props: ['contextName'],
+  components: {
+    contextDetail: contextDetail
+  },
+  data() {
+    return {
+      clicked: false
+    }
+  },
   computed: {
     parseContext() {
       return this.jsonToHTML(this.context)
@@ -20,24 +33,17 @@ export default {
     }
   },
   methods: {
-    jsonToHTML(jsonObject) {
-
-      //this is halfway between handling a simple object and being made recusrive - I ran out of time :)
-      let keys = Object.keys(jsonObject)
-      let html = keys.forEach(key => {
-        debugger
-        if (typeof key !== 'Object') {
-          return `<span>${key}:</span><span>${jsonObject[`${key}`]}</span>`
-        } 
-        else {
-          return this.jsonToHTML(jsonObject[`${key}`])
-        }
-      })
-      return html.join(' ')
+    toggleClicked() {
+      this.clicked = !this.clicked
     }
   }
 }
 </script>
 <style>
 
+.context-li {
+  display:flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
 </style>

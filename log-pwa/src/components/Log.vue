@@ -60,12 +60,12 @@
       <div class="header" :style="styleObject">
         <span>Shared Contexts</span>
       </div>
-      <transition-group appear tag="ul" :name="`${color}in`" v-if="data.length > 0">
-        <context-item  v-for="(ctx, i) in currentContexts" :key = "i" class="log-item" :context="ctx"></context-item>
+      <transition-group appear tag="ul" :name="`${color}in`" v-if="availableContexts.length > 0">
+        <context-item  v-for="(ctx, i) in availableContexts" :key = "i" class="log-item" :contextName="ctx"></context-item>
       </transition-group>
       <ul v-else>
-//       <li>No Shared Contexts</li>
-//     </ul>
+       <li>No Shared Contexts</li>
+     </ul>
     </div>
   </div>
 </template>
@@ -90,52 +90,16 @@ export default {
       currentContexts: [],
     };
   },
-  mounted() {
-    this.availableContexts.forEach(ctx => {
-      const key = this.subscribe(ctx, (context, delta, removed) => {
-        // debugger
-        this.addData(context + JSON.stringify(delta));
-      });
-
-      this.currentContexts.push({name:ctx, key:key})
-    });
-
-    window.setInterval( () => {
-      
-      this.currentContexts.forEach(ctx=>{
-      // debugger
-        this.unsubscribe(ctx.key)
-      })
-
-      // debugger
-
-      this.currentContexts = []
-
-      this.availableContexts.forEach(ctx => {
-        const key = this.subscribe(ctx, (context, delta, removed) => {
-          // debugger
-          this.addData(context + JSON.stringify(delta));
-        });
-
-        this.currentContexts.push({name:ctx, key:key})
-      });
-
-    }, 5000)
-  },
   computed: {
     ...mapState(['color', 'lighting']),
     ...mapGetters(['data']),
     availableContexts() {
-
-      // debugger
-      let availableContexts = [];
-      window.glue.contexts.all().forEach(context => {
-        availableContexts.push(context);
-      });
-
-      // Where are all of the contexts ?
-
-      return availableContexts;
+      if (window.glue) {
+        return window.glue.contexts.all()
+      }
+      else {
+        return []
+      }
     },
     styleObject() {
       if (this.lighting === 'dark') {
