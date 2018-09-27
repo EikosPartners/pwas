@@ -1,7 +1,10 @@
 <template>
-  <li class="context-li">
-    <button @click="toggleClicked">X</button>
-    <span>{{contextName}}</span>
+  <li @click="toggleClicked" class="context-li">
+    <div class="context-header">
+      <span v-if="clicked">-</span>
+      <span v-else>+</span>
+      <span class="c-name">{{formattedContextName}}</span>
+    </div>
     <div v-if="clicked">
       <filtered-on-detail v-if="contextName === 'filterOnGrid'" :contextName="contextName"></filtered-on-detail>
       <connect-themes-detail v-if="contextName === 'Connect.Themes'" :contextName="contextName"></connect-themes-detail>
@@ -19,10 +22,11 @@ import connectThemesDetail from '@/components/ConnectThemesDetail.vue'
 import globalThemeDetail from '@/components/GlobalThemeDetail.vue'
 import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
+import JSONtoHTML from '@/mixins/JSONtoHTML';
 
 export default {
   name: 'ContextItem',
-  mixins: [Messaging, Windowing, StyleTogglerMixin],
+  mixins: [Messaging, Windowing, StyleTogglerMixin, JSONtoHTML],
   props: ['contextName'],
   components: {
     filteredGridDetail,
@@ -38,9 +42,9 @@ export default {
   computed: {
     parseContext() {
       return this.jsonToHTML(this.context)
-      },
-    test() {
-      return JSON.stringify(this.context)
+    },
+    formattedContextName() {
+      return this.formatText(this.contextName)
     }
   },
   methods: {
@@ -54,7 +58,29 @@ export default {
 
 .context-li {
   display:flex;
+  flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
+}
+
+.context-header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  font-size: 1.1rem;
+}
+
+.key {
+  font-weight: 700;
+}
+
+.c-name {
+  font-weight: 700;
+}
+
+.data-container {
+  display: flex;
+  width: 100%;
+  padding: 0.5rem;
 }
 </style>

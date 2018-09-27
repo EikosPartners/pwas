@@ -36,6 +36,8 @@ export default {
 
 <style>
   .context-detail {
+  margin-left: 3rem;
+  font-size: 1.2rem;
   display:flex;
   flex-direction: column;
   align-items: flex-start;

@@ -5,25 +5,30 @@ var myMixin = {
     }
   },
   methods: {
+    formatText(text) {
+      let withSpaces = text.replace(/([A-Z0-9]+)/g, " $1");
+      return withSpaces.charAt(0).toUpperCase() + withSpaces.slice(1);
+    },
     jsonToHTML(jsonObject) {
-      let keys = Object.keys(jsonObject)
-      let html = keys.map(key => {
+      let keys = Object.keys(jsonObject);
+      let html = '<ul class="data-container">';
+      keys.forEach(key => {
         // debugger
-        return this.handleKey(key, jsonObject)
-      })
-      return html.join(' ')
+        html += this.handleKey(key, jsonObject);
+      });
+      html += "</ul>";
+      return html;
     },
     handleKey(key, jsonObject) {
-      if (typeof jsonObject[`${key}`] !== 'object') {
+      if (typeof jsonObject[`${key}`] !== "object") {
         // debugger
-        return `<div><span>${key}:</span><span>${jsonObject[`${key}`]}</span></div>`
-      }
-      else {
+        return `<li><span class="key">${this.formatText(key)}:</span><span class="value">${jsonObject[`${key}`]}</span></li>`;
+      } else {
         // debugger
-        return this.jsonToHTML(jsonObject[`${key}`])
+        return this.jsonToHTML(jsonObject[`${key}`]);
       }
     }
-  },
+  }
 };
 
 export default myMixin
