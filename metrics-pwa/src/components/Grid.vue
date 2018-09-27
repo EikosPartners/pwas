@@ -55,7 +55,6 @@
     <v-layout fill-height row wrap style="height: 60vh; !important">
       <v-flex xs6>
       <bar-chart class="ag-theme-material"
-        @jsc_click="filterByMonth"
         :dataModel='prettyDataForBarChart'
         xaxisLabel="Application"
         yaxisLabel="Number of Actions"
@@ -116,7 +115,7 @@ export default {
         .select(d => {
           return {
             x: d.application,
-            y: d.severity
+            y: d.element.data
           };
         })
         .groupBy(d => {
@@ -125,8 +124,8 @@ export default {
         .select(d => {
           return { x: d.key, y: d.count };
         });
-
-      return linqData;
+      console.log(linqData)
+      return linqData.items;
     },
     prettyData() {
       return this.data.map(item => {
