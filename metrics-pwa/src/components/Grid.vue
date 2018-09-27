@@ -520,7 +520,7 @@ export default {
 }
 
 .grid {
-  height: 85vh;
+  height: 77vh;
 }
 
 .select {

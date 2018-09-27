@@ -60,4 +60,8 @@ body {
   color: black;
   background-color: white;
 }
+
+.application {
+  height: 98vh!important;
+}
 </style>
