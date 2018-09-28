@@ -7,6 +7,9 @@ import './registerServiceWorker';
 import VueSocketio from 'vue-socket.io';
 import Vuetify from 'vuetify';
 
+import "../node_modules/ag-grid/dist/styles/ag-grid.css";
+import "../node_modules/ag-grid/dist/styles/ag-theme-material.css";
+import "../node_modules/ag-grid/dist/styles/ag-theme-dark.css";
 import 'jscatalyst/dist/jscatalyst.min.css';
 import '../node_modules/vuetify/dist/vuetify.min.css';
 import 'typeface-roboto';

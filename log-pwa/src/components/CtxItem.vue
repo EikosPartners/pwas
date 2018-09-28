@@ -1,15 +1,15 @@
 <template>
-  <li @click="toggleClicked" class="context-li">
+  <li class="context-li">
     <div class="context-header">
-      <span v-if="clicked">-</span>
-      <span v-else>+</span>
+      <span v-if="clicked"  @click="toggleClicked">-</span>
+      <span v-else  @click="toggleClicked">+</span>
       <span class="c-name">{{formattedContextName}}</span>
     </div>
-    <div v-if="clicked">
+    <div class="expanded" v-if="clicked">
       <filtered-on-detail v-if="contextName === 'filterOnGrid'" :contextName="contextName"></filtered-on-detail>
       <connect-themes-detail v-if="contextName === 'Connect.Themes'" :contextName="contextName"></connect-themes-detail>
       <global-theme-detail v-if="contextName === 'globalTheme'" :contextName="contextName"></global-theme-detail>
-      <filtered-grid-detail v-else :contextName="contextName"></filtered-grid-detail>
+      <filtered-grid-detail v-if="contextName.includes('filteredGrid')" :contextName="contextName"></filtered-grid-detail>
     </div>
   </li>
 </template>
@@ -76,6 +76,11 @@ export default {
 
 .c-name {
   font-weight: 700;
+}
+
+.expanded {
+  width: 80vw;
+  height: 50vh;
 }
 
 .data-container {

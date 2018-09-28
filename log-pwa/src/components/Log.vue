@@ -4,11 +4,11 @@
       <div class="header" :style="styleObject">
         <span>Shared Contexts</span>
       </div>
-      <transition-group appear tag="ul" :name="`${color}in`" v-if="availableContexts.length > 0">
+      <transition-group appear tag="ul" class="ul-comp" :name="`${color}in`" v-if="availableContexts.length > 0">
         <context-item  v-for="(ctx, i) in availableContexts" :key = "i" class="log-item" :contextName="ctx"></context-item>
       </transition-group>
-      <ul v-else>
-       <li>No Shared Contexts</li>
+      <ul class="ul-comp" v-else>
+       <li class="li-comp" >No Shared Contexts</li>
      </ul>
     </div>
   </div>
@@ -149,19 +149,19 @@ export default {
   /* background-color: white; */
 }
 
-ul {
+.ul-comp {
   display: flex;
   flex-direction: column-reverse;
   padding-top: 0;
 }
 
-ul,
-li {
+.ul-comp,
+.li-comp {
   margin-left: 0;
   padding-left: 0 !important;
 }
 
-li {
+.li-comp {
   list-style: none;
   display: flex;
   justify-content: space-between;
