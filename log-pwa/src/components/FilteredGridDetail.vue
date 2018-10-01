@@ -1,5 +1,4 @@
 <template>
-  <div class="grid-container">
     <ag-grid-vue
       id='Grid'
       class="grid ag-theme-material"
@@ -12,7 +11,6 @@
       :gridReady='onGridReady'
       rowSelection='multiple'
     ></ag-grid-vue>
-  </div>
   <!-- 
     <div class="context-detail" v-html="jsonString"></div>
     -->
@@ -48,10 +46,12 @@ export default {
         keys.splice(i, 1);
 
         let cols = keys.map(key => {
-          return {
+          let col = {
             headerName: `${key}`,
             field: `${key}`
           };
+          console.log(col)
+          return col
         });
         console.log("cols", cols)
         return cols
@@ -90,8 +90,9 @@ export default {
 }
 </script>
 
-<style scoped>
-  .context-detail {
+<style>
+
+.context-detail {
   margin-left: 3rem;
   font-size: 1.2rem;
   display:flex;
@@ -100,16 +101,10 @@ export default {
   justify-content: space-between;
 }
 
-.grid-container {
-  width: 80vw;
-  /* overflow: hidden; */
-}
-
 .grid {
-  width: 80vw;
-  height: 50vh;
+  width: 100%;
+  height: 100%;
 }
-
 .ag-theme-dark {
   font-family: Roboto, sans-serif !important;
 }
@@ -127,6 +122,11 @@ export default {
 
 .theme--dark .ag-row-hover {
   color: black;
+}
+
+.ag-layout-normal .ag-header {
+  /*fixes header row - but I feel like we shouldn't need this */
+  position: relative !important;
 }
 </style>
 

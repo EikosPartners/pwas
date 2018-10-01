@@ -167,7 +167,7 @@ export default {
   justify-content: space-between;
   padding: 0 0.3rem;
 }
-
+/*
 span {
   padding: 0 2rem 0 0;
 }
@@ -175,6 +175,7 @@ span {
 span span {
   font-weight: 700;
 }
+*/
 
 .outer-span {
   display: flex;

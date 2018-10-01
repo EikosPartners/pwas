@@ -79,8 +79,9 @@ export default {
 }
 
 .expanded {
-  width: 80vw;
+  width: 100%;
   height: 50vh;
+  display: block;
 }
 
 .data-container {
