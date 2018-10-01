@@ -4,7 +4,7 @@
       <div class="header" :style="styleObject">
         <span>Shared Contexts</span>
       </div>
-      <transition-group appear tag="ul" class="ul-comp" :name="`${color}in`" v-if="availableContexts.length > 0">
+      <transition-group appear tag="ul" class="ul-comp col-rev" :name="`${color}in`" v-if="availableContexts.length > 0">
         <context-item  v-for="(ctx, i) in availableContexts" :key = "i" class="log-item" :contextName="ctx"></context-item>
       </transition-group>
       <ul class="ul-comp" v-else>
@@ -151,8 +151,12 @@ export default {
 
 .ul-comp {
   display: flex;
-  flex-direction: column-reverse;
   padding-top: 0;
+  flex-direction: column;
+}
+
+.col-rev {
+  flex-direction: column-reverse;
 }
 
 .ul-comp,
@@ -166,16 +170,8 @@ export default {
   display: flex;
   justify-content: space-between;
   padding: 0 0.3rem;
+  width: 100%;
 }
-/*
-span {
-  padding: 0 2rem 0 0;
-}
-
-span span {
-  font-weight: 700;
-}
-*/
 
 .outer-span {
   display: flex;

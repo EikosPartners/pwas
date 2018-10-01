@@ -1,8 +1,8 @@
 <template>
   <li class="context-li">
     <div class="context-header">
-      <span v-if="clicked"  @click="toggleClicked">-</span>
-      <span v-else  @click="toggleClicked">+</span>
+      <span class="toggle" v-if="clicked"  @click="toggleClicked">-</span>
+      <span class="toggle" v-else  @click="toggleClicked">+</span>
       <span class="c-name">{{formattedContextName}}</span>
     </div>
     <div class="expanded" v-if="clicked">
@@ -72,21 +72,40 @@ export default {
 
 .key {
   font-weight: 700;
+  width: 50%;
+  text-align: left;
+  float: left;
+  /* padding: 0 2rem 0 0; */
+}
+
+.value {
+  /* padding: 0 2rem 0 0; */
+  width: 50%;
+  text-align: left;
 }
 
 .c-name {
   font-weight: 700;
+  padding: 0 2rem 0 0;
 }
 
 .expanded {
   width: 100%;
-  height: 50vh;
+  height: 30vh;
   display: block;
 }
 
 .data-container {
   display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
   width: 100%;
-  padding: 0.5rem;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+}
+
+.toggle {
+  padding: 0 2rem 0 0;
 }
 </style>

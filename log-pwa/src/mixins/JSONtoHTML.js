@@ -1,6 +1,7 @@
 var myMixin = {
   computed: {
     jsonString() {
+      console.log(this.ctxInfo)
       return this.jsonToHTML(this.ctxInfo);
     }
   },
@@ -11,9 +12,8 @@ var myMixin = {
     },
     jsonToHTML(jsonObject) {
       let keys = Object.keys(jsonObject);
-      let html = '<ul class="data-container">';
+      let html = '<ul class="data-container ul-comp">';
       keys.forEach(key => {
-        // debugger
         html += this.handleKey(key, jsonObject);
       });
       html += "</ul>";
@@ -21,10 +21,8 @@ var myMixin = {
     },
     handleKey(key, jsonObject) {
       if (typeof jsonObject[`${key}`] !== "object") {
-        // debugger
-        return `<li><span class="key">${this.formatText(key)}:</span><span class="value">${jsonObject[`${key}`]}</span></li>`;
+        return `<li class="li-comp"><span class="key">${this.formatText(key)}:</span><span class="value">${jsonObject[`${key}`]}</span></li>`;
       } else {
-        // debugger
         return this.jsonToHTML(jsonObject[`${key}`]);
       }
     }
