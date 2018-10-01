@@ -2,7 +2,7 @@
 <div class="container">
   <div :class="['header']" :style="styleObject">
     <span>Grid</span>
-     <span class="current-context">Id: {{contextId}}</span>
+     <span class="current-context"  @dragstart="handleDragStart" @dragend="handleDragEnd" draggable="true">Id: {{contextId}}</span>
     <span class="current-filter">{{currentFilter}}</span>
     <button class="header-button" @click="removeFilter">Clear Filter</button>
     <select class="select" v-model="selected">
@@ -181,6 +181,13 @@ export default {
     modelUpdated(params) {
       this.gridApi = params.api;
       this.updateChildren();
+    },
+    handleDragStart(event) {
+      event.dataTransfer.setData('text/plain', this.contextId)
+      console.log('dragstart', event)
+    },
+    handleDragEnd(event) {
+      console.log('dragend', event)
     },
     updateChildren() {
       if (window.glue.windows.my().context === null) {

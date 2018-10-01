@@ -1,5 +1,5 @@
 <template>
-   <div class="container">
+   <div class="container" @drop="handleDrop" @dragenter="handleDragEnter" @dragover="handleDragOver">
     <div :class="['header']" :style="styleObj">
       <span>Number of Tickets by Date</span>
       <span class="current-context">Subscribed:
@@ -159,6 +159,24 @@ export default {
       if (this.$store.state.themeMod) {
         this.chooseTheme(this.$store.state.themeMod.colorTheme);
       }
+    },
+    handleDrop(event) {
+     var ctxName = event.dataTransfer.getData('text/plain')
+    console.log('drop', ctxName)
+     this.$store.commit('setSelected', `filteredGrid${ctxName}`)
+    event.preventDefault()
+    },
+    handleDragEnter(event) {
+      event.dataTransfer.dropEffect = "copy"
+      event.preventDefault()
+      console.log("enter", event)
+      return false
+    },
+    handleDragOver(event) {
+      event.dataTransfer.dropEffect = "copy"
+      event.preventDefault()
+      console.log("over", event)
+      return false
     }
   },
   created() {
