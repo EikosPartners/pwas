@@ -85,12 +85,15 @@ import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
 import jslinq from 'jslinq';
 
+import HeatMap from "./HeatMap.vue"
+
 export default {
   name: 'Grid',
   components: {
     AgGridVue,
     pieChart: D3PieChart,
-    barChart: D3BarChart
+    barChart: D3BarChart,
+    heatMap: HeatMap
   },
   mixins: [Messaging, Windowing, StyleTogglerMixin],
   computed: {
