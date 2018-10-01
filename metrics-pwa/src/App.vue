@@ -1,5 +1,5 @@
 <template>
-  <v-app id="app" :class="computedClass">
+  <v-app id="app">
     <router-view></router-view>
   </v-app>
 </template>
