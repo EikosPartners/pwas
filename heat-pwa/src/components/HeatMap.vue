@@ -164,6 +164,7 @@ export default {
      var ctxName = event.dataTransfer.getData('text/plain')
     console.log('drop', ctxName)
      this.$store.commit('setSelected', `filteredGrid${ctxName}`)
+     //THIS IS WHERE WE SHOULD SUBSCRIBE TO THE CONTEXT
     event.preventDefault()
     },
     handleDragEnter(event) {
