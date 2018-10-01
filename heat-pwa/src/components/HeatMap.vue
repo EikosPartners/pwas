@@ -63,7 +63,7 @@ export default {
       const heatData = [];
       let sorted = this.sortData(this.data);
       for (let date in sorted) {
-        let dataObj = { date: date, volume: sorted[date] };
+        let dataObj = { x: date, magnitude: sorted[date] };
         heatData.push(dataObj);
       }
       return heatData;
