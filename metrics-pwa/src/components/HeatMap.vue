@@ -20,7 +20,6 @@ export default {
   computed: {
     ...mapState(['data']),
     prettyData() {
-      console.log(this.data);
       const linqData = new jslinq(this.data)
         .select(d => {
           return {
@@ -34,13 +33,11 @@ export default {
         });
 
       let finalData = [];
- 
+
       linqData.items.forEach(i => {
-        console.log(i);
         let groups = new jslinq(i.elements).groupBy(d => {
           return d.os;
         });
-        console.log(groups);
         groups.items.forEach(g => {
           finalData.push({
             x: g.key,
@@ -49,10 +46,7 @@ export default {
           });
         });
       });
-      //   .select(d => {
-      //     return { x: d.key, y: d.count };
-      //   });
-      console.log(finalData);
+
       return finalData;
     },
     themeColorsComp() {
@@ -61,7 +55,7 @@ export default {
   },
   methods: {
     ...mapActions([])
-  },
+  }
 };
 </script>
 

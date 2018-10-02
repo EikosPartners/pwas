@@ -54,7 +54,6 @@
   <v-tab-item key="visuals" id="tab-visuals" style="height: 100% !important;">
     <v-layout row wrap style="min-height: 60vh; !important">
       <v-flex xs10 offset-xs1>
-
         <heat-map/>
       </v-flex>
      
@@ -118,7 +117,6 @@ export default {
     ]),
     prettyDataForBarChart() {
       // Done
-      console.log(this.data);
       const linqData = new jslinq(this.data)
         .select(d => {
           return {
@@ -132,7 +130,6 @@ export default {
         .select(d => {
           return { x: d.key, y: d.count };
         });
-      console.log(linqData);
       return linqData.items;
     },
     prettyData() {
@@ -490,10 +487,7 @@ export default {
     },
     lighting(newData) {
       if (newData) {
-        console.log(newData);
         if (newData === 'dark') {
-          console.log(here);
-          console.log(this);
           this.toggleDark();
         }
       }
