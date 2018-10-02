@@ -36,6 +36,7 @@ import { AgGridVue } from "ag-grid-vue";
 import { D3PieChart, StyleTogglerMixin } from 'jscatalyst';
 import Messaging from "@/mixins/Messaging";
 import Windowing from "@/mixins/Windowing";
+import DragAndDrop from "@/mixins/DragAndDrop"
 import jslinq from "jslinq";
 
 export default {
@@ -44,7 +45,7 @@ export default {
     AgGridVue,
     pieChart: D3PieChart
   },
-  mixins: [Messaging, Windowing, StyleTogglerMixin],
+  mixins: [Messaging, Windowing, StyleTogglerMixin, DragAndDrop],
   computed: {
     ...mapState([
       "data",
@@ -181,13 +182,6 @@ export default {
     modelUpdated(params) {
       this.gridApi = params.api;
       this.updateChildren();
-    },
-    handleDragStart(event) {
-      event.dataTransfer.setData('text/plain', this.contextId)
-      console.log('dragstart', event)
-    },
-    handleDragEnd(event) {
-      console.log('dragend', event)
     },
     updateChildren() {
       if (window.glue.windows.my().context === null) {

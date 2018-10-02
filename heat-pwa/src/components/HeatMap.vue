@@ -5,7 +5,7 @@
       <span class="current-context">Subscribed:
         <select class="select" v-model="selected" v-on:click="populate">
           <option disabled value="">Select context</option>
-          <option v-for="(context, index) in availableContexts" :key="index">{{context}}</option>
+          <option v-for="(context, index) in availableContexts" :value="context" :key="index">{{context}}</option>
         </select>
       </span>
     </div>
@@ -24,13 +24,14 @@ import { mapGetters, mapState, mapActions } from 'vuex';
 import { D3HeatMap, StyleTogglerMixin } from 'jscatalyst';
 import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
+import DragAndDrop from '@/mixins/DragAndDrop';
 
 export default {
   name: 'HeatMap',
   components: {
     heatMap: D3HeatMap
   },
-  mixins: [StyleTogglerMixin, Messaging, Windowing],
+  mixins: [StyleTogglerMixin, Messaging, Windowing, DragAndDrop],
   data() {
     return {
       gridInstance: false,
@@ -91,7 +92,6 @@ export default {
   },
   methods: {
     populate() {
-      debugger
       let local = [];
       window.glue.contexts.all().forEach(context => {
         if (context.includes('filteredGrid') && context !== 'filteredGrid') {
@@ -159,25 +159,6 @@ export default {
       if (this.$store.state.themeMod) {
         this.chooseTheme(this.$store.state.themeMod.colorTheme);
       }
-    },
-    handleDrop(event) {
-     var ctxName = event.dataTransfer.getData('text/plain')
-    console.log('drop', ctxName)
-     this.$store.commit('setSelected', `filteredGrid${ctxName}`)
-     //THIS IS WHERE WE SHOULD SUBSCRIBE TO THE CONTEXT
-    event.preventDefault()
-    },
-    handleDragEnter(event) {
-      event.dataTransfer.dropEffect = "copy"
-      event.preventDefault()
-      console.log("enter", event)
-      return false
-    },
-    handleDragOver(event) {
-      event.dataTransfer.dropEffect = "copy"
-      event.preventDefault()
-      console.log("over", event)
-      return false
     }
   },
   created() {
