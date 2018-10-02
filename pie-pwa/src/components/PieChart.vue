@@ -1,11 +1,15 @@
 <template>
-   <div class="container">
+   <div class="container" @drop="handleDrop" @dragenter="handleDragEnter" @dragover="handleDragOver">
     <div :class="['header']" :style="styleObj">
-      <span>Tickets per Project</span>
-      <span class="current-context">Subscribed:
-        <select class="select" v-model="selected">
+      <span>Tickets Per Project</span>
+      <span class="current-context" v-if="inGlue && selected !== ''">Subscribed:
+        <span>{{selected.split('d')[2]}}</span>
+      </span>
+      <span v-else-if="inGlue && selected == ''">Unsubscribed</span>
+        <span class="current-context" v-else>Subscribed:
+        <select class="select" v-model="selected" v-on:click="populate">
           <option disabled value="">Select context</option>
-          <option v-for="(context, index) in availableContexts" :key="index">{{context}}</option>
+          <option v-for="(context, index) in availableContexts" :value="context" :key="index">{{context}}</option>
         </select>
       </span>
     </div>
@@ -22,13 +26,14 @@ import { mapGetters, mapState, mapActions } from 'vuex';
 import jslinq from 'jslinq';
 import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
+import DragAndDrop from '@/mixins/DragAndDrop'
 
 export default {
   name: 'PieChart',
   components: {
     pieChart: D3PieChart
   },
-  mixins: [StyleTogglerMixin, Messaging, Windowing],
+  mixins: [StyleTogglerMixin, Messaging, Windowing, DragAndDrop],
   data() {
     return {
       gridInstance: false
