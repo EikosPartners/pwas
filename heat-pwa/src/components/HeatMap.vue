@@ -39,8 +39,7 @@ export default {
   data() {
     return {
       gridInstance: false,
-      availableContexts: [],
-      inGlue: !!window.glue
+      availableContexts: []
     };
   },
   computed: {

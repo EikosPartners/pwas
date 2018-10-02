@@ -1,4 +1,9 @@
 var myMixin = {
+  data() {
+    return {
+      inGlue: !!window.glue
+    }
+  },
   methods: {
     handleDragStart(event) {
       //goes on the sender
