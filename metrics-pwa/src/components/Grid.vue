@@ -58,6 +58,7 @@
       </v-flex>
      
       <v-flex xs6>
+        <!-- <bar-chart class="ag-theme-material"/> -->
       <bar-chart class="ag-theme-material"
         :dataModel='prettyDataForBarChart'
         xaxisLabel="Application"
@@ -65,6 +66,7 @@
         :xAxisAngle='45'/>
     </v-flex>
     <v-flex xs6>
+        <!-- <pie-chart class="ag-theme-material"/> -->
         <pie-chart class="ag-theme-material"
         :dataModel="prettyDataForPieChart"  
         @jsc_click="filterByProject" 
@@ -91,6 +93,7 @@ import jslinq from 'jslinq';
 
 import BarChart from './BarChart.vue';
 import HeatMap from './HeatMap.vue';
+import PieChart from './PieChart.vue';
 
 export default {
   name: 'Grid',
@@ -98,7 +101,9 @@ export default {
     AgGridVue,
     pieChart: D3PieChart,
     barChart: D3BarChart,
-    heatMap: HeatMap
+    heatMap: HeatMap,
+    // pieChart:PieChart,
+    // barChart:BarChart
   },
   mixins: [Messaging, Windowing, StyleTogglerMixin],
   computed: {
