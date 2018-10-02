@@ -384,14 +384,16 @@ export default {
       }
     },
     color(newData) {
+      //we should also make this 
       if (newData) {
         console.log('watch', this.color)
         this.setTheme();
       }
     },
-    lighting(newData) {
-      if (newData) {
-        if (newData !== this.lighting) {
+    lighting(newData, oldData) {
+      //we should make this listen to the contexts instead of the websockets - when that happens this fix will change
+      if (oldData === null) {
+        if (newData === 'dark') {
           this.toggleDark();
         }
       }
