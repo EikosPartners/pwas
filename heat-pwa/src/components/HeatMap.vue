@@ -28,8 +28,7 @@ export default {
   data() {
     return {
       compTitle: "Number of Tickets by Date",
-      gridInstance: false,
-      availableContexts: []
+      gridInstance: false
     };
   },
   computed: {
@@ -43,6 +42,15 @@ export default {
         heatData.push(dataObj);
       }
       return heatData;
+    },
+    availableContexts() {
+      let availableContexts = [];
+      window.glue.contexts.all().forEach(context => {
+        if (context.includes('filteredGrid') && context !== 'filteredGrid') {
+          availableContexts.push(context);
+        }
+      });
+      return availableContexts;
     },
     themeColorsComp() {
       return Object.values(this.$store.getters.themeColors);
