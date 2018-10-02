@@ -1,8 +1,9 @@
 <template>
   <heat-map
-     v-if="themeColorsComp && themeColorsComp.length > 0"
+     v-if="this.data != null"
+    :dataType="'other'"
     :dataModel="prettyData"
-    dataType="other"
+    :xAxisAngle="65"
   />
 </template>
 
@@ -33,7 +34,7 @@ export default {
         });
 
       let finalData = [];
-
+ 
       linqData.items.forEach(i => {
         console.log(i);
         let groups = new jslinq(i.elements).groupBy(d => {
@@ -42,8 +43,8 @@ export default {
         console.log(groups);
         groups.items.forEach(g => {
           finalData.push({
-            x: i.key,
-            y: g.key,
+            x: g.key,
+            y: i.key,
             magnitude: g.count
           });
         });
@@ -60,7 +61,7 @@ export default {
   },
   methods: {
     ...mapActions([])
-  }
+  },
 };
 </script>
 

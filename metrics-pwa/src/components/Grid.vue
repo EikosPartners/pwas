@@ -52,7 +52,12 @@
   </v-tab-item>
 
   <v-tab-item key="visuals" id="tab-visuals" style="height: 100% !important;">
-    <v-layout fill-height row wrap style="height: 60vh; !important">
+    <v-layout row wrap style="min-height: 60vh; !important">
+      <v-flex xs10 offset-xs1>
+
+        <heat-map/>
+      </v-flex>
+     
       <v-flex xs6>
       <bar-chart class="ag-theme-material"
         :dataModel='prettyDataForBarChart'
@@ -85,7 +90,7 @@ import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
 import jslinq from 'jslinq';
 
-import HeatMap from "./HeatMap.vue"
+import HeatMap from './HeatMap.vue';
 
 export default {
   name: 'Grid',
@@ -113,7 +118,7 @@ export default {
     ]),
     prettyDataForBarChart() {
       // Done
-      console.log(this.data)
+      console.log(this.data);
       const linqData = new jslinq(this.data)
         .select(d => {
           return {
@@ -127,7 +132,7 @@ export default {
         .select(d => {
           return { x: d.key, y: d.count };
         });
-      console.log(linqData)
+      console.log(linqData);
       return linqData.items;
     },
     prettyData() {
