@@ -20,7 +20,7 @@
     </v-flex>
 
 <v-flex xs12>
-<v-tabs grow v-model="tabModel">
+<v-tabs grow v-model="tabModel" class="ag-theme-material">
   <v-tab centered ripple key="data" href="#tab-data">Data</v-tab>
 
   <v-tab ripple key="visuals" href="#tab-visuals">Visuals</v-tab>
@@ -40,7 +40,7 @@
         :rowData='prettyData'
         :rowHeight='48'
         :enableSorting='trueVar'
-        :enableFilter='trueVar'
+        :enableFilter='trueVar'  
         :modelUpdated="modelUpdated"
         :gridReady='onGridReady'
         :filterChanged='updateChildren'
@@ -54,7 +54,7 @@
   <v-tab-item key="visuals" id="tab-visuals" style="height: 100% !important;">
     <v-layout row wrap style="min-height: 60vh; !important">
       <v-flex xs10 offset-xs1>
-        <heat-map/>
+        <heat-map class="ag-theme-material"/>
       </v-flex>
      
       <v-flex xs6>
@@ -263,7 +263,6 @@ export default {
     themeLighting(data) {
       console.log(data);
       this.changeLighting(data);
-      this.toggleDark();
     },
     themeColor(data) {
       console.log('fetchColor recieved', data);
@@ -487,9 +486,7 @@ export default {
     },
     lighting(newData) {
       if (newData) {
-        if (newData === 'dark') {
-          this.toggleDark();
-        }
+        this.toggleDark();
       }
     }
   }
@@ -554,6 +551,7 @@ export default {
   background-color: #303030 !important;
   color: white;
 }
+
 .theme--dark .ag-header {
   color: white;
 }
