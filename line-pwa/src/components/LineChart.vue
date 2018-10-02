@@ -1,19 +1,23 @@
 <template>
-    <div class="container">
+  <div class="container" @drop="handleDrop" @dragenter="handleDragEnter" @dragover="handleDragOver">
     <div :class="['header']" :style="styleObj">
-      <span>Ticket Severity by Date</span>
-      <span class="current-context">Subscribed:
-        <select class="select" v-model="selected">
+      <span>Ticket Severity By Date</span>
+      <span class="current-context" v-if="inGlue && selected !== ''">Subscribed:
+        <span>{{selected.split('d')[2]}}</span>
+      </span>
+      <span v-else-if="inGlue && selected == ''">Unsubscribed</span>
+        <span class="current-context" v-else>Subscribed:
+        <select class="select" v-model="selected" v-on:click="populate">
           <option disabled value="">Select context</option>
-          <option v-for="(context, index) in availableContexts" :key="index">{{context}}</option>
+          <option v-for="(context, index) in availableContexts" :value="context" :key="index">{{context}}</option>
         </select>
       </span>
     </div>
-      <line-chart 
-        @jsc_click="filterByDate" 
-        :dataModel="dataDV"
-      />
-    </div>
+    <line-chart 
+      @jsc_click="filterByDate" 
+      :dataModel="dataDV"
+    />
+  </div>
 </template>
 
 <script>
@@ -21,13 +25,14 @@ import { D3LineChart, StyleTogglerMixin } from 'jscatalyst';
 import { mapGetters, mapState, mapActions } from 'vuex';
 import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
+import DragAndDrop from '@/mixins/DragAndDrop'
 
 export default {
   name: 'LineChart',
   components: {
     lineChart: D3LineChart
   },
-  mixins: [StyleTogglerMixin, Messaging, Windowing],
+  mixins: [StyleTogglerMixin, Messaging, Windowing, DragAndDrop],
   data() {
     return {
       gridInstance: false
