@@ -14,6 +14,7 @@
     "metrics-pwa": "cd metrics-pwa && npm run serve -- --port 9098",
     "server": "cd server && nodemon app.js",
     "serve-all": "npm-run-all --parallel --aggregate-output bubble-pwa grid-pwa bar-pwa line-pwa heat-pwa pie-pwa log-pwa user-settings-pwa metrics-pwa",
+    "serve-all-no-m": "npm-run-all --parallel --aggregate-output bubble-pwa grid-pwa bar-pwa line-pwa heat-pwa pie-pwa log-pwa user-settings-pwa", 
     "build-bar-pwa": "cd bar-pwa && npm run build",
     "build-bubble-pwa": "cd bubble-pwa && npm run build",
     "build-line-pwa": "cd line-pwa && npm run build",

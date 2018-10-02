@@ -57,13 +57,19 @@ export default {
     ]),
     prettyData() {
       return this.data.map(item => {
-        let prettyItem = {};
-        prettyItem.date = this.parseDate(item.date);
-        prettyItem.project = item.project;
-        prettyItem.raisedBy = item.raisedBy;
-        prettyItem.severity = item.severity;
-        prettyItem.id = item.id;
-        return prettyItem;
+        if (item.date) {
+          //formats our data
+          let prettyItem = {};
+          prettyItem.date = this.parseDate(item.date);
+          prettyItem.project = item.project;
+          prettyItem.raisedBy = item.raisedBy;
+          prettyItem.severity = item.severity;
+          prettyItem.id = item.id;
+          return prettyItem;
+        } else {
+          // if the data is not as expected
+          return item
+        }
       });
     },
     styleObject() {
@@ -199,7 +205,6 @@ export default {
       ).select(i => {
         return i.data;
       }).items;
-      console.log("linq data", gridData.data);
       if (gridData) {
         //convert date from grid display formatting to match what the server is sending
         filter.data = gridData.map(item => {
@@ -240,7 +245,6 @@ export default {
     onGridReady(params) {
       this.gridApi = params.api;
       this.columnApi = params.columnApi;
-      console.log("gridApi", this.gridApi);
       this.gridApi.sizeColumnsToFit();
       window.addEventListener("resize", () => {
         this.gridApi.sizeColumnsToFit();
@@ -381,15 +385,13 @@ export default {
     },
     color(newData) {
       if (newData) {
+        console.log('watch', this.color)
         this.setTheme();
       }
     },
     lighting(newData) {
       if (newData) {
-        console.log(newData);
-        if (newData === "dark") {
-          console.log(here);
-          console.log(this);
+        if (newData !== this.lighting) {
           this.toggleDark();
         }
       }
