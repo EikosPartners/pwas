@@ -2,7 +2,11 @@
    <div class="container" @drop="handleDrop" @dragenter="handleDragEnter" @dragover="handleDragOver">
     <div :class="['header']" :style="styleObj">
       <span>Number of Tickets by Date</span>
-      <span class="current-context">Subscribed:
+      <span class="current-context" v-if="inGlue && selected !== ''">Subscribed:
+        <span>{{selected.split('d')[2]}}</span>
+      </span>
+      <span v-else-if="inGlue && selected == ''">Unsubscribed</span>
+        <span class="current-context" v-else>Subscribed:
         <select class="select" v-model="selected" v-on:click="populate">
           <option disabled value="">Select context</option>
           <option v-for="(context, index) in availableContexts" :value="context" :key="index">{{context}}</option>
@@ -36,6 +40,7 @@ export default {
     return {
       gridInstance: false,
       availableContexts: [],
+      inGlue: !!window.glue
     };
   },
   computed: {
