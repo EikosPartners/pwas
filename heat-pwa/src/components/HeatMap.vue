@@ -1,31 +1,19 @@
 <template>
-   <div class="container" @drop="handleDrop" @dragenter="handleDragEnter" @dragover="handleDragOver">
-    <div :class="['header']" :style="styleObj">
-      <span>Number of Tickets by Date</span>
-      <span class="current-context" v-if="inGlue && selected !== ''">Subscribed:
-        <span>{{selected.split('d')[2]}}</span>
-      </span>
-      <span v-else-if="inGlue && selected == ''">Unsubscribed</span>
-        <span class="current-context" v-else>Subscribed:
-        <select class="select" v-model="selected" v-on:click="populate">
-          <option disabled value="">Select context</option>
-          <option v-for="(context, index) in availableContexts" :value="context" :key="index">{{context}}</option>
-        </select>
-      </span>
-    </div>
+  <div class="container" @drop="handleDrop" @dragenter="handleDragEnter" @dragover="handleDragOver">
+    <pwa-header :title="compTitle" :availableContexts="availableContexts" />
     <heat-map
-        v-if="themeColorsComp && themeColorsComp.length > 0"
-        @jsc_click="filterByDate"
-        :dataModel='heatData'
-        xaxis-label="date"
-        yaxis-label="volume"
-      ></heat-map>
-
+      v-if="themeColorsComp && themeColorsComp.length > 0"
+      @jsc_click="filterByDate"
+      :dataModel='heatData'
+      xaxis-label="date"
+      yaxis-label="volume"
+    ></heat-map>
   </div>
 </template>
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex';
 import { D3HeatMap, StyleTogglerMixin } from 'jscatalyst';
+import PwaHeader from '@/components/PwaHeader.vue'
 import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
 import DragAndDrop from '@/mixins/DragAndDrop';
@@ -33,37 +21,20 @@ import DragAndDrop from '@/mixins/DragAndDrop';
 export default {
   name: 'HeatMap',
   components: {
-    heatMap: D3HeatMap
+    heatMap: D3HeatMap,
+    pwaHeader: PwaHeader
   },
   mixins: [StyleTogglerMixin, Messaging, Windowing, DragAndDrop],
   data() {
     return {
+      compTitle: "Number of Tickets by Date",
       gridInstance: false,
       availableContexts: []
     };
   },
   computed: {
     ...mapGetters(['data', 'themeColors']),
-    ...mapState(['color', 'lighting', 'belongsToGrid']),
-    styleObj(){
-      let background, text
-      if (this.$store.state.themeMod.displayTheme === 'light') {
-        background = this.themeColors.vuetifyLight
-        text = '#000'
-      } else {
-        background = this.themeColors.vuetifyDark
-        text = '#fff'
-      }
-      return {backgroundColor: background, color: text}
-    },
-    selected: {
-      get() {
-        return this.$store.state.selected
-      },
-      set(value) {
-        this.$store.commit('setSelected', value)
-      }
-    },
+    ...mapState(['color', 'lighting', 'belongsToGrid', 'selected']),
     heatData() {
       const heatData = [];
       let sorted = this.sortData(this.data);
