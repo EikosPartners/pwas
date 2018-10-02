@@ -256,16 +256,13 @@ export default {
       this.setCurrentFilter(source);
     },
     themeLighting(data) {
-      console.log(data);
       this.changeLighting(data);
       this.toggleDark();
     },
     themeColor(data) {
-      console.log('fetchColor recieved', data);
       this.changeTheme(data.name);
     },
     refresh(data) {
-      console.log('refresh!');
       this.updateData();
     }
   },
