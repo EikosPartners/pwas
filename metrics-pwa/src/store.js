@@ -9,7 +9,7 @@ const state = {
   columns: [],
   currentFilter: 'No Filter',
   contextId: null,
-  color:'blue',
+  color: null,
   lighting: null
 };
 

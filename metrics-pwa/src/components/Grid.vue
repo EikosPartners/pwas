@@ -20,7 +20,7 @@
     </v-flex>
 
 <v-flex xs12>
-<v-tabs grow v-model="tabModel" class="ag-theme-material">
+<v-tabs grow v-model="tabModel">
   <v-tab centered ripple key="data" href="#tab-data">Data</v-tab>
 
   <v-tab ripple key="visuals" href="#tab-visuals">Visuals</v-tab>
@@ -40,7 +40,7 @@
         :rowData='prettyData'
         :rowHeight='48'
         :enableSorting='trueVar'
-        :enableFilter='trueVar'  
+        :enableFilter='trueVar'
         :modelUpdated="modelUpdated"
         :gridReady='onGridReady'
         :filterChanged='updateChildren'
@@ -89,6 +89,7 @@ import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
 import jslinq from 'jslinq';
 
+import BarChart from './BarChart.vue';
 import HeatMap from './HeatMap.vue';
 
 export default {
@@ -194,35 +195,30 @@ export default {
       console.log('socket connected');
     },
     filterByDate(filter) {
-      console.log('filter', filter);
       this.removeFilter();
       this.setQuickFilter(filter.data);
       let source = this.formatSource(filter.source);
       this.setCurrentFilter(source);
     },
     filterByProject(filter) {
-      console.log('filter', filter);
       this.removeFilter();
       this.setQuickFilter(filter.data);
       let source = this.formatSource(filter.source);
       this.setCurrentFilter(source);
     },
     filterBySeverity(filter) {
-      console.log('filter', filter);
       this.removeFilter();
       this.setQuickFilter(filter.data);
       let source = this.formatSource(filter.source);
       this.setCurrentFilter(source);
     },
     filterByRaisedBy(filter) {
-      console.log('filter', filter);
       this.removeFilter();
       this.setQuickFilter(filter.data);
       let source = this.formatSource(filter.source);
       this.setCurrentFilter(source);
     },
     filterByDateAndSeverity(filter) {
-      console.log('filter', filter);
       this.removeFilter();
       let filterObject = {
         date: {
@@ -239,7 +235,6 @@ export default {
       this.setCurrentFilter(source);
     },
     filterByMonth(filter) {
-      console.log('filter', filter);
       let month = filter.data.split('/')[0] + '-';
       let year = '-' + filter.data.split('/')[1];
       this.removeFilter();
@@ -263,6 +258,7 @@ export default {
     themeLighting(data) {
       console.log(data);
       this.changeLighting(data);
+      this.toggleDark();
     },
     themeColor(data) {
       console.log('fetchColor recieved', data);
@@ -301,7 +297,6 @@ export default {
       ).select(i => {
         return i.data;
       }).items;
-      console.log('linq data', gridData.data);
       if (gridData) {
         //convert date from grid display formatting to match what the server is sending
         filter.data = gridData.map(item => {
@@ -484,9 +479,11 @@ export default {
         this.setTheme();
       }
     },
-    lighting(newData) {
-      if (newData) {
-        this.toggleDark();
+    lighting(newData, oldData) {
+      if (oldData === null) {
+        if (newData === 'dark') {
+          this.toggleDark();
+        }
       }
     }
   }
@@ -551,7 +548,10 @@ export default {
   background-color: #303030 !important;
   color: white;
 }
-
+.theme--light .ag-theme-material {
+  background-color: white !important;
+  color: black;
+}
 .theme--dark .ag-header {
   color: white;
 }
