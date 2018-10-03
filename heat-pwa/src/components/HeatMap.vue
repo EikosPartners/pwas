@@ -61,10 +61,14 @@ export default {
       console.log("socket Connected!")
     },
     themeColor: function(data) {
-      this.changeTheme(data.name.toLowerCase());
+      if (!window.glue) {
+        this.changeTheme(data.name.toLowerCase());
+      }
     },
     themeLighting() {
-      this.toggleDark();
+      if (!window.glue) {
+        this.toggleDark();
+      }
     },
     refresh() {
       if (!this.belongsToGrid) {
@@ -158,9 +162,7 @@ export default {
     },
     lighting(newData) {
       if (newData) {
-        if (newData === 'dark') {
-          this.toggleDark();
-        }
+        this.toggleDark(newData);
       }
     },
     selected(newData) {
