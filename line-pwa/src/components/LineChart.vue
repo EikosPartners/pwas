@@ -1,18 +1,6 @@
 <template>
   <div class="container" @drop="handleDrop" @dragenter="handleDragEnter" @dragover="handleDragOver">
-    <div :class="['header']" :style="styleObj">
-      <span>Ticket Severity By Date</span>
-      <span class="current-context" v-if="inGlue && selected !== ''">Subscribed:
-        <span>{{selected.split('d')[2]}}</span>
-      </span>
-      <span v-else-if="inGlue && selected == ''">Unsubscribed</span>
-        <span class="current-context" v-else>Subscribed:
-        <select class="select" v-model="selected" v-on:click="populate">
-          <option disabled value="">Select context</option>
-          <option v-for="(context, index) in availableContexts" :value="context" :key="index">{{context}}</option>
-        </select>
-      </span>
-    </div>
+    <pwa-header :title="compTitle" :availableContexts="availableContexts" />
     <line-chart 
       @jsc_click="filterByDate" 
       :dataModel="dataDV"
@@ -21,8 +9,9 @@
 </template>
 
 <script>
-import { D3LineChart, StyleTogglerMixin } from 'jscatalyst';
 import { mapGetters, mapState, mapActions } from 'vuex';
+import { D3LineChart, StyleTogglerMixin } from 'jscatalyst';
+import PwaHeader from '@/components/PwaHeader.vue'
 import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
 import DragAndDrop from '@/mixins/DragAndDrop'
@@ -30,36 +19,19 @@ import DragAndDrop from '@/mixins/DragAndDrop'
 export default {
   name: 'LineChart',
   components: {
-    lineChart: D3LineChart
+    lineChart: D3LineChart,
+    pwaHeader: PwaHeader
   },
   mixins: [StyleTogglerMixin, Messaging, Windowing, DragAndDrop],
   data() {
     return {
+      compTitle: "Ticket Severity by Date",
       gridInstance: false
     };
   },
   computed: {
-    ...mapState(['color', 'belongsToGrid', 'lighting']),
     ...mapGetters(['dataDV', 'themeColors']),
-    styleObj(){
-      let background, text
-      if (this.$store.state.themeMod.displayTheme === 'light') {
-        background = this.themeColors.vuetifyLight
-        text = '#000'
-      } else {
-        background = this.themeColors.vuetifyDark
-        text = '#fff'
-      }
-      return {backgroundColor: background, color: text}
-    },
-    selected: {
-      get() {
-        return this.$store.state.selected
-      },
-      set(value) {
-        this.$store.commit('setSelected', value)
-      }
-    },
+    ...mapState(['color', 'belongsToGrid', 'lighting', 'selected']),
     availableContexts() {
       let availableContexts = [];
       window.glue.contexts.all().forEach(context => {
