@@ -7,16 +7,24 @@
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex';
 import { StyleTogglerMixin } from 'jscatalyst';
+import Messaging from '@/mixins/Messaging';
 
 export default {
   name: 'app',
   methods: {
     ...mapActions(['fetchData', 'fetchColor']),
-    ...mapMutations(['setContextId'])
+    ...mapMutations(['initializeData', 'setBelongsToGrid', 'setSelected', 'setColor', 'setLighting'])
   },
-  mixins: [StyleTogglerMixin],
+  mixins: [StyleTogglerMixin, Messaging],
   created() {
     this.fetchColor();
+     if (window.glue) {
+      this.subscribe('globalTheme', (context, delta, removed) => {
+        console.log("global theme context", context)
+        this.setColor(context.color)
+        this.setLighting(context.lighting)
+      })
+    }
     this.fetchData();
     const IdNumber = Date.now();
     this.$store.commit('setContextId', `${IdNumber}`);

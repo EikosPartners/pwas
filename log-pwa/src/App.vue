@@ -5,14 +5,26 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapMutations } from 'vuex';
+import Windowing from '@/mixins/Windowing';
+import Messaging from '@/mixins/Messaging';
+
 export default {
+  mixins: [Windowing, Messaging],
   name: 'app',
   methods: {
-    ...mapActions(['fetchColor'])
+    ...mapActions(['fetchColor']),
+    ...mapMutations(['initializeData', 'setBelongsToGrid', 'setSelected', 'setColor', 'setLighting'])
   },
   created() {
     this.fetchColor();
+     if (window.glue) {
+      this.subscribe('globalTheme', (context, delta, removed) => {
+        console.log("global theme context", context)
+        this.setColor(context.color)
+        this.setLighting(context.lighting)
+      })
+    }
   },
   computed: {
     ...mapState(['lighting']),

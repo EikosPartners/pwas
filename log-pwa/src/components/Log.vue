@@ -88,9 +88,7 @@ export default {
     },
     lighting(newData) {
       if (newData) {
-        if (newData === 'dark') {
-          // this.toggleDark();
-        }
+        this.toggleDark(newData);
       }
     }
   },
@@ -118,18 +116,18 @@ export default {
         this.addData(filter);
       };
     },
-    themeLighting(data) {
-      console.log(data);
-      this.changeLighting(data);
-      this.toggleDark();
+    themeColor: function(data) {
+      if (!window.glue) {
+        this.changeTheme(data.name.toLowerCase());
+      }
     },
-
-    themeColor(data) {
-      console.log('fetchColor recieved', data);
-      this.changeTheme(data.name);
+    themeLighting() {
+      if (!window.glue) {
+        this.toggleDark();
+      }
     }
   }
-};
+}
 </script>
 
 <style >

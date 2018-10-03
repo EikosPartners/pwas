@@ -260,12 +260,15 @@ export default {
       let source = this.formatSource(filter.source);
       this.setCurrentFilter(source);
     },
-    themeLighting(data) {
-      this.changeLighting(data);
-      this.toggleDark();
+    themeColor: function(data) {
+      if (!window.glue) {
+        this.changeTheme(data.name.toLowerCase());
+      }
     },
-    themeColor(data) {
-      this.changeTheme(data.name);
+    themeLighting() {
+      if (!window.glue) {
+        this.toggleDark();
+      }
     },
     refresh(data) {
       this.updateData();
@@ -481,11 +484,9 @@ export default {
         this.setTheme();
       }
     },
-    lighting(newData, oldData) {
-      if (oldData === null) {
-        if (newData === 'dark') {
-          this.toggleDark();
-        }
+    lighting(newData) {
+      if (newData) {
+        this.toggleDark(newData);
       }
     }
   }

@@ -1,18 +1,6 @@
 <template>
-    <div class="container" @drop="handleDrop" @dragenter="handleDragEnter" @dragover="handleDragOver">
-    <div :class="['header']" :style="styleObj">
-      <span>Ticket Severity by Date</span>
-      <span class="current-context" v-if="inGlue && selected !== ''">Subscribed:
-        <span>{{selected.split('d')[2]}}</span>
-      </span>
-      <span v-else-if="inGlue && selected == ''">Unsubscribed</span>
-        <span class="current-context" v-else>Subscribed:
-        <select class="select" v-model="selected" v-on:click="populate">
-          <option disabled value="">Select context</option>
-          <option v-for="(context, index) in availableContexts" :value="context" :key="index">{{context}}</option>
-        </select>
-      </span>
-    </div>
+  <div class="container" @drop="handleDrop" @dragenter="handleDragEnter" @dragover="handleDragOver">
+    <pwa-header :title="compTitle" :availableContexts="availableContexts" />
     <bubble-chart 
       :isDate="true" 
       @jsc_click="filterByDateAndSeverity" 
@@ -27,6 +15,7 @@
 import { D3BubbleChart, StyleTogglerMixin } from 'jscatalyst';
 import { mapGetters, mapState, mapActions } from 'vuex';
 import jslinq from 'jslinq';
+import PwaHeader from '@/components/PwaHeader.vue'
 import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
 import DragAndDrop from '@/mixins/DragAndDrop'
@@ -34,36 +23,19 @@ import DragAndDrop from '@/mixins/DragAndDrop'
 export default {
   name: 'BubbleChart',
   components: {
-    bubbleChart: D3BubbleChart
+    bubbleChart: D3BubbleChart,
+    pwaHeader: PwaHeader
   },
   mixins: [StyleTogglerMixin, Messaging, Windowing, DragAndDrop],
   data() {
     return {
+      compTitle: "Ticket Severity by Date",
       gridInstance: false
     };
   },
   computed: {
     ...mapGetters(['data', 'themeColors']),
-    ...mapState(['color', 'belongsToGrid', 'lighting']),
-    styleObj(){
-      let background, text
-      if (this.$store.state.themeMod.displayTheme === 'light') {
-        background = this.themeColors.vuetifyLight
-        text = '#000'
-      } else {
-        background = this.themeColors.vuetifyDark
-        text = '#fff'
-      }
-      return {backgroundColor: background, color: text}
-    },
-     selected: {
-      get() {
-        return this.$store.state.selected
-      },
-      set(value) {
-        this.$store.commit('setSelected', value)
-      }
-    },
+    ...mapState(['color', 'lighting', 'belongsToGrid', 'selected']),
     availableContexts() {
       let availableContexts = [];
       window.glue.contexts.all().forEach(context => {
@@ -106,6 +78,27 @@ export default {
         });
       });
       return finalData;
+    }
+  },
+  sockets: {
+    connect: function() {
+      console.log("socket Connected!")
+    },
+    themeColor: function(data) {
+      if (!window.glue) {
+        this.changeTheme(data.name.toLowerCase());
+      }
+    },
+    themeLighting() {
+      if (!window.glue) {
+        this.toggleDark();
+      }
+    },
+    refresh() {
+      if (!this.belongsToGrid) {
+        console.log('refresh!');
+        this.updateData();
+      }
     }
   },
   methods: {
@@ -165,23 +158,6 @@ export default {
       }
     }
   },
-  sockets: {
-    connect: function() {
-      console.log('socket connected');
-      this.$options.sockets.refresh = () => {
-        if (!this.belongsToGrid) {
-          console.log('refresh!');
-          this.updateData();
-        }
-      };
-    },
-    themeColor(data) {
-      this.changeTheme(data.name);
-    },
-    themeLighting(data) {
-      this.toggleDark();
-    }
-  },
   watch: {
     color(newData) {
       if (newData) {
@@ -190,13 +166,11 @@ export default {
     },
     lighting(newData) {
       if (newData) {
-        if (newData === 'dark') {
-          this.toggleDark();
-        }
+        this.toggleDark(newData);
       }
     },
     selected(newData) {
-      if (newData && newData !== undefined) {
+      if (newData) {
         this.subscribe(newData, (context, delta, removed) => {
           this.$store.commit('initializeData', context.filter.data);
         });

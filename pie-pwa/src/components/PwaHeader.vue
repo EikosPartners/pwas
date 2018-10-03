@@ -56,18 +56,6 @@ export default {
     }
   },
   watch: {
-    color(newData) {
-      if (newData) {
-        this.setTheme();
-      }
-    },
-    lighting(newData) {
-      if (newData) {
-        if (newData === 'dark') {
-          this.toggleDark();
-        }
-      }
-    },
     selected(newData) {
       if (newData) {
         this.subscribe(newData, (context, delta, removed) => {

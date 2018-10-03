@@ -6,7 +6,7 @@
 
 <script>
 import { ThemeChooserComponent, StyleTogglerMixin, Toolbar } from 'jscatalyst';
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 import logoLight from '../../static/ep-logo-yellow.png';
 import logoDark from '../../static/ep-logo-black.png';
 
@@ -32,11 +32,25 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setColor', 'setLighting']),
     themeHandler(data) {
+      this.setColor(data.name)
+      //still emit over socket so server is up to date
       this.$socket.emit('themeColor', data);
+      //else send over context
+      console.log("c: ", data.name, "l: ", this.lighting)
+      let theme = {color: data.name, lighting: this.lighting}
+      window.glue.contexts.set('globalTheme', theme)
     },
     lightingHandler(data) {
+      this.setLighting(data
+      )
+      //still emit over socket so server is up to date
       this.$socket.emit('themeLighting', data);
+      //else send over context
+      console.log("c: ", this.color, "l: ", data)
+      let theme = {color: this.color, lighting: data}
+      window.glue.contexts.set('globalTheme', theme)
     },
     setTheme() {
       this.$store.commit('changeColor', this.color);
@@ -53,9 +67,8 @@ export default {
     },
     lighting(newData) {
       if (newData) {
-        if (newData === 'dark') {
-          this.toggleDark();
-        }
+        console.log("ll", newData)
+        this.toggleDark(newData);
       }
     }
   }

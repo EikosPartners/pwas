@@ -14,10 +14,18 @@ export default {
   name: 'app',
   methods: {
     ...mapActions(['fetchData', 'fetchColor']),
-    ...mapMutations(['initializeData', 'setBelongsToGrid', 'setSelected'])
+    ...mapMutations(['initializeData', 'setBelongsToGrid', 'setSelected', 'setColor', 'setLighting'])
   },
   created() {
     this.fetchColor();
+    if (window.glue) {
+      this.subscribe('globalTheme', (context, delta, removed) => {
+        console.log("global theme context", context)
+        this.setColor(context.color)
+        this.setLighting(context.lighting)
+      })
+    }
+    //this is the grid specific local context it opens with
     const localWindow = window.glue.windows.my();
     const ctx = localWindow.context;
     const contextName = ctx.contextName;
@@ -25,13 +33,9 @@ export default {
     if (contextName !== undefined) {
       this.$store.commit('setBelongsToGrid'); //disables socket refresh
       this.$store.commit('setSelected', contextName)
-  }
-
-    if (contextName !== undefined) {
-    this.subscribe(contextName, (context, delta, removed) => {
-      debugger;
-      this.$store.commit('initializeData', context.filter.data);
-    });
+      this.subscribe(contextName, (context, delta, removed) => {
+        this.$store.commit('initializeData', context.filter.data);
+      });
     }
 
     if (ctx.filter) {

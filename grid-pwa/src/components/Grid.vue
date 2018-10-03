@@ -163,14 +163,15 @@ export default {
       let source = this.formatSource(filter.source);
       this.setCurrentFilter(source);
     },
-    themeLighting(data) {
-      console.log(data);
-      this.changeLighting(data);
-      this.toggleDark();
+    themeColor: function(data) {
+      if (!window.glue) {
+        this.changeTheme(data.name.toLowerCase());
+      }
     },
-    themeColor(data) {
-      console.log("fetchColor recieved", data);
-      this.changeTheme(data.name);
+    themeLighting() {
+      if (!window.glue) {
+        this.toggleDark();
+      }
     },
     refresh(data) {
       console.log("refresh!");
@@ -384,20 +385,17 @@ export default {
       }
     },
     color(newData) {
-      //we should also make this 
       if (newData) {
-        console.log('watch', this.color)
+        console.log("c", newData)
         this.setTheme();
       }
     },
-    lighting(newData, oldData) {
-      //we should make this listen to the contexts instead of the websockets - when that happens this fix will change
-      if (oldData === null) {
-        if (newData === 'dark') {
-          this.toggleDark();
-        }
+    lighting(newData) {
+      if (newData) {
+        console.log("l", newData)
+        this.toggleDark(newData);
       }
-    }
+    },
   }
 };
 </script>

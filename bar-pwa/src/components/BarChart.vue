@@ -44,19 +44,6 @@ export default {
       });
       return availableContexts;
     },
-
-    // Deprecated
-
-    // barData() {
-    //   const barData = [];
-    //   let sorted = this.sortData(this.data);
-    //   for (let date in sorted) {
-    //     let dataObj = { x: date, y: sorted[date] };
-    //     barData.push(dataObj);
-    //   }
-    //   return barData;
-    // },
-
     prettyData() {
       let barData = [];
       console.log(this.data);
@@ -81,7 +68,6 @@ export default {
 
       return barData;
     },
-
     barDataProject() {
       let barLinqData = new jslinq(this.data)
         .select(d => {
@@ -109,23 +95,24 @@ export default {
     }
   },
   sockets: {
-    connect() {
-      console.log('socket connected');
+    connect: function() {
+      console.log("socket Connected!")
+    },
+    themeColor: function(data) {
+      if (!window.glue) {
+        this.changeTheme(data.name.toLowerCase());
+      }
+    },
+    themeLighting() {
+      if (!window.glue) {
+        this.toggleDark();
+      }
     },
     refresh() {
       if (!this.belongsToGrid) {
         console.log('refresh!');
         this.updateData();
       }
-    },
-    themeLighting(data) {
-      console.log(data);
-      this.toggleDark();
-    },
-
-    themeColor(data) {
-      console.log('fetchColor recieved', data);
-      this.changeTheme(data.name);
     }
   },
   methods: {
@@ -212,9 +199,7 @@ export default {
     },
     lighting(newData) {
       if (newData) {
-        if (newData === 'dark') {
-          this.toggleDark();
-        }
+        this.toggleDark(newData);
       }
     },
     selected(newData) {
