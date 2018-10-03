@@ -44,7 +44,7 @@
     "install-user-settings-pwa": "cd user-settings-pwa && npm install",
     "install-metrics-pwa": "cd metrics-pwa && npm install",
     "install-server": "cd server && npm install",
-    "install-all": "npm-run-all --parallel --aggregate-output install-server install-bar-pwa install-bubble-pwa install-line-pwa install-grid-pwa install-heat-pwa install-pie-pwa install-user-settings-pwa install-metrics-pwa",
+    "install-all": "npm-run-all --serial install-server install-bar-pwa install-bubble-pwa install-line-pwa install-grid-pwa install-heat-pwa install-pie-pwa install-user-settings-pwa install-log-pwa install-metrics-pwa",
     "update-bar-pwa": "cd bar-pwa && npm update",
     "update-bubble-pwa": "cd bubble-pwa && npm update",
     "update-line-pwa": "cd line-pwa && npm update",
