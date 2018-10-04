@@ -15,10 +15,11 @@ export default {
     ...mapGetters(['color' , 'lighting'])
   },
   created() {
-    this.fetchColor();
-    let theme = {color: this.color, lighting: this.lighting}
-
-    window.glue.contexts.set('globalTheme', theme)
+    this.fetchColor()
+    let color = this.color
+    let lighting = this.lighting
+    let theme = { color: color, lighting: lighting }
+    window.glue.contexts.update('globalTheme', theme)
   }
 };
 </script>
