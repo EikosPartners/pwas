@@ -11,7 +11,7 @@
   "dependencies": {
     "ag-grid-community": "^19.0.0",
     "ag-grid-vue": "^19.0.0",
-    "jscatalyst": "^1.2.27",
+    "jscatalyst": "^1.2.30",
     "register-service-worker": "^1.0.0",
     "typeface-roboto": "0.0.54",
     "vue": "^2.5.17",
