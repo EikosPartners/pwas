@@ -41,7 +41,7 @@ export default {
       for (let date in sorted) {
         let dataObj = { x: date, magnitude: sorted[date] };
         heatData.push(dataObj);
-      }
+      }console.log(heatdata)
       return heatData;
     },
     availableContexts() {
