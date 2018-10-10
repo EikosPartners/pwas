@@ -121,9 +121,9 @@ export default {
         this.changeTheme(data.name.toLowerCase());
       }
     },
-    themeLighting() {
+    themeLighting(data) {
       if (!window.glue) {
-        this.toggleDark();
+        this.toggleDark(data);
       }
     }
   }

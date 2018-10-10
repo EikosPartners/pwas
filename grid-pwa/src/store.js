@@ -10,7 +10,7 @@ const state = {
   currentFilter: 'No Filter',
   contextId: null,
   color: null,
-  lighting: null
+  lighting: 'lighting'
 };
 
 export const getters = {
@@ -36,7 +36,7 @@ export const mutations = {
     state.color = color;
   },
   setLighting(state, lighting) {
-    console.log(lighting);
+    console.log("mut", lighting);
     state.lighting = lighting;
   },
   generateColumns(state, data) {
@@ -83,6 +83,7 @@ export const actions = {
   },
   fetchColor({ commit }) {
     axios.get('http://localhost:9000/color').then(response => {
+      console.log('response', response)
       commit('setColor', response.data.color);
       commit('setLighting', response.data.lighting);
     });

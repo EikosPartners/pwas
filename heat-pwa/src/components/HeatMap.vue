@@ -17,6 +17,7 @@ import PwaHeader from '@/components/PwaHeader.vue'
 import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
 import DragAndDrop from '@/mixins/DragAndDrop';
+import { log } from 'async';
 
 export default {
   name: 'HeatMap',
@@ -90,9 +91,10 @@ export default {
     ...mapActions(['updateData', 'changeTheme']),
     filterByDate(data) {
       let filter = {};
+      console.log(data)
       filter.source = 'heatMap';
       filter.dataSource = '/';
-      filter.data = this.parseDate(data.date);
+      filter.data = this.parseDate(data[0].x);
       filter.time = new Date();
       // console.log(filter);
 
