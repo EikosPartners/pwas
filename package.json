@@ -75,10 +75,6 @@
     "jslinq": "^1.0.21",
     "material-design-icons-iconfont": "^3.0.3",
     "typeface-roboto": "0.0.54",
-<<<<<<< HEAD
     "vuetify": "^1.2.8"
-=======
-    "vuetify": "^1.2.6"
->>>>>>> 6c4c539e0a37ad16a9375a0843482c31b147410f
   }
 }
