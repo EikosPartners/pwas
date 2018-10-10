@@ -1,5 +1,5 @@
 <template>
-<v-container grid-list-md fluid justify-center>
+<v-container grid-list-md fluid justify-center v-if="startNow">
   <v-layout row wrap> 
     <v-flex xs12>
       <div :class="['header']" :style="styleObject">
@@ -188,8 +188,15 @@ export default {
       }
     }
   },
+  created(){
+    setTimeout(()=>{
+      this.startNow = true
+      
+    }, 4000)
+  },
   data() {
     return {
+      startNow: false,
       trueVar: true,
       selected: '',
       tabModel: 'tab-data'
