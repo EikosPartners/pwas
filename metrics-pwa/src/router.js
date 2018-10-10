@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Grid from "./components/Grid.vue";
+// import Grid from "./components/Grid.vue";
+const Grid = () => import ('./components/Grid.vue')
 
 Vue.use(Router);
 
