@@ -3,11 +3,14 @@ let express = require('express');
 let bodyParser = require('body-parser');
 let seed = require('../data/seed.js');
 let metrics = require('../data/metrics.js');
+let positions = require('../data/positions.js');
 let router = express.Router();
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
 let colorObj = { action: 'changeColor', color: 'blue', lighting: 'light' };
+
+let positionData = positions.aquirePositions()
 
 let data = seed.generateDataSet(500);
 let refreshTime = 20000;
@@ -17,6 +20,10 @@ setInterval(function() {
 
 router.get('/', (req, res) => {
   res.send(data);
+});
+
+router.get('/positions', (req, res) => {
+  res.send(positionData);
 });
 
 router.get('/update', (req, res) => {
