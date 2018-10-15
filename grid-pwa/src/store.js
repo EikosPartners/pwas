@@ -23,6 +23,7 @@ export const getters = {
 
 export const mutations = {
   initializeData(state, data) {
+    console.log(data)
     state.data = data;
   },
   setCurrentFilter(state, data) {
@@ -93,7 +94,12 @@ export const actions = {
   },
   changeLighting({ commit }, data) {
     commit('setLighting', data);
-  }
+  },
+
+  initializeData({commit}, data){
+    commit("initializeData", data)
+    commit("generateColumns", data)
+  },
 };
 
 export default new Vuex.Store({

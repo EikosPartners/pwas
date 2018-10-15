@@ -100,7 +100,8 @@ export default {
 
       filter.source = 'heatMap';
       filter.dataSource = '/';
-      filter.data = this.parseDate(data[0].x);
+      //filter.data = this.parseDate(data[0].x);
+      filter.data = filteredData
       filter.time = new Date();
       // console.log(filter);
 

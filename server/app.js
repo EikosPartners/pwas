@@ -18,9 +18,9 @@ let server = http.createServer(app);
 
 server.listen(9000);
 var io = require('socket.io').listen(server);
-setInterval(function() {
-  io.emit('refresh');
-}, 20500);
+// setInterval(function() {
+//   io.emit('refresh');
+// }, 20500);
 
 var connectCount = 0;
 io.sockets.on('connection', function(socket) {

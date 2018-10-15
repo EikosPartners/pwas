@@ -12,7 +12,7 @@ import Messaging from "@/mixins/Messaging";
 export default {
   name: 'app',
   methods: {
-    ...mapActions(['fetchData', 'fetchColor']),
+    ...mapActions(['fetchData', 'fetchColor', 'initializeData']),
     ...mapMutations(['setContextId', 'setColor', 'setLighting'])
   },
   mixins: [StyleTogglerMixin, Messaging],
@@ -26,7 +26,16 @@ export default {
       })
     }
 
-    this.fetchData();
+    console.log("in not undefined")
+    if (window.glue.windows.my().context.eventName !== undefined){
+      let ctx = window.glue.windows.my().context
+      console.log("ctx",ctx)
+      this.initializeData(ctx.filter.data)
+    }
+    else{
+      this.fetchData();
+    }
+    
     const IdNumber = Date.now();
     this.$store.commit('setContextId', `${IdNumber}`);
     const uniqueName = 'filteredGrid' + IdNumber;
