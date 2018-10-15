@@ -41,7 +41,7 @@ export default {
       for (let date in sorted) {
         let dataObj = { x: date, magnitude: sorted[date] };
         heatData.push(dataObj);
-      }console.log(heatdata)
+      }
       return heatData;
     },
     availableContexts() {
@@ -92,6 +92,12 @@ export default {
     filterByDate(data) {
       let filter = {};
       console.log(data)
+
+      let filteredData = this.data.filter((i)=>{
+        return i.date.split("T")[0] === data[0].x
+      })
+      console.log(filteredData)
+
       filter.source = 'heatMap';
       filter.dataSource = '/';
       filter.data = this.parseDate(data[0].x);

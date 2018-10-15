@@ -37,7 +37,7 @@ export default {
         this.$store.commit('initializeData', context.filter.data);
       });
     }
-
+ 
     if (ctx.filter) {
       this.$store.commit('initializeData', ctx.filter.data)
       localWindow.onContextUpdated((context, win) => console.log('update context:', context))
