@@ -65,7 +65,6 @@ export default {
           prettyItem.raisedBy = item.raisedBy;
           prettyItem.severity = item.severity;
           prettyItem.id = item.id;
-          console.log(prettyItem)
           return prettyItem;
         } else {
           // if the data is not as expected

@@ -88,7 +88,7 @@ export default {
       });
       this.availableContexts = local
     },
-    ...mapActions(['updateData', 'changeTheme']),
+    ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID']),
     filterByDate(data) {
       let filter = {};
       console.log(data)
