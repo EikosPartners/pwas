@@ -184,7 +184,8 @@ export default {
       "updateData",
       "fetchColor",
       "changeTheme",
-      "changeLighting"
+      "changeLighting",
+      "initializeData"
     ]),
     modelUpdated(params) {
       this.gridApi = params.api;
@@ -259,6 +260,7 @@ export default {
           console.log("subscribe context", context);
           let source = this.formatSource(context.source);
           this.setCurrentFilter(source);
+          this.initializeData(context.data)
           if (context.source === "BubbleChart") {
             console.log("bubble chart", context);
             let filterObject = {

@@ -12,7 +12,7 @@
 </template>
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex';
-import { D3HeatMap, StyleTogglerMixin } from 'jscatalyst';
+import { D3HeatMap, StyleTogglerMixin } from '@/../node_modules/jscatalyst/dist/jscatalyst.js';
 import PwaHeader from '@/components/PwaHeader.vue'
 import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
@@ -33,7 +33,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['data', 'themeColors']),
+    ...mapGetters(['data', 'themeColors', 'filterOnGridID']),
     ...mapState(['color', 'lighting', 'belongsToGrid', 'selected']),
     heatData() {
       const heatData = [];
@@ -103,9 +103,13 @@ export default {
       //filter.data = this.parseDate(data[0].x);
       filter.data = filteredData
       filter.time = new Date();
-      // console.log(filter);
-
-      this.filter(filter, 'filterOnGrid');
+      console.log(filter)
+      if(this.filterOnGridID === null){
+        const uniqueID = Date.now()
+        const contextID = 'filterOnGrid' + uniqueID
+        this.setFilterOnGridID(contextID)
+      }
+      this.filter(filter, this.filterOnGridID);
 
       // this.openContextWindow('Filter Results', 'http://localhost:9093', filter)
 
@@ -125,7 +129,7 @@ export default {
 
         // Launch the app and then wait for the return so that we can grab the instance Id
         app
-          .start({ filter: filter, eventName: 'filterOnGrid' }, windowConfig)
+          .start({ filter: filter, eventName: this.filterOnGridID }, windowConfig)
           .then(instance => {
             //localThis.gridInstance = instance
           });
