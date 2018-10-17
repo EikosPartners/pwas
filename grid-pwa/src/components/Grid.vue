@@ -253,7 +253,7 @@ export default {
       });
       const localWindow = window.glue.windows.my();
       const ctx = localWindow.context;
-
+      console.log("onGridReady",ctx)
       if (ctx.eventName !== undefined) {
         this.subscribe(ctx.eventName, (context, delta, removed) => {
           this.removeFilter();

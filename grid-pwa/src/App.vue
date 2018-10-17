@@ -8,6 +8,7 @@
 import { mapActions, mapMutations, mapState } from 'vuex';
 import { StyleTogglerMixin } from 'jscatalyst';
 import Messaging from "@/mixins/Messaging";
+import Windowing from "@/mixins/Windowing"
 
 export default {
   name: 'app',
@@ -15,7 +16,7 @@ export default {
     ...mapActions(['fetchData', 'fetchColor', 'initializeData']),
     ...mapMutations(['setContextId', 'setColor', 'setLighting'])
   },
-  mixins: [StyleTogglerMixin, Messaging],
+  mixins: [StyleTogglerMixin, Messaging, Windowing],
   created() {
     this.fetchColor();
     if (window.glue) {
@@ -26,7 +27,7 @@ export default {
       })
     }
 
-    console.log("in not undefined")
+    console.log("in not undefined", window.glue)
     if (window.glue.windows.my().context.eventName !== undefined){
       let ctx = window.glue.windows.my().context
       console.log("ctx",ctx)

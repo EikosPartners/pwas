@@ -30,25 +30,22 @@ export default {
     const ctx = localWindow.context;
     const contextName = ctx.contextName;
 
+    console.log('localWindow', localWindow)
+
     if (contextName !== undefined) {
       this.$store.commit('setBelongsToGrid'); //disables socket refresh
       this.$store.commit('setSelected', contextName);
-    }
-
-    if (ctx.filter) {
-      this.$store.commit('initializeData', ctx.filter.data);
-      localWindow.onContextUpdated((context, win) =>
-        console.log('update context:', context)
-      );
-    } else {
-      this.fetchData();
-    }
-
-    if (contextName !== undefined) {
-      console.log(contextName);
       this.subscribe(contextName, (context, delta, removed) => {
         this.$store.commit('initializeData', context.filter.data);
       });
+    }
+
+    if (ctx.filter) {
+
+      this.$store.commit('initializeData', ctx.filter.data);
+      localWindow.onContextUpdated((context, win) => console.log('update context:', context))
+    } else {
+      this.fetchData();
     }
   }
 };

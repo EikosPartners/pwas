@@ -91,12 +91,10 @@ export default {
     ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID']),
     filterByDate(data) {
       let filter = {};
-      console.log(data)
 
       let filteredData = this.data.filter((i)=>{
         return i.date.split("T")[0] === data[0].x
       })
-      console.log(filteredData)
 
       filter.source = 'heatMap';
       filter.dataSource = '/';
