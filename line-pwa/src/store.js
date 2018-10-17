@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios';
+import { stat } from 'fs';
 
 Vue.use(Vuex);
 
@@ -9,7 +10,8 @@ const state = {
   color: null,
   lighting: null,
   belongsToGrid: false,
-  selected: ""
+  selected: "",
+  filterOnGridID: null
 };
 
 export const mutations = {
@@ -32,6 +34,9 @@ export const mutations = {
   },
   setSelected(state, data) {
     state.selected = data
+  },
+  setFilterOnGridID(state, data){
+    state.filterOnGridID = data
   }
 };
 
@@ -54,6 +59,9 @@ export const actions = {
   },
   changeTheme({ commit }, data) {
     commit('setColor', data);
+  },
+  setFilterOnGridID({commit}, data){
+    commit("setFilterOnGridID", data)
   }
 };
 
@@ -72,7 +80,8 @@ export const getters = {
       modifiedData.push(temp);
     });
     return modifiedData;
-  }
+  },
+  filterOnGridID: state => state.filterOnGridID
 };
 
 export default new Vuex.Store({

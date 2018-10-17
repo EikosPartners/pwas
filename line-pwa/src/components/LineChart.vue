@@ -30,7 +30,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['dataDV', 'themeColors']),
+    ...mapGetters(['dataDV','data', 'themeColors', 'filterOnGridID']),
     ...mapState(['color', 'belongsToGrid', 'lighting', 'selected']),
     availableContexts() {
       let availableContexts = [];
@@ -64,20 +64,40 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['changeTheme', 'updateData']),
+    ...mapActions(['changeTheme', 'updateData', 'setFilterOnGridID']),
     filterByDate(data) {
       let filter = {};
+      
+       let date = this.formatDate(data.date).split("-")
+       date = date[2] +"-"+date[0]+"-"+date[1]
+       console.log(data)
+      
+       let filteredData = this.data.filter((i)=>{
+        // console.log("split",i.date.split("T"))
+        // console.log("formatted date",date)
+        return i.date.split("T")[0] === date
+      })
+      console.log(filteredData, "Filtered Data")
+    
       filter.source = 'lineChart';
       filter.dataSource = '/';
-      filter.data = this.formatDate(data.date);
+      filter.data = filteredData;
       filter.time = new Date();
 
-      this.filter(filter, 'filterOnGrid');
+      if (this.filterOnGridID === null){
+        const uniqueID = Date.now()
+        const contextID = 'filterOnGrid' + uniqueID
+        this.setFilterOnGridID(contextID)
+      }
+      console.log(this.filterOnGridID)
+
+
+      this.filter(filter, this.filterOnGridID);
       // this.openContextWindow('Filter Results', 'http://localhost:9093', filter)
 
       // A Named object
       if (this.gridInstance === true) {
-        debugger;
+        // debugger;
         // Can we pass the instance an updated context here?
       } else {
         let app = window.glue.appManager.application('JSCDataGrid');
@@ -91,7 +111,7 @@ export default {
 
         // Launch the app and then wait for the return so that we can grab the instance Id
         app
-          .start({ filter: filter, eventName: 'filterOnGrid' }, windowConfig)
+          .start({ filter: filter, eventName: this.filterOnGridID }, windowConfig)
           .then(instance => {
             //localThis.gridInstance = instance
           });
