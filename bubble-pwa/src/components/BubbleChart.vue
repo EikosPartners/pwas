@@ -19,6 +19,7 @@ import PwaHeader from '@/components/PwaHeader.vue'
 import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
 import DragAndDrop from '@/mixins/DragAndDrop'
+import { log } from 'async';
 
 export default {
   name: 'BubbleChart',
@@ -34,7 +35,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['data', 'themeColors']),
+    ...mapGetters(['data', 'themeColors', 'filterOnGridID']),
     ...mapState(['color', 'lighting', 'belongsToGrid', 'selected']),
     availableContexts() {
       let availableContexts = [];
@@ -102,21 +103,42 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['updateData', 'changeTheme']),
+    ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID']),
     filterByDateAndSeverity(data) {
       let filter = {};
+      
+      console.log("clicked Bubble", data)
+      let date = this.parseDate(data.x).split("-")
+      date = date[2] +"-"+date[0]+"-"+date[1]
+      
+
+      let filteredByDate = this.data.filter((i)=>{
+        return i.date.split("T")[0] === date
+      })
+      console.log("Filtered Dates",filteredByDate)
+      let filteredData = filteredByDate.filter((i)=>{
+        return i.severity === data.y
+      })
       filter.source = 'BubbleChart';
       filter.dataSource = '/';
-      filter.data = { date: this.parseDate(data.x), severity: data.y };
+      // filter.data = { date: this.parseDate(data.x), severity: data.y };
+      filter.data = filteredData
       filter.time = new Date();
       // console.log(filter);
       // this.$socket.emit('filterByDateAndSeverity', filter);
-      this.filter(filter, 'filterOnGrid');
+
+      if(this.filterOnGridID === null){
+        const uniqueID = Date.now()
+        const contextID = 'filterOnGrid'+ uniqueID
+        this.setFilterOnGridID(contextID)
+      }
+      console.log(this.filterOnGridID)
+      this.filter(filter, this.filterOnGridID);
       // this.openContextWindow('Filter Results', 'http://localhost:9093', filter)
 
       // A Named object
       if (this.gridInstance === true) {
-        debugger;
+        // debugger;
         // Can we pass the instance an updated context here?
       } else {
         let app = window.glue.appManager.application('JSCDataGrid');
@@ -130,7 +152,7 @@ export default {
 
         // Launch the app and then wait for the return so that we can grab the instance Id
         app
-          .start({ filter: filter, eventName: 'filterOnGrid' }, windowConfig)
+          .start({ filter: filter, eventName: this.filterOnGridID }, windowConfig)
           .then(instance => {
             //localThis.gridInstance = instance
           });

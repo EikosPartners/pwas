@@ -263,17 +263,17 @@ export default {
           this.initializeData(context.data)
           if (context.source === "BubbleChart") {
             console.log("bubble chart", context);
-            let filterObject = {
-              date: {
-                type: "contains",
-                filter: `${context.data.date}`
-              },
-              severity: {
-                type: "contains",
-                filter: `${context.data.severity}`
-              }
-            };
-            this.gridApi.setFilterModel(filterObject);
+            // let filterObject = {
+            //   date: {
+            //     type: "contains",
+            //     filter: `${context.data.date}`
+            //   },
+            //   severity: {
+            //     type: "contains",
+            //     filter: `${context.data.severity}`
+            //   }
+            // };
+            // this.gridApi.setFilterModel(filterObject);
           } else if (context.source === "BarChart") {
             console.log("bar chart", context);
             let month = context.data.split("/")[0] + "-";
