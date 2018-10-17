@@ -55,7 +55,6 @@ export const actions = {
   },
   fetchColor({ commit }) {
     axios.get('http://localhost:9000/color').then(resp => {
-      console.log(resp);
       commit('setColor', resp.data.color);
       commit('setLighting', resp.data.lighting);
     });
@@ -69,7 +68,6 @@ export const actions = {
     commit('setColor', data);
   },
   setFilterOnGridID({commit}, data){
-    console.log(data)
     commit('setFilterOnGridID', data)
   }
 };

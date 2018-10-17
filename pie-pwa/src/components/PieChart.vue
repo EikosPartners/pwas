@@ -101,20 +101,18 @@ export default {
       filter.dataSource = '/';
       filter.data = filteredData;
       filter.time = new Date();
-      // console.log(filter); 
+
       if(this.filterOnGridID === null){
         const uniqueID = Date.now()
         const contextID = 'filterOnGrid' + uniqueID
         this.setFilterOnGridID(contextID)
       }
-        // debugger
       this.filter(filter, this.filterOnGridID);
 
       // this.openContextWindow('Filter Results', 'http://localhost:9093', filter)
 
       // A Named object
       if (this.gridInstance === true) {
-        // debugger;
         // Can we pass the instance an updated context here?
       } else {
         let app = window.glue.appManager.application('JSCDataGrid');

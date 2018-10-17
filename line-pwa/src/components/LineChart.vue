@@ -70,14 +70,10 @@ export default {
       
        let date = this.formatDate(data.date).split("-")
        date = date[2] +"-"+date[0]+"-"+date[1]
-       console.log(data)
       
        let filteredData = this.data.filter((i)=>{
-        // console.log("split",i.date.split("T"))
-        // console.log("formatted date",date)
         return i.date.split("T")[0] === date
       })
-      console.log(filteredData, "Filtered Data")
     
       filter.source = 'lineChart';
       filter.dataSource = '/';
@@ -89,7 +85,6 @@ export default {
         const contextID = 'filterOnGrid' + uniqueID
         this.setFilterOnGridID(contextID)
       }
-      console.log(this.filterOnGridID)
 
 
       this.filter(filter, this.filterOnGridID);

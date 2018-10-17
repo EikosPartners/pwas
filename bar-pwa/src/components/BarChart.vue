@@ -46,7 +46,6 @@ export default {
     },
     prettyData() {
       let barData = [];
-      console.log(this.data);
       let sorted = this.sortData(this.data);
       for (let year in sorted) {
         let oneYearData = [];
@@ -82,10 +81,8 @@ export default {
       let temp = barLinqData.items.map(i => {
         return i;
       });
-      console.log(temp);
       const finalData = [];
       temp.forEach(i => {
-        console.log(i);
         finalData.push({
           x: i.key,
           y: i.count

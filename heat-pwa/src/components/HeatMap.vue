@@ -92,21 +92,23 @@ export default {
     filterByDate(data) {
       let filter = {};
 
+      // create an array of data, filtered by the appropriate criteria
       let filteredData = this.data.filter((i)=>{
         return i.date.split("T")[0] === data[0].x
       })
 
       filter.source = 'heatMap';
       filter.dataSource = '/';
-      //filter.data = this.parseDate(data[0].x);
       filter.data = filteredData
       filter.time = new Date();
-      console.log(filter)
+
+      // set up a context for this instance of the HeatMap
       if(this.filterOnGridID === null){
         const uniqueID = Date.now()
         const contextID = 'filterOnGrid' + uniqueID
         this.setFilterOnGridID(contextID)
       }
+      
       this.filter(filter, this.filterOnGridID);
 
       // this.openContextWindow('Filter Results', 'http://localhost:9093', filter)

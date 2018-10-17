@@ -107,7 +107,7 @@ export default {
     filterByDateAndSeverity(data) {
       let filter = {};
       
-      console.log("clicked Bubble", data)
+      //Properly format the date for filtering dataset
       let date = this.parseDate(data.x).split("-")
       date = date[2] +"-"+date[0]+"-"+date[1]
       
@@ -115,30 +115,26 @@ export default {
       let filteredByDate = this.data.filter((i)=>{
         return i.date.split("T")[0] === date
       })
-      console.log("Filtered Dates",filteredByDate)
+
       let filteredData = filteredByDate.filter((i)=>{
         return i.severity === data.y
       })
+
       filter.source = 'BubbleChart';
       filter.dataSource = '/';
-      // filter.data = { date: this.parseDate(data.x), severity: data.y };
       filter.data = filteredData
       filter.time = new Date();
-      // console.log(filter);
-      // this.$socket.emit('filterByDateAndSeverity', filter);
 
       if(this.filterOnGridID === null){
         const uniqueID = Date.now()
         const contextID = 'filterOnGrid'+ uniqueID
         this.setFilterOnGridID(contextID)
       }
-      console.log(this.filterOnGridID)
       this.filter(filter, this.filterOnGridID);
       // this.openContextWindow('Filter Results', 'http://localhost:9093', filter)
 
       // A Named object
       if (this.gridInstance === true) {
-        // debugger;
         // Can we pass the instance an updated context here?
       } else {
         let app = window.glue.appManager.application('JSCDataGrid');
