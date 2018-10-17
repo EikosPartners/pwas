@@ -9,14 +9,16 @@ const state = {
   color: null,
   lighting: null,
   belongsToGrid: false,
-  selected: ""
+  selected: "",
+  filterOnGridID:null
 };
 
 export const getters = {
   data: state => state.data,
   color: state => state.color,
   lighting: state => state.lighting,
-  belongsToGrid: state => state.belongsToGrid
+  belongsToGrid: state => state.belongsToGrid,
+  filterOnGridID: state => state.filterOnGridID
 };
 
 export const mutations = {
@@ -39,6 +41,9 @@ export const mutations = {
   },
   setSelected(state, data) {
     state.selected = data
+  },
+  setFilterOnGridID(state, data){
+    state.filterOnGridID = data
   }
 };
 
@@ -62,6 +67,10 @@ export const actions = {
   },
   changeTheme({ commit }, data) {
     commit('setColor', data);
+  },
+  setFilterOnGridID({commit}, data){
+    console.log(data)
+    commit('setFilterOnGridID', data)
   }
 };
 

@@ -31,7 +31,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['data', 'themeColors']),
+    ...mapGetters(['data', 'themeColors', 'filterOnGridID']),
     ...mapState(['color', 'lighting', 'belongsToGrid', 'selected']),
     availableContexts() {
       let availableContexts = [];
@@ -88,22 +88,33 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['updateData', 'changeTheme']),
+    ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID']),
     filterByProject(data) {
       let filter = {};
+
+      let filteredData = this.data.filter((i) =>{
+        return i.project === data.data.label
+      })
+
+
       filter.source = 'PieChart';
       filter.dataSource = '/';
-      filter.data = data.data.label;
+      filter.data = filteredData;
       filter.time = new Date();
-      // console.log(filter);
-
-      this.filter(filter, 'filterOnGrid');
+      // console.log(filter); 
+      if(this.filterOnGridID === null){
+        const uniqueID = Date.now()
+        const contextID = 'filterOnGrid' + uniqueID
+        this.setFilterOnGridID(contextID)
+      }
+        // debugger
+      this.filter(filter, this.filterOnGridID);
 
       // this.openContextWindow('Filter Results', 'http://localhost:9093', filter)
 
       // A Named object
       if (this.gridInstance === true) {
-        debugger;
+        // debugger;
         // Can we pass the instance an updated context here?
       } else {
         let app = window.glue.appManager.application('JSCDataGrid');
@@ -117,7 +128,7 @@ export default {
 
         // Launch the app and then wait for the return so that we can grab the instance Id
         app
-          .start({ filter: filter, eventName: 'filterOnGrid' }, windowConfig)
+          .start({ filter: filter, eventName: this.filterOnGridID }, windowConfig)
           .then(instance => {
             //localThis.gridInstance = instance
           });
