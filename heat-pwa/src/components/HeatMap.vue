@@ -33,7 +33,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['data', 'themeColors', 'filterOnGridID']),
+    ...mapGetters(['data', 'themeColors', 'filterOnGridID', 'contextFilter']),
     ...mapState(['color', 'lighting', 'belongsToGrid', 'selected']),
     heatData() {
       const heatData = [];
@@ -51,6 +51,7 @@ export default {
           availableContexts.push(context);
         }
       });
+     
       return availableContexts;
     },
     themeColorsComp() {
@@ -88,32 +89,40 @@ export default {
       });
       this.availableContexts = local
     },
-    ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID']),
-    filterByDate(data) {
-      let filter = {};
-
+    ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID', 'setContextFilterData']),
+    filterByDate(message) {
       // create an array of data, filtered by the appropriate criteria
+      const data = message.data
+      const clickEvent = message.event
+
       let filteredData = this.data.filter((i)=>{
         return i.date.split("T")[0] === data[0].x
       })
-
-      filter.source = 'heatMap';
-      filter.dataSource = '/';
-      filter.data = filteredData
-      filter.time = new Date();
-
+      this.setContextFilterData(filteredData)
+     
       // set up a context for this instance of the HeatMap
-      if(this.filterOnGridID === null){
+      this.handleFilterOnGrid()
+      
+      this.filter(this.contextFilter, this.filterOnGridID);
+      
+      // this.subscribe(this.filterOnGridID, (context, delta, removed) => {
+      //   console.log('context update', context);
+      //   console.log("context delta", delta)
+      //   console.log("contxt removed", removed)
+      //   this.output = context.data;
+      // });
+
+      this.manageContextWindow()
+    },
+    handleFilterOnGrid(){
+       if(this.filterOnGridID === null){
         const uniqueID = Date.now()
         const contextID = 'filterOnGrid' + uniqueID
         this.setFilterOnGridID(contextID)
       }
-      
-      this.filter(filter, this.filterOnGridID);
+    },
+    manageContextWindow(){
 
-      // this.openContextWindow('Filter Results', 'http://localhost:9093', filter)
-
-      // A Named object
       if (this.gridInstance === true) {
         // debugger;
         // Can we pass the instance an updated context here?
@@ -125,17 +134,22 @@ export default {
           relativeTo: localWindow.id,
           relativePosition: 'right'
         };
-        // let windowConfig = { }
-
         // Launch the app and then wait for the return so that we can grab the instance Id
+        this.manageGridInstance()
         app
-          .start({ filter: filter, eventName: this.filterOnGridID }, windowConfig)
+          .start({ filter: this.contextFilter, eventName: this.filterOnGridID }, windowConfig)
           .then(instance => {
             //localThis.gridInstance = instance
+           
           });
-
+        
         this.gridInstance = true;
       }
+    },
+    manageGridInstance(){
+      glue.appManager.onAppRemoved((appication)=>{
+        console.log(appication)
+      })
     },
     parseDate(date) {
       const dateArray = date.split('-');
@@ -166,6 +180,7 @@ export default {
       console.log('context update', context);
       this.output = context.data;
     });
+   
   },
   watch: {
     color(newData) {
