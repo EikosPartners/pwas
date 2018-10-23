@@ -98,13 +98,12 @@ export default {
       let filteredData = this.data.filter((i)=>{
         return i.date.split("T")[0] === data[0].x
       })
-      this.setContextFilterData(filteredData)
-     
+      this.setContextFilterData(filteredData)   
       // set up a context for this instance of the HeatMap
       this.handleFilterOnGrid()
-      
       this.filter(this.contextFilter, this.filterOnGridID);
-      
+      this.manageContextWindow()
+      //The following subsrcibe code was for testing access to changes in the context
       // this.subscribe(this.filterOnGridID, (context, delta, removed) => {
       //   console.log('context update', context);
       //   console.log("context delta", delta)
@@ -112,7 +111,6 @@ export default {
       //   this.output = context.data;
       // });
 
-      this.manageContextWindow()
     },
     handleFilterOnGrid(){
        if(this.filterOnGridID === null){
