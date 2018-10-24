@@ -94,15 +94,16 @@ export default {
       // create an array of data, filtered by the appropriate criteria
       const data = message.data
       const clickEvent = message.event
-
       let filteredData = this.data.filter((i)=>{
         return i.date.split("T")[0] === data[0].x
       })
+
       this.setContextFilterData(filteredData)   
       // set up a context for this instance of the HeatMap
       this.handleFilterOnGrid()
       this.filter(this.contextFilter, this.filterOnGridID);
       this.manageContextWindow()
+
       //The following subsrcibe code was for testing access to changes in the context
       // this.subscribe(this.filterOnGridID, (context, delta, removed) => {
       //   console.log('context update', context);
@@ -110,14 +111,30 @@ export default {
       //   console.log("contxt removed", removed)
       //   this.output = context.data;
       // });
-
     },
     handleFilterOnGrid(){
-       if(this.filterOnGridID === null){
-        const uniqueID = Date.now()
-        const contextID = 'filterOnGrid' + uniqueID
-        this.setFilterOnGridID(contextID)
+      if(!!this.windowUnverified()){
+          console.log("Here")
+          const uniqueID = Date.now()
+          const contextID = 'filterOnGrid' + uniqueID
+          this.setFilterOnGridID(contextID)
       }
+    },
+    windowUnverified(){
+      if(this.filterOnGridID === null){
+        return true
+      }
+      let context = this.filterOnGridID
+      const windowsList = glue.windows.list()
+      let window = windowsList.find(w=>{
+        return w.context.eventName === context
+      })
+      if (!!window){
+        debugger
+        return false
+      }
+      this.gridInstance = false
+      return true
     },
     manageContextWindow(){
 
@@ -134,6 +151,7 @@ export default {
         };
         // Launch the app and then wait for the return so that we can grab the instance Id
         this.manageGridInstance()
+        console.log(this.filterOnGridID)
         app
           .start({ filter: this.contextFilter, eventName: this.filterOnGridID }, windowConfig)
           .then(instance => {
@@ -144,6 +162,7 @@ export default {
         this.gridInstance = true;
       }
     },
+  
     manageGridInstance(){
       glue.appManager.onAppRemoved((appication)=>{
         console.log(appication)

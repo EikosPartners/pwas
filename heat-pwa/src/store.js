@@ -12,7 +12,8 @@ const state = {
   belongsToGrid: false,
   selected: "",
   filterOnGridID: null,
-  contextFilter: {source:"heatMap", dataSource: "/"}
+  contextFilter: {source:"heatMap", dataSource: "/"},
+  shiftClickGrids: []
 };
 
 export const getters = {
@@ -21,7 +22,8 @@ export const getters = {
   lighting: state => state.lighting,
   belongsToGrid: state => state.belongsToGrid,
   filterOnGridID: state => state.filterOnGridID,
-  contextFilter: state => state.contextFilter
+  contextFilter: state => state.contextFilter,
+  shiftClickGrids: state => state.shiftClickGrids
 };
 
 export const mutations = {
@@ -51,6 +53,9 @@ export const mutations = {
   setContextFilterData(state, data){
     state.contextFilter.data = data
     state.contextFilter.time = new Date()
+  },
+  addShiftClickGrid(state, data){
+    state.shiftClickGrids.push(data)
   }
 };
 
@@ -79,6 +84,9 @@ export const actions = {
   },
   setContextFilterData({commit}, data){
     commit('setContextFilterData', data)
+  },
+  addShiftClickGrid({commit}, data){
+    commit('addShiftClickGrid', data)
   }
 };
 
