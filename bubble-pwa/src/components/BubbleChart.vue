@@ -3,7 +3,7 @@
     <pwa-header :title="compTitle" :availableContexts="availableContexts" />
     <bubble-chart 
       :isDate="true" 
-      @jsc_click="filterByDateAndSeverity" 
+      @jsc_click="handleFilter" 
       :dataModel="prettyData" 
       xAxisLabel="date" 
       yAxisLabel="severity"
@@ -35,7 +35,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['data', 'themeColors', 'filterOnGridID']),
+    ...mapGetters(['data', 'themeColors', 'filterOnGridID', 'contextFilter']),
     ...mapState(['color', 'lighting', 'belongsToGrid', 'selected']),
     availableContexts() {
       let availableContexts = [];
@@ -79,7 +79,8 @@ export default {
         });
       });
       return finalData;
-    }
+    },
+    
   },
   sockets: {
     connect: function() {
@@ -103,11 +104,69 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID']),
-    filterByDateAndSeverity(data) {
-      let filter = {};
-      
-      //Properly format the date for filtering dataset
+    ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID', 'setContextFilterData']),
+    handleFilter(message) {
+
+      // Preparation for JSC_Click update
+      console.log(message)
+      const data = message 
+
+      const filteredData = this.filterByDateAndSeverity(data)
+      this.setContextFilterData(filteredData)
+      this.handleFilterOnGrid()
+      this.filter(this.contextFilter, this.filterOnGridID);
+      this.manageContextWindow()
+    
+    },
+
+    handleFilterOnGrid(){
+      if(!!this.windowUnverified()){
+        const uniqueID = Date.now()
+        const contextID = 'filterOnGrid'+ uniqueID
+        this.setFilterOnGridID(contextID)
+      }
+    },
+    windowUnverified(){
+      if(this.filterOnGridID === null){
+        return true
+      }
+      let context = this.filterOnGridID
+      const windowsList = glue.windows.list()
+      let window = windowsList.find(w=>{
+        return w.context.eventName === context
+      })
+      if (!!window){
+        
+        return false
+      }
+      this.gridInstance = false
+      return true
+    },
+    manageContextWindow(){
+
+      if (this.gridInstance === true) {
+        // Can we pass the instance an updated context here?
+      } else {
+        let app = window.glue.appManager.application('JSCDataGrid');
+        const localWindow = window.glue.windows.my();
+        const localThis = this;
+        let windowConfig = {
+          relativeTo: localWindow.id,
+          relativePosition: 'right'
+        };
+
+        console.log(this.filterOnGridID)
+        app
+          .start({ filter: this.contextFilter, eventName: this.filterOnGridID }, windowConfig)
+          .then(instance => {
+            //localThis.gridInstance = instance
+           
+          });
+        
+        this.gridInstance = true;
+      }
+    },
+    filterByDateAndSeverity(data){
       let date = this.parseDate(data.x).split("-")
       date = date[2] +"-"+date[0]+"-"+date[1]
       
@@ -119,42 +178,7 @@ export default {
       let filteredData = filteredByDate.filter((i)=>{
         return i.severity === data.y
       })
-
-      filter.source = 'BubbleChart';
-      filter.dataSource = '/';
-      filter.data = filteredData
-      filter.time = new Date();
-
-      if(this.filterOnGridID === null){
-        const uniqueID = Date.now()
-        const contextID = 'filterOnGrid'+ uniqueID
-        this.setFilterOnGridID(contextID)
-      }
-      this.filter(filter, this.filterOnGridID);
-      // this.openContextWindow('Filter Results', 'http://localhost:9093', filter)
-
-      // A Named object
-      if (this.gridInstance === true) {
-        // Can we pass the instance an updated context here?
-      } else {
-        let app = window.glue.appManager.application('JSCDataGrid');
-        const localWindow = window.glue.windows.my();
-        const localThis = this;
-        let windowConfig = {
-          relativeTo: localWindow.id,
-          relativePosition: 'right'
-        };
-        // let windowConfig = { }
-
-        // Launch the app and then wait for the return so that we can grab the instance Id
-        app
-          .start({ filter: filter, eventName: this.filterOnGridID }, windowConfig)
-          .then(instance => {
-            //localThis.gridInstance = instance
-          });
-
-        this.gridInstance = true;
-      }
+      return filteredData
     },
     parseDate(date) {
       let month = date.getMonth() + 1;
