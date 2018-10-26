@@ -33,7 +33,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['data', 'themeColors', 'filterOnGridID']),
+    ...mapGetters(['data', 'themeColors', 'filterOnGridID', 'contextFilter']),
     ...mapState(['color', 'belongsToGrid', 'lighting', 'selected']),
     availableContexts() {
       let availableContexts = [];
@@ -113,30 +113,50 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID']),
-    handleFilter(data) {
+    ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID', 'setContextFilterData']),
+    handleFilter(message) {
+      console.log(message)
+      const data = message // Prep for JSC_click update
       let filteredData = this.data.filter((i)=>{
         return i.project === data.x
       })
 
-      let filter = {};
-      filter.source = 'BarChart';
-      filter.dataSource = '/';
-      filter.data = filteredData;
-      filter.time = new Date();
-      // console.log('filter', filter);
-      if (this.filterOnGridID === null){
-        const uniqueID = Date.now()
-        const contextID = "filterOnGrid" + uniqueID
-        this.setFilterOnGridID(contextID)
-      }
-      this.filter(filter, this.filterOnGridID);
+      this.setContextFilterData(filteredData)
+     
+      this.handleFilterOnGrid()
+      this.filter(this.contextFilter, this.filterOnGridID);
+      this.manageContextWindow()
 
       // this.openContextWindow('Filter Results', 'http://localhost:9093', filter)
 
-      // A Named object
+    },
+    handleFilterOnGrid(){
+       if(!!this.windowUnverified()){
+          const uniqueID = Date.now()
+          const contextID = 'filterOnGrid' + uniqueID
+          this.setFilterOnGridID(contextID)
+      }
+    },
+    windowUnverified(){
+      if(this.filterOnGridID === null){
+        return true
+      }
+      let context = this.filterOnGridID
+      const windowsList = glue.windows.list()
+      let window = windowsList.find(w=>{
+        return w.context.eventName === context
+      })
+      if (!!window){
+        
+        return false
+      }
+      this.gridInstance = false
+      return true
+    },
+    manageContextWindow(){
+      
       if (this.gridInstance === true) {
-        // debugger;
+
         // Can we pass the instance an updated context here?
       } else {
         let app = window.glue.appManager.application('JSCDataGrid');
@@ -150,7 +170,7 @@ export default {
 
         // Launch the app and then wait for the return so that we can grab the instance Id
         app
-          .start({ filter: filter, eventName: this.filterOnGridID }, windowConfig)
+          .start({ filter: this.contextFilter, eventName: this.filterOnGridID }, windowConfig)
           .then(instance => {
             //localThis.gridInstance = instance
           });

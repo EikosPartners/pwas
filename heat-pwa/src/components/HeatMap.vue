@@ -104,6 +104,16 @@ export default {
       this.filter(this.contextFilter, this.filterOnGridID);
       this.manageContextWindow()
 
+      glue.agm.invoke(
+            'T42.GNS.Publish.RaiseNotification', {
+            notification: {
+            title: 'Critical Alert',
+            severity: 'High',
+            description: 'Your machine is going to be restarted in 30 seconds'
+          }
+      })
+      .then(() => console.log('Raised notification'))
+      .catch(console.error);
       //The following subsrcibe code was for testing access to changes in the context
       // this.subscribe(this.filterOnGridID, (context, delta, removed) => {
       //   console.log('context update', context);
@@ -114,7 +124,6 @@ export default {
     },
     handleFilterOnGrid(){
       if(!!this.windowUnverified()){
-          console.log("Here")
           const uniqueID = Date.now()
           const contextID = 'filterOnGrid' + uniqueID
           this.setFilterOnGridID(contextID)
@@ -130,7 +139,7 @@ export default {
         return w.context.eventName === context
       })
       if (!!window){
-        debugger
+        
         return false
       }
       this.gridInstance = false
@@ -139,7 +148,6 @@ export default {
     manageContextWindow(){
 
       if (this.gridInstance === true) {
-        // debugger;
         // Can we pass the instance an updated context here?
       } else {
         let app = window.glue.appManager.application('JSCDataGrid');
