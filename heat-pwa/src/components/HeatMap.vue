@@ -114,6 +114,7 @@ export default {
       })
       .then(() => console.log('Raised notification'))
       .catch(console.error);
+      
       //The following subsrcibe code was for testing access to changes in the context
       // this.subscribe(this.filterOnGridID, (context, delta, removed) => {
       //   console.log('context update', context);
@@ -157,8 +158,10 @@ export default {
           relativeTo: localWindow.id,
           relativePosition: 'right'
         };
+
         // Launch the app and then wait for the return so that we can grab the instance Id
-        this.manageGridInstance()
+        this.manageGridInstance()  // Added for testing purposes
+
         console.log(this.filterOnGridID)
         app
           .start({ filter: this.contextFilter, eventName: this.filterOnGridID }, windowConfig)

@@ -11,7 +11,8 @@ const state = {
   lighting: null,
   belongsToGrid: false,
   selected: "",
-  filterOnGridID: null
+  filterOnGridID: null,
+  contextFilter: {source: "LineChart", dataSource: "/"},
 };
 
 export const mutations = {
@@ -37,6 +38,10 @@ export const mutations = {
   },
   setFilterOnGridID(state, data){
     state.filterOnGridID = data
+  },
+  setContextFilterData(state, data){
+    state.contextFilter.data = data
+    state.contextFilter.date = new Date()
   }
 };
 
@@ -62,6 +67,10 @@ export const actions = {
   },
   setFilterOnGridID({commit}, data){
     commit("setFilterOnGridID", data)
+  },
+  setContextFilterData({commit}, data){
+    commit('setContextFilterData', data)
+
   }
 };
 
@@ -70,18 +79,9 @@ export const getters = {
   color: state => state.color,
   lighting: state => state.lighting,
   //  Date / Value data
-  dataDV: state => {
-    const modifiedData = [];
-    state.data.forEach(datum => {
-      const temp = {
-        date: datum.date.split('T')[0],
-        value: datum.severity
-      };
-      modifiedData.push(temp);
-    });
-    return modifiedData;
-  },
-  filterOnGridID: state => state.filterOnGridID
+  dataDV: state => state.data,
+  filterOnGridID: state => state.filterOnGridID,
+  contextFilter: state => state.contextFilter
 };
 
 export default new Vuex.Store({

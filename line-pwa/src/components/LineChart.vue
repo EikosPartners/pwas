@@ -2,8 +2,8 @@
   <div class="container" @drop="handleDrop" @dragenter="handleDragEnter" @dragover="handleDragOver">
     <pwa-header :title="compTitle" :availableContexts="availableContexts" />
     <line-chart 
-      @jsc_click="filterByDate" 
-      :dataModel="dataDV"
+      @jsc_click="handleFilter" 
+      :dataModel="lineData"
     />
   </div>
 </template>
@@ -30,7 +30,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['dataDV','data', 'themeColors', 'filterOnGridID']),
+    ...mapGetters(['data', 'themeColors', 'filterOnGridID', 'contextFilter']),
     ...mapState(['color', 'belongsToGrid', 'lighting', 'selected']),
     availableContexts() {
       let availableContexts = [];
@@ -40,6 +40,17 @@ export default {
         }
       });
       return availableContexts;
+    },
+    lineData(){
+      const modifiedData = [];
+      this.data.forEach(datum => {
+        const temp = {
+          date: datum.date.split('T')[0],
+          value: datum.severity
+        };
+        modifiedData.push(temp);
+      });
+      return modifiedData;
     }
   },
   sockets: {
@@ -64,35 +75,46 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['changeTheme', 'updateData', 'setFilterOnGridID']),
-    filterByDate(data) {
-      let filter = {};
-      
-       let date = this.formatDate(data.date).split("-")
-       date = date[2] +"-"+date[0]+"-"+date[1]
-      
-       let filteredData = this.data.filter((i)=>{
-        return i.date.split("T")[0] === date
-      })
-    
-      filter.source = 'lineChart';
-      filter.dataSource = '/';
-      filter.data = filteredData;
-      filter.time = new Date();
+    ...mapActions(['changeTheme', 'updateData', 'setFilterOnGridID', 'setContextFilterData']),
+    handleFilter(message) {
 
-      if (this.filterOnGridID === null){
+      console.log(message)
+      const data = message
+
+      const filteredData = this.filterByDate(data)
+      this.setContextFilterData(filteredData)
+      this.handleFilterOnGrid()
+      this.filter(this.contextFilter, this.filterOnGridID);
+      this.manageContextWindow()
+    },
+    handleFilterOnGrid(){
+      
+      if (!!this.windowUnverified()){
         const uniqueID = Date.now()
         const contextID = 'filterOnGrid' + uniqueID
         this.setFilterOnGridID(contextID)
       }
 
+    },
+    windowUnverified(){
+       if(this.filterOnGridID === null){
+        return true
+      }
+      let context = this.filterOnGridID
+      const windowsList = glue.windows.list()
+      let window = windowsList.find(w=>{
+        return w.context.eventName === context
+      })
+      if (!!window){
+        
+        return false
+      }
+      this.gridInstance = false
+      return true
+    },
+     manageContextWindow(){
 
-      this.filter(filter, this.filterOnGridID);
-      // this.openContextWindow('Filter Results', 'http://localhost:9093', filter)
-
-      // A Named object
       if (this.gridInstance === true) {
-        // debugger;
         // Can we pass the instance an updated context here?
       } else {
         let app = window.glue.appManager.application('JSCDataGrid');
@@ -102,17 +124,27 @@ export default {
           relativeTo: localWindow.id,
           relativePosition: 'right'
         };
-        // let windowConfig = { }
-
-        // Launch the app and then wait for the return so that we can grab the instance Id
+        console.log(this.filterOnGridID)
         app
-          .start({ filter: filter, eventName: this.filterOnGridID }, windowConfig)
+          .start({ filter: this.contextFilter, eventName: this.filterOnGridID }, windowConfig)
           .then(instance => {
             //localThis.gridInstance = instance
+           
           });
-
+        
         this.gridInstance = true;
       }
+    },
+    filterByDate(data){
+
+      let date = this.formatDate(data.date).split("-")
+      date = date[2] +"-"+date[0]+"-"+date[1]
+      
+      let filteredData = this.data.filter((i)=>{
+        return i.date.split("T")[0] === date
+      })
+      return filteredData
+
     },
     formatDate(dateObj) {
       let date = new Date(dateObj);
