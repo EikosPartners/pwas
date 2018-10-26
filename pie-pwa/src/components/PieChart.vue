@@ -3,7 +3,7 @@
     <pwa-header :title="compTitle" :availableContexts="availableContexts" />
     <pie-chart 
     :dataModel="prettyData"  
-    @jsc_click="filterByProject" 
+    @jsc_click="handleFilter" 
     />
     </div>
 </template>
@@ -31,7 +31,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['data', 'themeColors', 'filterOnGridID']),
+    ...mapGetters(['data', 'themeColors', 'filterOnGridID', 'contextFilter']),
     ...mapState(['color', 'lighting', 'belongsToGrid', 'selected']),
     availableContexts() {
       let availableContexts = [];
@@ -88,30 +88,44 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID']),
-    filterByProject(data) {
-      let filter = {};
+    ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID', 'setContextFilterData']),
+    handleFilter(message) {
 
-      let filteredData = this.data.filter((i) =>{
-        return i.project === data.data.label
-      })
+      console.log(message)
+      const data = message
+      const filteredData = this.filterByProject(data)
 
-
-      filter.source = 'PieChart';
-      filter.dataSource = '/';
-      filter.data = filteredData;
-      filter.time = new Date();
-
-      if(this.filterOnGridID === null){
-        const uniqueID = Date.now()
-        const contextID = 'filterOnGrid' + uniqueID
-        this.setFilterOnGridID(contextID)
+      this.setContextFilterData(filteredData)
+      this.handleFilterOnGrid()
+      this.filter(this.contextFilter, this.filterOnGridID);
+      this.manageContextWindow()
+      
+    },
+     handleFilterOnGrid(){
+      if(!!this.windowUnverified()){
+          const uniqueID = Date.now()
+          const contextID = 'filterOnGrid' + uniqueID
+          this.setFilterOnGridID(contextID)
       }
-      this.filter(filter, this.filterOnGridID);
+    },
+    windowUnverified(){
+      if(this.filterOnGridID === null){
+        return true
+      }
+      let context = this.filterOnGridID
+      const windowsList = glue.windows.list()
+      let window = windowsList.find(w=>{
+        return w.context.eventName === context
+      })
+      if (!!window){
+        
+        return false
+      }
+      this.gridInstance = false
+      return true
+    },
+    manageContextWindow(){
 
-      // this.openContextWindow('Filter Results', 'http://localhost:9093', filter)
-
-      // A Named object
       if (this.gridInstance === true) {
         // Can we pass the instance an updated context here?
       } else {
@@ -122,19 +136,25 @@ export default {
           relativeTo: localWindow.id,
           relativePosition: 'right'
         };
-        // let windowConfig = { }
-
-        // Launch the app and then wait for the return so that we can grab the instance Id
+        console.log(this.filterOnGridID)
         app
-          .start({ filter: filter, eventName: this.filterOnGridID }, windowConfig)
+          .start({ filter: this.contextFilter, eventName: this.filterOnGridID }, windowConfig)
           .then(instance => {
             //localThis.gridInstance = instance
+           
           });
-
+        
         this.gridInstance = true;
       }
     },
-
+  
+    filterByProject(data){
+        
+      let filteredData = this.data.filter((i) =>{
+        return i.project === data.data.label
+      })
+      return filteredData
+    },
     setTheme() {
       this.$store.commit('changeColor', this.color);
       if (this.$store.state.themeMod) {
