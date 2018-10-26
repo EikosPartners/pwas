@@ -3,7 +3,7 @@
     <pwa-header :title="compTitle" :availableContexts="availableContexts" />
     <heat-map
       v-if="themeColorsComp && themeColorsComp.length > 0"
-      @jsc_click="filterByDate"
+      @jsc_click="handleFilter"
       :dataModel='heatData'
       xaxis-label="date"
       yaxis-label="volume"
@@ -90,13 +90,12 @@ export default {
       this.availableContexts = local
     },
     ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID', 'setContextFilterData']),
-    filterByDate(message) {
+    handleFilter(message) {
       // create an array of data, filtered by the appropriate criteria
       const data = message.data
       const clickEvent = message.event
-      let filteredData = this.data.filter((i)=>{
-        return i.date.split("T")[0] === data[0].x
-      })
+
+      const filteredData = this.filterByDate(data)
 
       this.setContextFilterData(filteredData)   
       // set up a context for this instance of the HeatMap
@@ -178,6 +177,12 @@ export default {
       glue.appManager.onAppRemoved((appication)=>{
         console.log(appication)
       })
+    },
+    filterByDate(data){
+       let filteredData = this.data.filter((i)=>{
+        return i.date.split("T")[0] === data[0].x
+      })
+      return filteredData
     },
     parseDate(date) {
       const dateArray = date.split('-');
