@@ -13,7 +13,6 @@ const state = {
   selected: "",
   filterOnGridID: null,
   contextFilter: {source:"heatMap", dataSource: "/"},
-  shiftClicked: false
  
 };
 
@@ -24,7 +23,7 @@ export const getters = {
   belongsToGrid: state => state.belongsToGrid,
   filterOnGridID: state => state.filterOnGridID,
   contextFilter: state => state.contextFilter,
-  shiftClicked: state => state.shiftClicked
+
 };
 
 export const mutations = {
@@ -55,11 +54,6 @@ export const mutations = {
     state.contextFilter.data = data
     state.contextFilter.time = new Date()
   },
-  setShiftClicked(state,data){
-    console.log(data)
-    state.shiftClicked = data
-  }
- 
 };
 
 export const actions = {
@@ -88,11 +82,6 @@ export const actions = {
   setContextFilterData({commit}, data){
     commit('setContextFilterData', data)
   },
-  setShiftClicked({commit}, data){
-    console.log('setShiftClicked', data)
-    commit("setShiftClicked", data)
-  }
-
 };
 
 export default new Vuex.Store({
