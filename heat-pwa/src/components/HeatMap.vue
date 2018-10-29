@@ -34,7 +34,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['data', 'themeColors', 'filterOnGridID', 'contextFilter', 'shiftClicked']),
+    ...mapGetters(['data', 'themeColors', 'filterOnGridID', 'contextFilter']),
     ...mapState(['color', 'lighting', 'belongsToGrid', 'selected']),
     heatData() {
       const heatData = [];
@@ -90,96 +90,28 @@ export default {
       });
       this.availableContexts = local
     },
-    ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID', 'setContextFilterData', "setShiftClicked"]),
+    ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID', 'setContextFilterData' ]),
     handleFilter(message) {
       // create an array of data, filtered by the appropriate criteria
       const data = message.data
       const clickEvent = message.event
-      // this.setShiftClicked(this.handleShiftClick(clickEvent))
       const filteredData = this.filterByDate(data)
-
       this.setContextFilterData(filteredData)   
+
       if(this.handleShiftClick(clickEvent)){
       // Case: Shift Click
-      console.log("Shift Click Open Grid")
       this.gridInstance = false
       this.manageContextWindow(this.contextFilter, "StandAloneGrid")
       }else{
-      // Case: Default (no 'Shift')
-      console.log("Regular Click")
+      // Case: Default Click (no 'Shift')
       this.handleFilterOnGrid()
       this.filter(this.contextFilter, this.filterOnGridID);
       this.manageContextWindow(this.contextFilter, this.filterOnGridID)
       }
 
-      glue.agm.invoke(
-            'T42.GNS.Publish.RaiseNotification', {
-            notification: {
-            title: 'Critical Alert',
-            severity: 'High',
-            description: 'Your machine is going to be restarted in 30 seconds'
-          }
-      })
-      .then(() => console.log('Raised notification'))
-      .catch(console.error);
+      this.testNotification()
     },
-
-    // TEMPORARILY REMOVED FOR MIXIN TESTING
-
-    // handleFilterOnGrid(){
-    //   if(!!this.windowUnverified()){
-    //       const uniqueID = Date.now()
-    //       const contextID = 'filterOnGrid' + uniqueID
-    //       this.setFilterOnGridID(contextID)
-    //   }
-    // },
-    // windowUnverified(){
-    //   if(this.filterOnGridID === null){
-    //     return true
-    //   }
-    //   let context = this.filterOnGridID
-    //   const windowsList = glue.windows.list()
-    //   let window = windowsList.find(w=>{
-    //     return w.context.eventName === context
-    //   })
-    //   if (!!window){
-    //     return false
-    //   }
-    //   this.gridInstance = false
-    //   return true
-    // },
-    manageContextWindow(filter, eventName){
-
-      if (this.gridInstance === true) {
-        // Can we pass the instance an updated context here?
-      } else {
-        let app = window.glue.appManager.application('JSCDataGrid');
-        const localWindow = window.glue.windows.my();
-        const localThis = this;
-        let windowConfig = {
-          relativeTo: localWindow.id,
-          relativePosition: 'right'
-        };
-
-        // Launch the app and then wait for the return so that we can grab the instance Id
-        this.manageGridInstance()  // Added for testing purposes
-
-        app
-          .start({ filter, eventName }, windowConfig)
-          .then(instance => {
-            //localThis.gridInstance = instance
-           
-          });
-        
-        this.gridInstance = true;
-      }
-    },
-  
-    manageGridInstance(){
-      glue.appManager.onAppRemoved((appication)=>{
-        console.log(appication)
-      })
-    },
+    
     filterByDate(data){
        let filteredData = this.data.filter((i)=>{
         return i.date.split("T")[0] === data[0].x
@@ -208,6 +140,18 @@ export default {
       if (this.$store.state.themeMod) {
         this.chooseTheme(this.$store.state.themeMod.colorTheme);
       }
+    },
+    testNotification(){
+      glue.agm.invoke(
+        'T42.GNS.Publish.RaiseNotification', {
+          notification: {
+            title: 'Critical Alert',
+            severity: 'High',
+            description: 'Your machine is going to be restarted in 30 seconds'
+          }
+      })
+      .then(() => console.log('Raised notification'))
+      .catch(console.error);
     }
   },
   created() {
