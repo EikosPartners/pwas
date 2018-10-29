@@ -17,6 +17,7 @@ import PwaHeader from '@/components/PwaHeader.vue'
 import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
 import DragAndDrop from '@/mixins/DragAndDrop';
+import Filtering from '@/mixins/Filtering'
 import { log } from 'async';
 
 export default {
@@ -25,7 +26,7 @@ export default {
     heatMap: D3HeatMap,
     pwaHeader: PwaHeader
   },
-  mixins: [StyleTogglerMixin, Messaging, Windowing, DragAndDrop],
+  mixins: [StyleTogglerMixin, Messaging, Windowing, DragAndDrop, Filtering],
   data() {
     return {
       compTitle: "Number of Tickets by Date",
@@ -33,7 +34,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['data', 'themeColors', 'filterOnGridID', 'contextFilter']),
+    ...mapGetters(['data', 'themeColors', 'filterOnGridID', 'contextFilter', 'shiftClicked']),
     ...mapState(['color', 'lighting', 'belongsToGrid', 'selected']),
     heatData() {
       const heatData = [];
@@ -89,19 +90,27 @@ export default {
       });
       this.availableContexts = local
     },
-    ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID', 'setContextFilterData']),
+    ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID', 'setContextFilterData', "setShiftClicked"]),
     handleFilter(message) {
       // create an array of data, filtered by the appropriate criteria
       const data = message.data
       const clickEvent = message.event
-
+      // this.setShiftClicked(this.handleShiftClick(clickEvent))
       const filteredData = this.filterByDate(data)
 
       this.setContextFilterData(filteredData)   
-      // set up a context for this instance of the HeatMap
+      if(this.handleShiftClick(clickEvent)){
+      // Case: Shift Click
+      console.log("Shift Click Open Grid")
+      this.gridInstance = false
+      this.manageContextWindow(this.contextFilter, "StandAloneGrid")
+      }else{
+      // Case: Default (no 'Shift')
+      console.log("Regular Click")
       this.handleFilterOnGrid()
       this.filter(this.contextFilter, this.filterOnGridID);
-      this.manageContextWindow()
+      this.manageContextWindow(this.contextFilter, this.filterOnGridID)
+      }
 
       glue.agm.invoke(
             'T42.GNS.Publish.RaiseNotification', {
@@ -113,39 +122,33 @@ export default {
       })
       .then(() => console.log('Raised notification'))
       .catch(console.error);
-      
-      //The following subsrcibe code was for testing access to changes in the context
-      // this.subscribe(this.filterOnGridID, (context, delta, removed) => {
-      //   console.log('context update', context);
-      //   console.log("context delta", delta)
-      //   console.log("contxt removed", removed)
-      //   this.output = context.data;
-      // });
     },
-    handleFilterOnGrid(){
-      if(!!this.windowUnverified()){
-          const uniqueID = Date.now()
-          const contextID = 'filterOnGrid' + uniqueID
-          this.setFilterOnGridID(contextID)
-      }
-    },
-    windowUnverified(){
-      if(this.filterOnGridID === null){
-        return true
-      }
-      let context = this.filterOnGridID
-      const windowsList = glue.windows.list()
-      let window = windowsList.find(w=>{
-        return w.context.eventName === context
-      })
-      if (!!window){
-        
-        return false
-      }
-      this.gridInstance = false
-      return true
-    },
-    manageContextWindow(){
+
+    // TEMPORARILY REMOVED FOR MIXIN TESTING
+
+    // handleFilterOnGrid(){
+    //   if(!!this.windowUnverified()){
+    //       const uniqueID = Date.now()
+    //       const contextID = 'filterOnGrid' + uniqueID
+    //       this.setFilterOnGridID(contextID)
+    //   }
+    // },
+    // windowUnverified(){
+    //   if(this.filterOnGridID === null){
+    //     return true
+    //   }
+    //   let context = this.filterOnGridID
+    //   const windowsList = glue.windows.list()
+    //   let window = windowsList.find(w=>{
+    //     return w.context.eventName === context
+    //   })
+    //   if (!!window){
+    //     return false
+    //   }
+    //   this.gridInstance = false
+    //   return true
+    // },
+    manageContextWindow(filter, eventName){
 
       if (this.gridInstance === true) {
         // Can we pass the instance an updated context here?
@@ -161,9 +164,8 @@ export default {
         // Launch the app and then wait for the return so that we can grab the instance Id
         this.manageGridInstance()  // Added for testing purposes
 
-        console.log(this.filterOnGridID)
         app
-          .start({ filter: this.contextFilter, eventName: this.filterOnGridID }, windowConfig)
+          .start({ filter, eventName }, windowConfig)
           .then(instance => {
             //localThis.gridInstance = instance
            
