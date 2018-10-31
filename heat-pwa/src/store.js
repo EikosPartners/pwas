@@ -13,7 +13,7 @@ const state = {
   selected: "",
   filterOnGridID: null,
   contextFilter: {source:"heatMap", dataSource: "/"},
- 
+  stream: null
 };
 
 export const getters = {
@@ -23,6 +23,7 @@ export const getters = {
   belongsToGrid: state => state.belongsToGrid,
   filterOnGridID: state => state.filterOnGridID,
   contextFilter: state => state.contextFilter,
+  stream: state => state.stream
 
 };
 
@@ -54,6 +55,9 @@ export const mutations = {
     state.contextFilter.data = data
     state.contextFilter.time = new Date()
   },
+  setStream(state, data){
+    state.stream = data
+  }
 };
 
 export const actions = {
@@ -82,6 +86,9 @@ export const actions = {
   setContextFilterData({commit}, data){
     commit('setContextFilterData', data)
   },
+  setStream({commit}, data){
+    commit("setStream", data)
+  }
 };
 
 export default new Vuex.Store({

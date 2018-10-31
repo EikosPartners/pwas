@@ -46,6 +46,8 @@ export default {
     pieChart: D3PieChart
   },
   mixins: [Messaging, Windowing, StyleTogglerMixin, DragAndDrop],
+  created(){
+  },
   computed: {
     ...mapState([
       "data",

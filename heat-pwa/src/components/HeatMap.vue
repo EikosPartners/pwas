@@ -18,6 +18,8 @@ import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
 import DragAndDrop from '@/mixins/DragAndDrop';
 import Filtering from '@/mixins/Filtering'
+import Stream from '@/mixins/Stream'
+import Notifications from '@/mixins/Notifications'
 import { log } from 'async';
 
 export default {
@@ -26,7 +28,7 @@ export default {
     heatMap: D3HeatMap,
     pwaHeader: PwaHeader
   },
-  mixins: [StyleTogglerMixin, Messaging, Windowing, DragAndDrop, Filtering],
+  mixins: [StyleTogglerMixin, Messaging, Windowing, DragAndDrop, Filtering, Stream, Notifications ],
   data() {
     return {
       compTitle: "Number of Tickets by Date",
@@ -34,7 +36,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['data', 'themeColors', 'filterOnGridID', 'contextFilter']),
+    ...mapGetters(['data', 'themeColors', 'filterOnGridID', 'contextFilter', "stream"]),
     ...mapState(['color', 'lighting', 'belongsToGrid', 'selected']),
     heatData() {
       const heatData = [];
@@ -90,7 +92,7 @@ export default {
       });
       this.availableContexts = local
     },
-    ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID', 'setContextFilterData' ]),
+    ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID', 'setContextFilterData', "setStream" ]),
     handleFilter(message) {
       // create an array of data, filtered by the appropriate criteria
       const data = message.data
@@ -110,6 +112,7 @@ export default {
       }
 
       this.testNotification()
+      this.publishToStream()
     },
     
     filterByDate(data){
@@ -141,24 +144,16 @@ export default {
         this.chooseTheme(this.$store.state.themeMod.colorTheme);
       }
     },
-    testNotification(){
-      glue.agm.invoke(
-        'T42.GNS.Publish.RaiseNotification', {
-          notification: {
-            title: 'Critical Alert',
-            severity: 'High',
-            description: 'Your machine is going to be restarted in 30 seconds'
-          }
-      })
-      .then(() => console.log('Raised notification'))
-      .catch(console.error);
-    }
+    
   },
   created() {
     this.subscribe('filterOnGrid', (context, delta, removed) => {
       console.log('context update', context);
       this.output = context.data;
     });
+    this.createStream()
+    this.subscribeToStream()
+
    
   },
   watch: {
