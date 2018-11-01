@@ -1,6 +1,3 @@
-// Stream Mixin
-// Used for testing purposes
-
 export default {
     methods: {
         createStream(){
@@ -12,7 +9,7 @@ export default {
                 returns: 'get'
             })
             .then((stream)=>{
-                window.glue.contexts.update("StreamsCtx",{streams: [stream.name]} )
+                window.glue.contexts.update("Streams",{streams: [stream.name]} )
                 console.log(stream)
                 this.setStream(stream)
 
@@ -36,10 +33,10 @@ export default {
                     const stream = context.streams.find((s)=>{
                        return s === "TestStream"
                     })
+                    console.log("stream",stream)
                     if(stream === undefined){
-                        console.log("stream not yet created",stream)
                         this.createStream()
-                        // context.update("StreamsCtx", {streams: "TestStream"})
+                        context.update("StreamsCtx", {streams: "TestStream"})
                     }
                 })
             }
@@ -55,24 +52,32 @@ export default {
             }
             return false
         },
-
         subscribeToStream(){
             if (window.glue !== undefined){
+                if (this.checkContext("StreamsCtx")===false){
+                    console.log("Creating StreamsCtx")
+                    window.glue.contexts.set("StreamsCtx", {streams: ["0"]} )
+                }
+                this.subscribe("StreamsCtx", (context, delta, removed) =>{
+                    console.log("Subscribed to StreamsCtx")
+                    const stream = context.streams.find((s)=>{
+                        return s === "TestStream"
+                     })
+                    if(stream !== undefined){
+                        console.log("TestStream found in StreamsCtx")
+                        window.glue.agm.subscribe("TestStream")
+                        .then((subscription) => {
+                            console.log("Sbscribed to TestStream", subscription)
+                            subscription.onData((streamData)=>{
+                                console.log("New Data Recieved", streamData)
+                            })
+                        })
+                        .catch((error) => {
+                            console.log("Error: ", error)
+                        });
 
-                window.glue.agm.subscribe("TestStream")
-                .then((subscription) => {
-                    console.table("Methods", glue.agm.methods())
-
-                    console.log("New Subscription",subscription)
-                    subscription.onData((streamData)=>{
-                        console.log("New Data Recieved", streamData)
-                        this.dataRecievedNotification()
-                    })
+                    }
                 })
-                .catch((error) => {
-                    // subscription rejected or failed
-                    console.log("Error: ", error)
-                });
 
             }
         },

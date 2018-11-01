@@ -23,7 +23,7 @@ var myMixin = {
         console.log('WEBSockets: Filtering message ', filter);
         this.$socket.emit('filterByDate', filter);
       }
-    }
+    },
   }
 };
 

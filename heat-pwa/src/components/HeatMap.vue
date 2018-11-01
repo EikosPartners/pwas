@@ -101,18 +101,19 @@ export default {
       this.setContextFilterData(filteredData)   
 
       if(this.handleShiftClick(clickEvent)){
-      // Case: Shift Click
-      this.gridInstance = false
-      this.manageContextWindow(this.contextFilter, "StandAloneGrid")
+        // Case: Shift Click
+        this.gridInstance = false
+        this.manageContextWindow(this.contextFilter, "StandAloneGrid")
       }else{
       // Case: Default Click (no 'Shift')
-      this.handleFilterOnGrid()
-      this.filter(this.contextFilter, this.filterOnGridID);
-      this.manageContextWindow(this.contextFilter, this.filterOnGridID)
+        this.handleFilterOnGrid()
+        this.filter(this.contextFilter, this.filterOnGridID);
+        this.manageContextWindow(this.contextFilter, this.filterOnGridID)
       }
-
-      this.testNotification()
       this.publishToStream()
+      this.testNotification()
+
+
     },
     
     filterByDate(data){
@@ -151,8 +152,10 @@ export default {
       console.log('context update', context);
       this.output = context.data;
     });
-    this.createStream()
-    this.subscribeToStream()
+    // this.streamsContext()
+    console.log(window.glue.contexts)
+    this.handleStream()
+    // this.createStream()
 
    
   },
