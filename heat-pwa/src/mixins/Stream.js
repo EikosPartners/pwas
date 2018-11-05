@@ -15,6 +15,9 @@ export default {
                 window.glue.contexts.update("StreamsCtx",{streams: [stream.name]} )
                 console.log(stream)
                 this.setStream(stream)
+                stream.subscriptionsAddHandler(sub=>{
+                    console.log(sub)
+                })
 
             })
 
@@ -56,25 +59,30 @@ export default {
             return false
         },
 
-        subscribeToStream(){
-            if (window.glue !== undefined){
+        
+        removeFromStreamsCtx(name){
+            console.log("Remove From Stream Context", name)
+            window.glue.contexts.update("StreamsCtx", {streams: []})
+        }
+        // subscribeToStream(){
+        //     if (window.glue !== undefined){
 
-                window.glue.agm.subscribe("TestStream")
-                .then((subscription) => {
-                    console.table("Methods", glue.agm.methods())
+        //         window.glue.agm.subscribe("TestStream")
+        //         .then((subscription) => {
+        //             console.table("Methods", glue.agm.methods())
 
-                    console.log("New Subscription",subscription)
-                    subscription.onData((streamData)=>{
-                        console.log("New Data Recieved", streamData)
-                        this.dataRecievedNotification()
-                    })
-                })
-                .catch((error) => {
-                    // subscription rejected or failed
-                    console.log("Error: ", error)
-                });
+        //             console.log("New Subscription",subscription)
+        //             subscription.onData((streamData)=>{
+        //                 console.log("New Data Recieved", streamData)
+        //                 this.dataRecievedNotification()
+        //             })
+        //         })
+        //         .catch((error) => {
+        //             // subscription rejected or failed
+        //             console.log("Error: ", error)
+        //         });
 
-            }
-        },
+        //     }
+        // },
     }
 }

@@ -37,7 +37,7 @@ import { D3PieChart, StyleTogglerMixin } from 'jscatalyst';
 import Messaging from "@/mixins/Messaging";
 import Windowing from "@/mixins/Windowing";
 import DragAndDrop from "@/mixins/DragAndDrop"
-import StreamCtx from "@/mixins/StreamCtx"
+import Stream from "@/mixins/Stream"
 import jslinq from "jslinq";
 
 export default {
@@ -46,7 +46,7 @@ export default {
     AgGridVue,
     pieChart: D3PieChart
   },
-  mixins: [Messaging, Windowing, StyleTogglerMixin, DragAndDrop, StreamCtx],
+  mixins: [Messaging, Windowing, StyleTogglerMixin, DragAndDrop, Stream],
   created(){
     this.subscribeToStream()
   },

@@ -67,9 +67,12 @@ export default {
                         console.log("TestStream found in StreamsCtx")
                         window.glue.agm.subscribe("TestStream")
                         .then((subscription) => {
-                            console.log("Sbscribed to TestStream", subscription)
+                            console.log("Subscribed to TestStream", subscription)
                             subscription.onData((streamData)=>{
                                 console.log("New Data Recieved", streamData)
+                            })
+                            subscription.onClosed((reason, server) =>{
+                                debugger
                             })
                         })
                         .catch((error) => {

@@ -112,10 +112,8 @@ export default {
       }
       this.publishToStream()
       this.testNotification()
-
-
     },
-    
+  
     filterByDate(data){
        let filteredData = this.data.filter((i)=>{
         return i.date.split("T")[0] === data[0].x
@@ -156,8 +154,19 @@ export default {
     console.log(window.glue.contexts)
     this.handleStream()
     // this.createStream()
+    window.addEventListener('beforeunload', function(e){
+      debugger
+      this.testNotification()
+    })
+    window.glue.windows.my().onClose((w)=>{
+      debugger
+      console.log(w)
+    })
+  },
+  beforeDestroy(){
 
-   
+    this.removeFromStreamsCtx("TestStream")
+    this.stream.close()
   },
   watch: {
     color(newData) {
