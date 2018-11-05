@@ -17,6 +17,7 @@ import jslinq from 'jslinq';
 import PwaHeader from '@/components/PwaHeader.vue'
 import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
+import Filtering from '@/mixins/Filtering';
 import DragAndDrop from '@/mixins/DragAndDrop'
 
 export default {
@@ -25,7 +26,7 @@ export default {
     barChart: D3BarChart,
     pwaHeader: PwaHeader
   },
-  mixins: [StyleTogglerMixin, Messaging, Windowing, DragAndDrop],
+  mixins: [StyleTogglerMixin, Messaging, Windowing, DragAndDrop, Filtering],
   data() {
     return {
       compTitle: "Number of Tickets by Month",
@@ -116,67 +117,27 @@ export default {
     ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID', 'setContextFilterData']),
     handleFilter(message) {
       console.log(message)
-      const data = message // Prep for JSC_click update
+      const data = message.data // Prep for JSC_click update
+      const clickEvent = message.event
+      const filteredData = this.filterByProject(data)
+      this.setContextFilterData(filteredData)
+
+      if(this.handleShiftClick(clickEvent)){
+        this.gridInstance= false
+        this.manageContextWindow(this.contextFilter, "StandAlongGrid")
+      }
+      else{
+        this.handleFilterOnGrid()
+        this.filter(this.contextFilter, this.filterOnGridID);
+        this.manageContextWindow(this.contextFilter , this.filterOnGridID)
+      }
+    
+    },
+    filterByProject(data){
       let filteredData = this.data.filter((i)=>{
         return i.project === data.x
       })
-
-      this.setContextFilterData(filteredData)
-     
-      this.handleFilterOnGrid()
-      this.filter(this.contextFilter, this.filterOnGridID);
-      this.manageContextWindow()
-
-      // this.openContextWindow('Filter Results', 'http://localhost:9093', filter)
-
-    },
-    handleFilterOnGrid(){
-       if(!!this.windowUnverified()){
-          const uniqueID = Date.now()
-          const contextID = 'filterOnGrid' + uniqueID
-          this.setFilterOnGridID(contextID)
-      }
-    },
-    windowUnverified(){
-      if(this.filterOnGridID === null){
-        return true
-      }
-      let context = this.filterOnGridID
-      const windowsList = glue.windows.list()
-      let window = windowsList.find(w=>{
-        return w.context.eventName === context
-      })
-      if (!!window){
-        
-        return false
-      }
-      this.gridInstance = false
-      return true
-    },
-    manageContextWindow(){
-      
-      if (this.gridInstance === true) {
-
-        // Can we pass the instance an updated context here?
-      } else {
-        let app = window.glue.appManager.application('JSCDataGrid');
-        const localWindow = window.glue.windows.my();
-        const localThis = this;
-        let windowConfig = {
-          relativeTo: localWindow.id,
-          relativePosition: 'right'
-        };
-        // let windowConfig = { }
-
-        // Launch the app and then wait for the return so that we can grab the instance Id
-        app
-          .start({ filter: this.contextFilter, eventName: this.filterOnGridID }, windowConfig)
-          .then(instance => {
-            //localThis.gridInstance = instance
-          });
-
-        this.gridInstance = true;
-      }
+      return filteredData
     },
     parseDate(date) {
       let dateA = date.split('T')[0].split('-');
