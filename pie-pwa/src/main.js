@@ -39,6 +39,6 @@ Glue({})
     new Vue({
       router,
       store,
-      render: h => h(GlueNotAvailable)
+      render: h => h(App)
     }).$mount('#app');
   });

@@ -25,23 +25,23 @@ export default {
         this.setColor(context.color)
         this.setLighting(context.lighting)
       })
+      console.log("in not undefined", window.glue)
+      if (window.glue.windows.my().context.eventName !== undefined){
+        let ctx = window.glue.windows.my().context
+        console.log("ctx",ctx)
+        this.initializeData(ctx.filter.data)
+      }
+      else{
+        this.fetchData();
+        const IdNumber = Date.now();
+        this.$store.commit('setContextId', `${IdNumber}`);
+        const uniqueName = 'filteredGrid' + IdNumber;
+        window.glue.contexts.set(uniqueName, {});
+      }
+    } else { 
+        this.fetchData();
     }
 
-    console.log("in not undefined", window.glue)
-    if (window.glue.windows.my().context.eventName !== undefined){
-      let ctx = window.glue.windows.my().context
-      console.log("ctx",ctx)
-      this.initializeData(ctx.filter.data)
-    }
-    else{
-      this.fetchData();
-      const IdNumber = Date.now();
-      this.$store.commit('setContextId', `${IdNumber}`);
-      const uniqueName = 'filteredGrid' + IdNumber;
-      window.glue.contexts.set(uniqueName, {});
-    }
-    
-    
   },
   computed: {
     ...mapState(['lighting']),

@@ -2,9 +2,9 @@
 <div class="container">
   <div :class="['header']" :style="styleObject">
     <span>Grid</span>
-     <span class="current-context"  @dragstart="handleDragStart" @dragend="handleDragEnd" draggable="true">Id: {{contextId}}</span>
+     <span class="current-context" @dragstart="handleDragStart" @dragend="handleDragEnd" draggable="true">Id: {{contextId}}</span>
     <span class="current-filter">{{currentFilter}}</span>
-    <button class="header-button" @click="removeFilter">Clear Filter</button>
+    <button class="header-button" @click="removeFilter" :disabled="currentFilter === 'No Filter'">Clear Filter</button>
     <select class="select" v-model="selected">
       <option disabled value="">Select chart</option>
       <option value="JSCBar">BarChart</option>
@@ -13,7 +13,7 @@
       <option value="JSCLine">Line Chart</option>
       <option value="JSCPie">Pie Chart</option>
     </select>
-     <button class="header-button" @click="openNewChart">Open</button>
+     <button class="header-button" @click="openNewChart" :disabled="!isGlu">Open</button>
   </div>
     <ag-grid-vue
       id='Grid'
@@ -93,7 +93,8 @@ export default {
   data() {
     return {
       trueVar: true,
-      selected: ""
+      selected: "",
+      isGlu: window.glue
     };
   },
   sockets: {
@@ -193,7 +194,9 @@ export default {
     ]),
     modelUpdated(params) {
       this.gridApi = params.api;
-      this.updateChildren();
+      if (window.glue) {
+          this.updateChildren();
+      }
     },
     updateChildren() {
       if (window.glue.windows.my().context === null) {
@@ -255,47 +258,51 @@ export default {
       window.addEventListener("resize", () => {
         this.gridApi.sizeColumnsToFit();
       });
-      const localWindow = window.glue.windows.my();
-      const ctx = localWindow.context;
-      console.log("onGridReady",ctx)
-      if (ctx.eventName !== undefined) {
-        this.subscribe(ctx.eventName, (context, delta, removed) => {
-          this.removeFilter();
-          console.log("subscribe context", context);
-          let source = this.formatSource(context.source);
-          this.setCurrentFilter(source);
-          this.initializeData(context.data)
-          if (context.source === "BubbleChart") {
-            console.log("bubble chart", context);
-            // let filterObject = {
-            //   date: {
-            //     type: "contains",
-            //     filter: `${context.data.date}`
-            //   },
-            //   severity: {
-            //     type: "contains",
-            //     filter: `${context.data.severity}`
-            //   }
-            // };
-            // this.gridApi.setFilterModel(filterObject);
-          } else if (context.source === "BarChart") {
-            console.log("bar chart", context);
-            let month = context.data.split("/")[0] + "-";
-            let year = "-" + context.data.split("/")[1];
 
-            let filterObject = {
-              date: {
-                condition1: { type: "startsWith", filter: month },
-                condition2: { type: "contains", filter: year },
-                operator: "AND"
+      if (window.glue) {
+
+          const localWindow = window.glue.windows.my();
+          const ctx = localWindow.context;
+          console.log("onGridReady",ctx)
+          if (ctx.eventName !== undefined) {
+            this.subscribe(ctx.eventName, (context, delta, removed) => {
+              this.removeFilter();
+              console.log("subscribe context", context);
+              let source = this.formatSource(context.source);
+              this.setCurrentFilter(source);
+              this.initializeData(context.data)
+              if (context.source === "BubbleChart") {
+                console.log("bubble chart", context);
+                // let filterObject = {
+                //   date: {
+                //     type: "contains",
+                //     filter: `${context.data.date}`
+                //   },
+                //   severity: {
+                //     type: "contains",
+                //     filter: `${context.data.severity}`
+                //   }
+                // };
+                // this.gridApi.setFilterModel(filterObject);
+              } else if (context.source === "BarChart") {
+                console.log("bar chart", context);
+                let month = context.data.split("/")[0] + "-";
+                let year = "-" + context.data.split("/")[1];
+    
+                let filterObject = {
+                  date: {
+                    condition1: { type: "startsWith", filter: month },
+                    condition2: { type: "contains", filter: year },
+                    operator: "AND"
+                  }
+                };
+    
+                this.gridApi.setFilterModel(filterObject);
+              } else {
+                this.setQuickFilter(context.data);
               }
-            };
-
-            this.gridApi.setFilterModel(filterObject);
-          } else {
-            this.setQuickFilter(context.data);
-          }
-        });
+            });
+      }
       }
     },
     setQuickFilter(data) {
@@ -311,10 +318,11 @@ export default {
       }
     },
     openNewChart() {
-      const newChart = glue.appManager.application(this.selected);
-      const localWindow = window.glue.windows.my();
-      const ctx = localWindow.context;
-
+      if (window.glue) {
+        const newChart = glue.appManager.application(this.selected);
+        const localWindow = window.glue.windows.my();
+        const ctx = localWindow.context;
+      }
       // Get the data set from this component
       let filter = {};
       if (this.gridApi !== undefined || this.gridApi !== null) {
@@ -351,21 +359,24 @@ export default {
           };
         });
       }
-      const uniqueName = "filteredGrid" + this.contextId;
 
-      window.glue.contexts.set(uniqueName, {
-        filter: filter,
-        name: uniqueName
-      });
+      if (window.glue) {
+        const uniqueName = "filteredGrid" + this.contextId;
+          window.glue.contexts.set(uniqueName, {
+            filter: filter,
+            name: uniqueName
+          });
 
-      let appContext = {
-        localContext: ctx,
-        contextName: uniqueName,
-        filter: filter
-      };
-      debugger
-      // console.log(JSON.stringify(appContext))
-      newChart.start(appContext);
+          let appContext = {
+            localContext: ctx,
+            contextName: uniqueName,
+            filter: filter
+          };
+          debugger
+          // console.log(JSON.stringify(appContext))
+          newChart.start(appContext);
+
+      }
     },
     parseDate(date) {
       let dateA = date.split("T")[0].split("-");
@@ -453,6 +464,10 @@ export default {
 
 .header-button:focus {
   outline: 0;
+}
+
+.header-button:disabled, .header-button[disabled]{
+  opacity: .5
 }
 
 .ag-theme-dark {

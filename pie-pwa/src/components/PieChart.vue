@@ -1,6 +1,6 @@
 <template>
    <div class="container" @drop="handleDrop" @dragenter="handleDragEnter" @dragover="handleDragOver">
-    <pwa-header :title="compTitle" :availableContexts="availableContexts" />
+    <pwa-header v-if="gluAvailable" :title="compTitle" :availableContexts="availableContexts" />
     <pie-chart 
     :dataModel="prettyData"  
     @jsc_click="handleFilter" 
@@ -28,7 +28,8 @@ export default {
   data() {
     return {
       compTitle: "Tickets per Project",
-      gridInstance: false
+      gridInstance: false,
+      gluAvailable: window.glue
     };
   },
   computed: {
