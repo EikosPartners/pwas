@@ -48,6 +48,7 @@ export default {
       return heatData;
     },
     availableContexts() {
+      console.log("Available Contexts")
       let availableContexts = [];
       window.glue.contexts.all().forEach(context => {
         if (context.includes('filteredGrid') && context !== 'filteredGrid') {
@@ -83,35 +84,43 @@ export default {
     }
   },
   methods: {
-    populate() {
-      let local = [];
-      window.glue.contexts.all().forEach(context => {
-        if (context.includes('filteredGrid') && context !== 'filteredGrid') {
-          local.push(context);
-        }
-      });
-      this.availableContexts = local
-    },
+    // populate() {
+    //   console.log("Populate")
+    //   let local = [];
+    //   window.glue.contexts.all().forEach(context => {
+    //     if (context.includes('filteredGrid') && context !== 'filteredGrid') {
+    //       local.push(context);
+    //     }
+    //   });
+    //   this.availableContexts = local
+    // },
     ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID', 'setContextFilterData', "setStream" ]),
     handleFilter(message) {
-      // create an array of data, filtered by the appropriate criteria
+      /* Handle Filtering
+       * @param {Object} message - Data recieved by clicking on a cell 
+       *      data - cell date
+       *      event - JS clickEvent
+       */
       const data = message.data
       const clickEvent = message.event
       const filteredData = this.filterByDate(data)
+
+      // Modify the filter in $store 
       this.setContextFilterData(filteredData)   
 
       if(this.handleShiftClick(clickEvent)){
         // Case: Shift Click
         this.gridInstance = false
-        this.manageContextWindow(this.contextFilter, "StandAloneGrid")
+        this.manageContextWindow(this.contextFilter, "StandAloneGrid") // Filtering Mixin
       }else{
       // Case: Default Click (no 'Shift')
-        this.handleFilterOnGrid()
-        this.filter(this.contextFilter, this.filterOnGridID);
-        this.manageContextWindow(this.contextFilter, this.filterOnGridID)
+        this.handleFilterOnGrid()  // Filtering Mixin
+        this.filter(this.contextFilter, this.filterOnGridID); //Messaging Mixin
+        this.manageContextWindow(this.contextFilter, this.filterOnGridID)  //Filtering Mixin
       }
-      this.publishToStream()
-      this.testNotification()
+
+      // this.testerMethod()
+   
     },
   
     filterByDate(data){
@@ -143,6 +152,13 @@ export default {
         this.chooseTheme(this.$store.state.themeMod.colorTheme);
       }
     },
+    testerMethod(){
+
+         // Testing Pub/Sub
+      this.publishToStream()
+      // Testing Notifications
+      this.testNotification()
+    }
     
   },
   created() {
@@ -164,9 +180,10 @@ export default {
     })
   },
   beforeDestroy(){
+    // Setup to test onClose lifecycle
 
-    this.removeFromStreamsCtx("TestStream")
-    this.stream.close()
+    // this.removeFromStreamsCtx("TestStream")
+    // this.stream.close()
   },
   watch: {
     color(newData) {
