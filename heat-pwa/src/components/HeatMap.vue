@@ -48,7 +48,6 @@ export default {
       return heatData;
     },
     availableContexts() {
-      console.log("Available Contexts")
       let availableContexts = [];
       window.glue.contexts.all().forEach(context => {
         if (context.includes('filteredGrid') && context !== 'filteredGrid') {
@@ -84,16 +83,6 @@ export default {
     }
   },
   methods: {
-    // populate() {
-    //   console.log("Populate")
-    //   let local = [];
-    //   window.glue.contexts.all().forEach(context => {
-    //     if (context.includes('filteredGrid') && context !== 'filteredGrid') {
-    //       local.push(context);
-    //     }
-    //   });
-    //   this.availableContexts = local
-    // },
     ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID', 'setContextFilterData', "setStream" ]),
     handleFilter(message) {
       /* Handle Filtering
@@ -153,31 +142,28 @@ export default {
       }
     },
     testerMethod(){
-
-         // Testing Pub/Sub
+      // Testing Pub/Sub
       this.publishToStream()
       // Testing Notifications
       this.testNotification()
+    },
+    lifecycleTester(){
+      // Testing onClose behavior
+      window.addEventListener('beforeunload', function(e){
+        debugger
+        this.testNotification()
+      })
+      window.glue.windows.my().onClose((w)=>{
+        debugger
+        console.log(w)
+      })
     }
     
   },
   created() {
-    this.subscribe('filterOnGrid', (context, delta, removed) => {
-      console.log('context update', context);
-      this.output = context.data;
-    });
-    // this.streamsContext()
-    console.log(window.glue.contexts)
-    this.handleStream()
-    // this.createStream()
-    window.addEventListener('beforeunload', function(e){
-      debugger
-      this.testNotification()
-    })
-    window.glue.windows.my().onClose((w)=>{
-      debugger
-      console.log(w)
-    })
+    console.log(window.glue.contexts.all())
+    // this.handleStream()
+    // this.lifecycleTester()
   },
   beforeDestroy(){
     // Setup to test onClose lifecycle
