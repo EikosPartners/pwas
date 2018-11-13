@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    This app needs to run within the Glue42 envoironment
+    This app needs to run within the Glue42 environment
   </div>
 </template>
 
@@ -15,6 +15,10 @@ export default {
   created() {
     this.fetchData();
     this.fetchColor();
+  },
+  beforeCreate(){
+    
+        
   }
 };
 </script>
