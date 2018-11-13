@@ -318,11 +318,11 @@ export default {
       }
     },
     openNewChart() {
-      if (window.glue) {
-        const newChart = glue.appManager.application(this.selected);
-        const localWindow = window.glue.windows.my();
-        const ctx = localWindow.context;
-      }
+      
+      const newChart = glue.appManager.application(this.selected);
+      const localWindow = window.glue.windows.my();
+      const ctx = localWindow.context;
+      
       // Get the data set from this component
       let filter = {};
       if (this.gridApi !== undefined || this.gridApi !== null) {
@@ -360,13 +360,13 @@ export default {
         });
       }
 
-      if (window.glue) {
+     
         const uniqueName = "filteredGrid" + this.contextId;
           window.glue.contexts.set(uniqueName, {
             filter: filter,
             name: uniqueName
           });
-
+          console.log("",window.glue.windows.my().context)
           let appContext = {
             localContext: ctx,
             contextName: uniqueName,
@@ -376,7 +376,7 @@ export default {
           // console.log(JSON.stringify(appContext))
           newChart.start(appContext);
 
-      }
+      
     },
     parseDate(date) {
       let dateA = date.split("T")[0].split("-");

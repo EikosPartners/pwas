@@ -8,7 +8,7 @@
         <span class="current-context" v-else>Subscribed:
         <select class="select" v-model="selected" v-on:click="populate">
           <option disabled value="">Select context</option>
-          <option v-for="(context, index) in availableContexts" :value="context" :key="index">{{context}}</option>
+          <option v-for="(context, index) in this.availableContexts" :value="context" :key="index">{{context}}</option>
         </select>
       </span>
     </div>
@@ -21,8 +21,12 @@ import DragAndDrop from '@/mixins/DragAndDrop';
 
 export default {
   name: "PwaHeader",
-  props: ['title', 'availableContexts'],
   mixins: [StyleTogglerMixin, DragAndDrop],
+  data(){
+    return {
+      title: "Number of Tickets by Date",
+    }
+  },
   computed: {
     ...mapGetters(['themeColors']),
     ...mapState(['color', 'lighting']),
@@ -44,7 +48,17 @@ export default {
       set(value) {
         this.$store.commit('setSelected', value)
       }
-    }
+    },
+    availableContexts() {
+      let availableContexts = [];
+      window.glue.contexts.all().forEach(context => {
+        if (context.includes('filteredGrid') && context !== 'filteredGrid') {
+          availableContexts.push(context);
+        }
+      });
+     
+      return availableContexts;
+    },
   },
   methods: {
     ...mapActions(['changeTheme']),
