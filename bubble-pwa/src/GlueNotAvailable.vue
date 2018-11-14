@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     This app needs to run within the Glue42 environment
-    <button @click="debuggerButton">enter debugger</button>
+    <div>
+      <button @click="debuggerButton">child ready</button>
+    </div>
   </div>
 </template>
 
@@ -13,20 +15,20 @@ export default {
   methods: {
     ...mapActions(['fetchData', 'fetchColor']),
     debuggerButton(){
+      // all of this needs to be moved to an actual component / mixin - just here for dev purposes 
         this.$socket.emit("appManaged", window.context)
   
-        this.$socket.emit(window.context + "childReady", 'foobar')
-        this.$socket.on(window.context + "dataToChild", function (event){
+        this.$socket.emit(window.context + "childReady", 'ready')
+        this.$socket.on(window.context + "dataToChild", function (data){
           console.log('dataToChild received')
+          console.log(data)
         })
 
-        // this.$socket.emit()
     }
   },
   created() {
     this.fetchData();
     this.fetchColor();
-    console.log('window opened')
   
   },
   mounted(){

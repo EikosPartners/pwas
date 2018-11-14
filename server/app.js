@@ -56,31 +56,17 @@ io.sockets.on('connection', function(socket) {
     io.emit('filterByMonth', data);
   });
 
-  socket.on('appManaged', function(data) {
-    console.log(data)
-    socket.on(data + "dataToServer", function(data2) {
-      console.log('dataToServer received')
-      io.emit(data + "dataToChild", data2)
-    })
-
-    socket.on(data + "childReady", function(data3) {
-      console.log('childReady received')
-      io.emit(data + "sendData", data3)
-    })
-
-    console.log(socket.eventNames())
-
-  })
 
   socket.on('appManager', function(data){
+    // parent window getting information about child window and setting up listeners for its context 
+    // data should be the name of the child application ala JSCBubble 
     let requestedApp = applications.filter(function(appJson){
       return appJson.name == data
     })[0]
-
-    
     
     let context = Date.now()
         socket.on(context + "dataToServer", function(data2) {
+          console.log('data2', data2)
           console.log('dataToServer received')
           io.emit(context + "dataToChild", data2)
         })
@@ -91,20 +77,30 @@ io.sockets.on('connection', function(socket) {
         })
     console.log('app manager received')
     io.emit('getNewChartInfo', {...requestedApp, context})
-
-
   
+  })
+
+  socket.on('appManaged', function(data) {
+    // child window setting up listeners for its context with parent 
+    // data will be the context (Date.now) established above
+    
+    socket.on(data + "dataToServer", function(data2) {
+      console.log('data2', data2)
+      console.log('dataToServer received')
+      io.emit(data + "dataToChild", data2)
+    })
+
+    socket.on(data + "childReady", function(data3) {
+      console.log('childReady received')
+      io.emit(data + "sendData", data3)
+    })
+
   })
   
   socket.on('why', function(data) {
+    // available to ensure events have been registered - for debugging  
     console.log(socket.eventNames())
   })
-
-  // var nsp = io.of('/my-namespace');
-  //   nsp.on('connection', function(socket){
-  //     console.log('someone connected');
-  //   });
-
 
   socket.on('themeColor', function(data) {
     colorObj.color = data.name;

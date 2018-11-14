@@ -95,7 +95,8 @@ export default {
       trueVar: true,
       selected: "",
       isGlu: window.glue,
-      temporaryWindow: null
+      temporaryWindow: null,
+      temporaryData: null
     };
   },
   sockets: {
@@ -190,10 +191,10 @@ export default {
       this.temporaryWindow = null
       this.$socket.on(data.context + "sendData", (event) => {
         console.log('sendData received')
-        localThis.$socket.emit(data.context + "dataToServer", 'foobar')
+        localThis.$socket.emit(data.context + "dataToServer", JSON.stringify(localThis.temporaryData.data))
       })
 
-      // save the context for updates
+      // save the context for updates (store? )
     }
   },
   methods: {
@@ -331,70 +332,37 @@ export default {
       }
     },
     openNewChart() {
+      // Get the data set from this component
+      let filter = this.getFilteredData(); 
+      this.temporaryData = this.getFilteredData()
       if (!window.glue) {
         this.temporaryWindow = window.open('', '_blank')
         this.$socket.emit('appManager', this.selected) 
         // this.$socket.emit(this.selected, 'foobar')
         
+      } else {
+        const newChart = glue.appManager.application(this.selected);
+        const localWindow = window.glue.windows.my();
+        const ctx = localWindow.context;
+        const uniqueName = "filteredGrid" + this.contextId;
+          window.glue.contexts.set(uniqueName, {
+            filter: filter,
+            name: uniqueName
+          });
+          console.log("",window.glue.windows.my().context)
+          let appContext = {
+            localContext: ctx,
+            contextName: uniqueName,
+            filter: filter
+          };
+          // debugger
+          // console.log(JSON.stringify(appContext))
+          newChart.start(appContext);
       }
       
-
-      // const newChart = glue.appManager.application(this.selected);
-      // const localWindow = window.glue.windows.my();
-      // const ctx = localWindow.context;
       
-      // // Get the data set from this component
-      // let filter = {};
-      // if (this.gridApi !== undefined || this.gridApi !== null) {
-      //   // console.log( this.gridApi )
-      //   let gridData = new jslinq(
-      //     this.gridApi.clientSideRowModel.rowsToDisplay
-      //   ).select(i => {
-      //     return i.data;
-      //   }).items;
-
-      //   //convert date from grid display formatting to match what the server is sending
-      //   filter.data = gridData.map(item => {
-      //     let dtA = item.date.split(" ");
-      //     let dateA = dtA[0].split("-");
-      //     let dateString =
-      //       dateA[2] +
-      //       "-" +
-      //       dateA[0] +
-      //       "-" +
-      //       dateA[1] +
-      //       "T" +
-      //       dtA[2] +
-      //       ":" +
-      //       dtA[3] +
-      //       ":" +
-      //       dtA[4] +
-      //       ".000Z";
-      //     return {
-      //       date: dateString,
-      //       id: item.id,
-      //       project: item.project,
-      //       raisedBy: item.raisedBy,
-      //       severity: item.severity
-      //     };
-      //   });
-      // }
 
      
-      //   const uniqueName = "filteredGrid" + this.contextId;
-      //     window.glue.contexts.set(uniqueName, {
-      //       filter: filter,
-      //       name: uniqueName
-      //     });
-      //     console.log("",window.glue.windows.my().context)
-      //     let appContext = {
-      //       localContext: ctx,
-      //       contextName: uniqueName,
-      //       filter: filter
-      //     };
-      //     debugger
-      //     // console.log(JSON.stringify(appContext))
-      //     newChart.start(appContext);
 
       
     },
@@ -413,6 +381,44 @@ export default {
       if (this.$store.state.themeMod) {
         this.chooseTheme(this.$store.state.themeMod.colorTheme);
       }
+    },
+    getFilteredData(){
+      let filter = {}
+      if (this.gridApi !== undefined || this.gridApi !== null) {
+        // console.log( this.gridApi )
+        let gridData = new jslinq(
+          this.gridApi.clientSideRowModel.rowsToDisplay
+        ).select(i => {
+          return i.data;
+        }).items;
+
+        //convert date from grid display formatting to match what the server is sending
+        filter.data = gridData.map(item => {
+          let dtA = item.date.split(" ");
+          let dateA = dtA[0].split("-");
+          let dateString =
+            dateA[2] +
+            "-" +
+            dateA[0] +
+            "-" +
+            dateA[1] +
+            "T" +
+            dtA[2] +
+            ":" +
+            dtA[3] +
+            ":" +
+            dtA[4] +
+            ".000Z";
+          return {
+            date: dateString,
+            id: item.id,
+            project: item.project,
+            raisedBy: item.raisedBy,
+            severity: item.severity
+          };
+        });
+      }
+      return filter
     }
   },
   watch: {
