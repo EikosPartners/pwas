@@ -2,6 +2,7 @@ let express = require('express');
 let helmet = require('helmet');
 let app = express();
 let cors = require('cors');
+let applications = require('./data/JSC_WS.json')
 
 let http = require('http');
 
@@ -52,6 +53,19 @@ io.sockets.on('connection', function(socket) {
     console.log(data);
     io.emit('filterByMonth', data);
   });
+
+  socket.on('appManager', function(data){
+    console.log(data)
+    let requestedApp = applications.filter(function(appJson){
+      return appJson.name == data
+    })[0]
+    
+    let context = Date.now()
+
+    io.emit('getNewChartInfo', {...requestedApp, context})
+  
+  })
+
   socket.on('themeColor', function(data) {
     colorObj.color = data.name;
 

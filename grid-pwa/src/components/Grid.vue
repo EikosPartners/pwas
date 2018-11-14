@@ -94,7 +94,8 @@ export default {
     return {
       trueVar: true,
       selected: "",
-      isGlu: window.glue
+      isGlu: window.glue,
+      temporaryWindow: null
     };
   },
   sockets: {
@@ -181,6 +182,13 @@ export default {
     refresh(data) {
       console.log("refresh!");
       this.updateData();
+    },
+    getNewChartInfo(data){
+      this.temporaryWindow.location.href = data.url + '?' + data.context
+      this.temporaryWindow = null
+      // window.open(data.url + '?' + data.context, data.title, "menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yes,toolbar=yes")
+      // debugger
+      // save the context for future communication
     }
   },
   methods: {
@@ -319,69 +327,73 @@ export default {
     },
     openNewChart() {
       if (!window.glue) {
-        axios.get(`http://localhost:9000/apps?appName=${this.selected}`).then(response => {
-          let {name, url, title} = response.data
-          debugger
-        });
+        debugger
+        this.temporaryWindow = window.open('', '_blank')
+        this.$socket.emit('appManager', this.selected) 
+        // axios.get(`http://localhost:9000/apps?appName=${this.selected}`).then(response => {
+        //   let {name, url, title} = response.data
+        //   debugger
+        // });
+        
       }
-
-
-      const newChart = glue.appManager.application(this.selected);
-      const localWindow = window.glue.windows.my();
-      const ctx = localWindow.context;
       
-      // Get the data set from this component
-      let filter = {};
-      if (this.gridApi !== undefined || this.gridApi !== null) {
-        // console.log( this.gridApi )
-        let gridData = new jslinq(
-          this.gridApi.clientSideRowModel.rowsToDisplay
-        ).select(i => {
-          return i.data;
-        }).items;
 
-        //convert date from grid display formatting to match what the server is sending
-        filter.data = gridData.map(item => {
-          let dtA = item.date.split(" ");
-          let dateA = dtA[0].split("-");
-          let dateString =
-            dateA[2] +
-            "-" +
-            dateA[0] +
-            "-" +
-            dateA[1] +
-            "T" +
-            dtA[2] +
-            ":" +
-            dtA[3] +
-            ":" +
-            dtA[4] +
-            ".000Z";
-          return {
-            date: dateString,
-            id: item.id,
-            project: item.project,
-            raisedBy: item.raisedBy,
-            severity: item.severity
-          };
-        });
-      }
+      // const newChart = glue.appManager.application(this.selected);
+      // const localWindow = window.glue.windows.my();
+      // const ctx = localWindow.context;
+      
+      // // Get the data set from this component
+      // let filter = {};
+      // if (this.gridApi !== undefined || this.gridApi !== null) {
+      //   // console.log( this.gridApi )
+      //   let gridData = new jslinq(
+      //     this.gridApi.clientSideRowModel.rowsToDisplay
+      //   ).select(i => {
+      //     return i.data;
+      //   }).items;
+
+      //   //convert date from grid display formatting to match what the server is sending
+      //   filter.data = gridData.map(item => {
+      //     let dtA = item.date.split(" ");
+      //     let dateA = dtA[0].split("-");
+      //     let dateString =
+      //       dateA[2] +
+      //       "-" +
+      //       dateA[0] +
+      //       "-" +
+      //       dateA[1] +
+      //       "T" +
+      //       dtA[2] +
+      //       ":" +
+      //       dtA[3] +
+      //       ":" +
+      //       dtA[4] +
+      //       ".000Z";
+      //     return {
+      //       date: dateString,
+      //       id: item.id,
+      //       project: item.project,
+      //       raisedBy: item.raisedBy,
+      //       severity: item.severity
+      //     };
+      //   });
+      // }
 
      
-        const uniqueName = "filteredGrid" + this.contextId;
-          window.glue.contexts.set(uniqueName, {
-            filter: filter,
-            name: uniqueName
-          });
-          console.log("",window.glue.windows.my().context)
-          let appContext = {
-            localContext: ctx,
-            contextName: uniqueName,
-            filter: filter
-          };
-          debugger
-          // console.log(JSON.stringify(appContext))
-          newChart.start(appContext);
+      //   const uniqueName = "filteredGrid" + this.contextId;
+      //     window.glue.contexts.set(uniqueName, {
+      //       filter: filter,
+      //       name: uniqueName
+      //     });
+      //     console.log("",window.glue.windows.my().context)
+      //     let appContext = {
+      //       localContext: ctx,
+      //       contextName: uniqueName,
+      //       filter: filter
+      //     };
+      //     debugger
+      //     // console.log(JSON.stringify(appContext))
+      //     newChart.start(appContext);
 
       
     },
