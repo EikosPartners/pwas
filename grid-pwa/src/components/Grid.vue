@@ -184,11 +184,16 @@ export default {
       this.updateData();
     },
     getNewChartInfo(data){
+      console.log('chart info received')
+      let localThis = this
       this.temporaryWindow.location.href = data.url + '?' + data.context
       this.temporaryWindow = null
-      // window.open(data.url + '?' + data.context, data.title, "menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yes,toolbar=yes")
-      // debugger
-      // save the context for future communication
+      this.$socket.on(data.context + "sendData", (event) => {
+        console.log('sendData received')
+        localThis.$socket.emit(data.context + "dataToServer", 'foobar')
+      })
+
+      // save the context for updates
     }
   },
   methods: {
@@ -327,13 +332,9 @@ export default {
     },
     openNewChart() {
       if (!window.glue) {
-        debugger
         this.temporaryWindow = window.open('', '_blank')
         this.$socket.emit('appManager', this.selected) 
-        // axios.get(`http://localhost:9000/apps?appName=${this.selected}`).then(response => {
-        //   let {name, url, title} = response.data
-        //   debugger
-        // });
+        // this.$socket.emit(this.selected, 'foobar')
         
       }
       

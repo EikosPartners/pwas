@@ -23,17 +23,6 @@ router.get('/', (req, res) => {
   res.send(data);
 });
 
-// router.get('/apps', (req, res)=> {
-//   let appName = req.query.appName
-//   // console.log
-//   console.log(applications)
-//   let requestedApp = applications.filter(appJson=>{
-//     return appJson.name == appName
-//   })[0]
-//   console.log(requestedApp)
-//   res.send(requestedApp)
-// })
-
 router.get('/positions', (req, res) => {
   res.send(positionData);
 });

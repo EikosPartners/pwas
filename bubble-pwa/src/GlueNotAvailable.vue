@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     This app needs to run within the Glue42 environment
+    <button @click="debuggerButton">enter debugger</button>
   </div>
 </template>
 
@@ -10,14 +11,28 @@ import { mapActions } from 'vuex';
 export default {
   name: 'app',
   methods: {
-    ...mapActions(['fetchData', 'fetchColor'])
+    ...mapActions(['fetchData', 'fetchColor']),
+    debuggerButton(){
+        this.$socket.emit("appManaged", window.context)
+  
+        this.$socket.emit(window.context + "childReady", 'foobar')
+        this.$socket.on(window.context + "dataToChild", function (event){
+          console.log('dataToChild received')
+        })
+
+        // this.$socket.emit()
+    }
   },
   created() {
     this.fetchData();
     this.fetchColor();
+    console.log('window opened')
+  
   },
-  beforeCreate(){
-    
+  mounted(){
+    if (window.context) {
+  
+    }
         
   }
 };

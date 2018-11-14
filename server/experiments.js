@@ -24,4 +24,22 @@ window.onload=function(){
 // render a useful chart 
 
 
+
+// data flow!
+
+// Open New Chart (structure implemented, data not being sent yet)
+// window 1 -> socket 'where is my child'
+// socket -> window 1 'localhost:909whatever'
+// window1.open(window2)
+// window2 -> socket 'childReady' (right now this is manual because isn't happening with lifecycle hooks)
+// socket -> window1 'sendData
+// window1 -> socket 'dataToServer'
+// socket -> window2 'dataToChild'
+
+// Update Filters (not yet implemented)
+// window 1 -> socket 'for each child, dataToServerUpdate'
+// socket -> window2 'dataToChildUpdate' 
+
+
+
   
