@@ -5,6 +5,9 @@ let seed = require('../data/seed.js');
 let metrics = require('../data/metrics.js');
 let positions = require('../data/positions.js');
 let router = express.Router();
+
+let applications = require('../data/JSC_WS.json')
+
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
@@ -21,6 +24,17 @@ setInterval(function() {
 router.get('/', (req, res) => {
   res.send(data);
 });
+
+router.get('/apps', (req, res)=> {
+  let appName = req.query.appName
+  // console.log
+  console.log(applications)
+  let requestedApp = applications.filter(appJson=>{
+    return appJson.name == appName
+  })[0]
+  console.log(requestedApp)
+  res.send(requestedApp)
+})
 
 router.get('/positions', (req, res) => {
   res.send(positionData);

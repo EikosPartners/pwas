@@ -13,7 +13,7 @@
       <option value="JSCLine">Line Chart</option>
       <option value="JSCPie">Pie Chart</option>
     </select>
-     <button class="header-button" @click="openNewChart" :disabled="!isGlu">Open</button>
+     <button class="header-button" @click="openNewChart" :disabled="selected === ''">Open</button>
   </div>
     <ag-grid-vue
       id='Grid'
@@ -39,7 +39,7 @@ import Windowing from "@/mixins/Windowing";
 import DragAndDrop from "@/mixins/DragAndDrop"
 import Stream from "@/mixins/Stream"
 import jslinq from "jslinq";
-
+import axios from 'axios'
 export default {
   name: "Grid",
   components: {
@@ -318,7 +318,14 @@ export default {
       }
     },
     openNewChart() {
-      
+      if (!window.glue) {
+        axios.get(`http://localhost:9000/apps?appName=${this.selected}`).then(response => {
+          let {name, url, title} = response.data
+          debugger
+        });
+      }
+
+
       const newChart = glue.appManager.application(this.selected);
       const localWindow = window.glue.windows.my();
       const ctx = localWindow.context;
