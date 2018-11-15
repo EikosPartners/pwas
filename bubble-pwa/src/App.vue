@@ -7,14 +7,16 @@
 <script>
 import { mapActions, mapMutations } from 'vuex';
 import Windowing from '@/mixins/Windowing';
-import Messaging from '@/mixins/Messaging';
+import Messaging from '@/mixins/Messaging'; 
 
 export default {
   mixins: [Windowing, Messaging],
   name: 'app',
   methods: {
     ...mapActions(['fetchData', 'fetchColor']),
-    ...mapMutations(['initializeData', 'setBelongsToGrid', 'setSelected', 'setColor', 'setLighting'])
+    ...mapMutations(['initializeData', 'setBelongsToGrid', 'setSelected', 'setColor', 'setLighting']),
+    extraMethod(){  
+    }
   },
   created() {
     this.fetchColor();
@@ -24,26 +26,46 @@ export default {
         this.setColor(context.color)
         this.setLighting(context.lighting)
       })
-    }
-    //this is the grid specific local context it opens with
-    const localWindow = window.glue.windows.my();
-    const ctx = localWindow.context;
-    const contextName = ctx.contextName;
+      const localWindow = window.glue.windows.my();
+      const ctx = localWindow.context;
+      const contextName = ctx.contextName;
+        //this is the grid specific local context it opens with
 
-    if (contextName !== undefined) {
-      this.$store.commit('setBelongsToGrid'); //disables socket refresh
-      this.$store.commit('setSelected', contextName)
-      this.subscribe(contextName, (context, delta, removed) => {
-        this.$store.commit('initializeData', context.filter.data);
-      });
-    }
-
-    if (ctx.filter) {
-      this.$store.commit('initializeData', ctx.filter.data);
+      if (contextName !== undefined) {
+        this.$store.commit('setBelongsToGrid'); //disables socket refresh
+        this.$store.commit('setSelected', contextName)
+        this.subscribe(contextName, (context, delta, removed) => {
+          this.$store.commit('initializeData', context.filter.data);
+        });
+      }
+      if (ctx.filter) {
+        this.$store.commit('initializeData', ctx.filter.data);
+      } else {
+        this.fetchData();
+      }
     } else {
-      this.fetchData();
+      if (window.context) {
+           let localThis = this
+           this.$socket.on(window.context + "dataToChild", function (data){
+             console.log('dataToChild received')
+             localThis.$store.commit('initializeData', JSON.parse(data))
+           })
+           this.$socket.emit("appManaged", window.context)
+           this.$socket.emit(window.context + "childReady", 'ready')
+ 
+         } else {
+           this.fetchData();
+         }
+    }
+  },
+  sockets: {
+    connect(){
+      console.log('connected')
+      this.debugButton()
+      
     }
   }
+
 };
 </script>
 

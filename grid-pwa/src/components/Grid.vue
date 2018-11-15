@@ -194,7 +194,7 @@ export default {
         localThis.$socket.emit(data.context + "dataToServer", JSON.stringify(localThis.temporaryData.data))
       })
 
-      // save the context for updates (store? )
+      // save the context for updates (store?)
     }
   },
   methods: {
@@ -359,11 +359,6 @@ export default {
           // console.log(JSON.stringify(appContext))
           newChart.start(appContext);
       }
-      
-      
-
-     
-
       
     },
     parseDate(date) {

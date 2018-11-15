@@ -40,11 +40,16 @@ export default {
     ...mapState(['color', 'lighting', 'belongsToGrid', 'selected']),
     availableContexts() {
       let availableContexts = [];
-      window.glue.contexts.all().forEach(context => {
-        if (context.includes('filteredGrid') && context !== 'filteredGrid') {
-          availableContexts.push(context);
-        }
-      });
+      if (window.glue) {
+        window.glue.contexts.all().forEach(context => {
+          if (context.includes('filteredGrid') && context !== 'filteredGrid') {
+            availableContexts.push(context);
+          }
+        });
+
+      } else if (window.context) {
+        availableContexts.push(window.context)
+      }
       return availableContexts;
     },
     prettyData() {

@@ -6,7 +6,7 @@
       </span>
       <span v-else-if="inGlue && selected == ''">Unsubscribed</span>
         <span class="current-context" v-else>Subscribed:
-        <select class="select" v-model="selected" v-on:click="populate">
+        <select class="select" v-model="selected" v-on:click="createOrPopulate">
           <option disabled value="">Select context</option>
           <option v-for="(context, index) in availableContexts" :value="context" :key="index">{{context}}</option>
         </select>
@@ -52,6 +52,13 @@ export default {
       this.$store.commit('changeColor', this.color);
       if (this.$store.state.themeMod) {
         this.chooseTheme(this.$store.state.themeMod.colorTheme);
+      }
+    },
+    createOrPopulate(){
+      if (window.glue) {
+        this.populate()
+      } else {
+        debugger
       }
     }
   },

@@ -35,23 +35,26 @@ export default {
             if (this.gridInstance === true) {
               // Can we pass the instance an updated context here?
             } else {
-              let app = window.glue.appManager.application('JSCDataGrid');
-              const localWindow = window.glue.windows.my();
-              const localThis = this;
-              let windowConfig = {
-                relativeTo: localWindow.id,
-                relativePosition: 'right'
-              };
-      
-              console.log(this.filterOnGridID)
-              app
-                .start({ filter, eventName }, windowConfig)
-                .then(instance => {
-                  //localThis.gridInstance = instance
-                 
-                });
-              
-              this.gridInstance = true;
+              if (window.glue) {
+                let app = window.glue.appManager.application('JSCDataGrid');
+                const localWindow = window.glue.windows.my();
+                const localThis = this;
+                let windowConfig = {
+                  relativeTo: localWindow.id,
+                  relativePosition: 'right'
+                };
+        
+                console.log(this.filterOnGridID)
+                app
+                  .start({ filter, eventName }, windowConfig)
+                  .then(instance => {
+                    //localThis.gridInstance = instance
+                   
+                  });
+                
+                this.gridInstance = true;
+
+              }
             }
           },
     }
