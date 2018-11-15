@@ -45,6 +45,7 @@ export default {
                 };
         
                 console.log(this.filterOnGridID)
+                
                 app
                   .start({ filter, eventName }, windowConfig)
                   .then(instance => {

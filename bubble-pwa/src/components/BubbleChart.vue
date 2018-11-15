@@ -1,6 +1,6 @@
 <template>
   <div class="container" @drop="handleDrop" @dragenter="handleDragEnter" @dragover="handleDragOver">
-    <pwa-header :title="compTitle" :availableContexts="availableContexts" />
+    <pwa-header :title="compTitle" />
     <bubble-chart 
       :isDate="true" 
       @jsc_click="handleFilter" 
@@ -38,20 +38,6 @@ export default {
   computed: {
     ...mapGetters(['data', 'themeColors', 'filterOnGridID', 'contextFilter']),
     ...mapState(['color', 'lighting', 'belongsToGrid', 'selected']),
-    availableContexts() {
-      let availableContexts = [];
-      if (window.glue) {
-        window.glue.contexts.all().forEach(context => {
-          if (context.includes('filteredGrid') && context !== 'filteredGrid') {
-            availableContexts.push(context);
-          }
-        });
-
-      } else if (window.context) {
-        availableContexts.push(window.context)
-      }
-      return availableContexts;
-    },
     prettyData() {
       let bubbleData = new jslinq(this.data)
         .select(item => {
@@ -120,6 +106,7 @@ export default {
 
       const filteredData = this.filterByDateAndSeverity(data)
       this.setContextFilterData(filteredData)
+
       if(this.handleShiftClick(clickEvent)){
         this.gridInstance = false
         this.manageContextWindow(this.contextFilter, "StandAloneGrid")

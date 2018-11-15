@@ -66,7 +66,7 @@ io.sockets.on('connection', function(socket) {
     
     let context = Date.now()
         socket.on(context + "dataToServer", function(data2) {
-          console.log('data2', data2)
+          console.log(context)
           console.log('dataToServer received')
           io.emit(context + "dataToChild", data2)
         })
@@ -85,8 +85,9 @@ io.sockets.on('connection', function(socket) {
     // data will be the context (Date.now) established above
     
     socket.on(data + "dataToServer", function(data2) {
-      console.log('data2', data2)
+      // console.log('data2', data2)
       console.log('dataToServer received')
+      console.log(data)
       io.emit(data + "dataToChild", data2)
     })
 

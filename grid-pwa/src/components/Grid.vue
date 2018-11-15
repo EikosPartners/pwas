@@ -57,7 +57,8 @@ export default {
       "currentFilter",
       "contextId",
       "color",
-      "lighting"
+      "lighting",
+      "childContexts"
     ]),
     prettyData() {
       return this.data.map(item => {
@@ -189,12 +190,12 @@ export default {
       let localThis = this
       this.temporaryWindow.location.href = data.url + '?' + data.context
       this.temporaryWindow = null
+      this.$store.commit('addChildContext', data.context)
       this.$socket.on(data.context + "sendData", (event) => {
         console.log('sendData received')
         localThis.$socket.emit(data.context + "dataToServer", JSON.stringify(localThis.temporaryData.data))
       })
 
-      // save the context for updates (store?)
     }
   },
   methods: {
@@ -208,62 +209,36 @@ export default {
     ]),
     modelUpdated(params) {
       this.gridApi = params.api;
+      console.log('update model')
       if (window.glue) {
-          this.updateChildren();
+        this.updateChildren();
       }
     },
     updateChildren() {
-      if (window.glue.windows.my().context === null) {
-        return;
-      }
-
-      if (window.glue.windows.my().context.eventName === "filterOnGrid") {
-        console.log("filteredGrid");
-        return;
-      }
-
-      let filter = {};
-      let gridData = new jslinq(
-        this.gridApi.clientSideRowModel.rowsToDisplay
-      ).select(i => {
-        return i.data;
-      }).items;
-      if (gridData) {
-        //convert date from grid display formatting to match what the server is sending
-        filter.data = gridData.map(item => {
-          let dtA = item.date.split(" ");
-          let dateA = dtA[0].split("-");
-          let dateString =
-            dateA[2] +
-            "-" +
-            dateA[0] +
-            "-" +
-            dateA[1] +
-            "T" +
-            dtA[2] +
-            ":" +
-            dtA[3] +
-            ":" +
-            dtA[4] +
-            ".000Z";
-          return {
-            date: dateString,
-            id: item.id,
-            project: item.project,
-            raisedBy: item.raisedBy,
-            severity: item.severity
-          };
+      if (window.glue) {
+        if (window.glue.windows.my().context === null) {
+          return;
+        }
+  
+        if (window.glue.windows.my().context.eventName === "filterOnGrid") {
+          console.log("filteredGrid");
+          return;
+        }
+  
+        let filter = this.getFilteredData()
+  
+        const uniqueName = "filteredGrid" + this.contextId;
+        window.glue.contexts.set(uniqueName, {
+          filter: filter,
+          name: uniqueName
         });
-      } else {
-        //if no filter has been applied to the grid use full data set from store
-        filter.data = this.data;
+      } else{
+        this.temporaryData = this.getFilteredData()
+        this.childContexts.forEach(context=>{
+          let localThis = this
+          this.$socket.emit(context + "dataToServer", JSON.stringify(localThis.temporaryData.data))
+        })
       }
-
-      const uniqueName = "filteredGrid" + this.contextId;
-      window.glue.contexts.set(uniqueName, {
-        filter: filter,
-        name: uniqueName
-      });
     },
     onGridReady(params) {
       this.gridApi = params.api;

@@ -10,7 +10,8 @@ const state = {
   currentFilter: 'No Filter',
   contextId: null,
   color: null,
-  lighting: 'lighting'
+  lighting: 'lighting',
+  childContexts: []
 };
 
 export const getters = {
@@ -67,6 +68,9 @@ export const mutations = {
     if (state.contextId === null) {
       state.contextId = data;
     }
+  },
+  addChildContext(state,data) {
+    state.childContexts = [...state.childContexts, data]
   }
 };
 
