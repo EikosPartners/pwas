@@ -60,9 +60,7 @@ export default {
   },
   sockets: {
     connect(){
-      console.log('connected')
-      this.debugButton()
-      
+      console.log('connected')      
     }
   }
 

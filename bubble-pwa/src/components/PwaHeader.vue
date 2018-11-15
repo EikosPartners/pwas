@@ -1,16 +1,10 @@
 <template>
   <div :class="['header']" :style="styleObj">
       <span>{{title}}</span>
-      <span class="current-context" v-if="inGlue && selected !== ''">Subscribed:
-        <span>{{selected.split('d')[2]}}</span>
+      <span class="current-context" v-if="availableContext">Subscribed:
+        <span>{{availableContext}}</span>
       </span>
-      <span v-else-if="inGlue && selected == ''">Unsubscribed</span>
-        <span class="current-context" v-else>Subscribed:
-        <select class="select" v-model="selected" v-on:click="createOrPopulate">
-          <option disabled value="">Select context</option>
-          <option v-for="(context, index) in availableContexts" :value="context" :key="index">{{context}}</option>
-        </select>
-      </span>
+      <span v-else>Unsubscribed</span>
     </div>
 </template>
 
@@ -21,7 +15,7 @@ import DragAndDrop from '@/mixins/DragAndDrop';
 
 export default {
   name: "PwaHeader",
-  props: ['title', 'availableContexts'],
+  props: ['title'],
   mixins: [StyleTogglerMixin, DragAndDrop],
   computed: {
     ...mapGetters(['themeColors']),
@@ -36,6 +30,16 @@ export default {
         text = '#fff'
       }
       return {backgroundColor: background, color: text}
+    },
+    availableContext() {
+      let availableContext  ;
+      if (window.glue) {
+        availableContext = window.glue.windows.my().contexts.contextName.split('filteredGrid')[1]       
+
+      } else if (window.context) {
+        availableContext = window.context
+      }
+      return availableContext;
     },
     selected: {
       get() {
