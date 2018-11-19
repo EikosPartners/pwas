@@ -1,11 +1,8 @@
 <template>
-  <div class="container" @drop="handleDrop" @dragenter="handleDragEnter" @dragover="handleDragOver">
-    <pwa-header :title="compTitle" :availableContexts="availableContexts" />
-    <line-chart 
-      @jsc_click="handleFilter" 
-      :dataModel="lineData"
-    />
-  </div>
+  <line-chart 
+    @jsc_click="handleFilter" 
+    :dataModel="lineData"
+  />
 </template>
 
 <script>
@@ -26,22 +23,13 @@ export default {
   mixins: [StyleTogglerMixin, Messaging, Windowing, DragAndDrop, Filtering],
   data() {
     return {
-      compTitle: "Ticket Severity by Date",
       gridInstance: false
     };
   },
   computed: {
     ...mapGetters(['data', 'themeColors', 'filterOnGridID', 'contextFilter']),
     ...mapState(['color', 'belongsToGrid', 'lighting', 'selected']),
-    availableContexts() {
-      let availableContexts = [];
-      window.glue.contexts.all().forEach(context => {
-        if (context.includes('filteredGrid') && context !== 'filteredGrid') {
-          availableContexts.push(context);
-        }
-      });
-      return availableContexts;
-    },
+    
     lineData(){
       const modifiedData = [];
       this.data.forEach(datum => {
@@ -93,7 +81,6 @@ export default {
       }
     },
     filterByDate(data){
-
       let date = this.formatDate(data.date).split("-")
       date = date[2] +"-"+date[0]+"-"+date[1]
       
@@ -145,26 +132,13 @@ export default {
 </script>
  
 <style >
-.container {
-  width: 90%;
-  padding: 0 5%;
-  height: 80vh;
-}
+
 
 .current-context {
   font-size: 1.1rem;
   margin: 0 0.6rem;
 }
 
-.header {
-  font-size: 1.2rem;
-  padding: 0.5rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 10vh;
-  /* min-height: 60px; */
-}
 
 .select {
   padding: 0.3rem;
