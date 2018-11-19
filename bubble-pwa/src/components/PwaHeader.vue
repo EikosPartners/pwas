@@ -1,10 +1,16 @@
 <template>
-  <div :class="['header']" :style="styleObj">
+   <div :class="['header']" :style="styleObj">
       <span>{{title}}</span>
-      <span class="current-context" v-if="availableContext">Subscribed:
-        <span>{{availableContext}}</span>
+      <span class="current-context" v-if="inGlue && selected !== ''">Subscribed:
+        <span>{{selected.split('d')[2]}}</span>
       </span>
-      <span v-else>Unsubscribed</span>
+      <span v-else-if="inGlue && selected == ''">Unsubscribed</span>
+        <span class="current-context" v-else>Subscribed:
+        <select class="select" v-model="selected" v-on:click="populate">
+          <option disabled value="">Select context</option>
+          <option v-for="(context, index) in this.availableContexts" :value="context" :key="index">{{context}}</option>
+        </select>
+      </span>
     </div>
 </template>
 
@@ -15,8 +21,12 @@ import DragAndDrop from '@/mixins/DragAndDrop';
 
 export default {
   name: "PwaHeader",
-  props: ['title'],
   mixins: [StyleTogglerMixin, DragAndDrop],
+  data(){
+    return{
+      title: "Ticket Severity by Date",
+    }
+  },
   computed: {
     ...mapGetters(['themeColors']),
     ...mapState(['color', 'lighting']),
@@ -31,15 +41,14 @@ export default {
       }
       return {backgroundColor: background, color: text}
     },
-    availableContext() {
-      let availableContext  ;
-      if (window.glue) {
-        availableContext = window.glue.windows.my().contexts.contextName.split('filteredGrid')[1]       
-
-      } else if (window.context) {
-        availableContext = window.context
-      }
-      return availableContext;
+    availableContexts() {
+      let availableContexts = [];
+      window.glue.contexts.all().forEach(context => {
+        if (context.includes('filteredGrid') && context !== 'filteredGrid') {
+          availableContexts.push(context);
+        }
+      });
+      return availableContexts;
     },
     selected: {
       get() {
@@ -78,3 +87,15 @@ export default {
 }
 </script>
 
+<style>
+  
+.header {
+  font-size: 1.2rem;
+  padding: 0.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 10vh;
+  /* min-height: 60px; */
+}
+</style>

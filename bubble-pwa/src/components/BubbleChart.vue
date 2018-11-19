@@ -1,6 +1,4 @@
 <template>
-  <div class="container" @drop="handleDrop" @dragenter="handleDragEnter" @dragover="handleDragOver">
-    <pwa-header :title="compTitle" />
     <bubble-chart 
       :isDate="true" 
       @jsc_click="handleFilter" 
@@ -8,30 +6,25 @@
       xAxisLabel="date" 
       yAxisLabel="severity"
     ></bubble-chart>
-  </div>
 </template>
 
 <script>
 import { D3BubbleChart, StyleTogglerMixin } from 'jscatalyst';
 import { mapGetters, mapState, mapActions } from 'vuex';
 import jslinq from 'jslinq';
-import PwaHeader from '@/components/PwaHeader.vue'
 import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
 import Filtering from '@/mixins/Filtering'
-import DragAndDrop from '@/mixins/DragAndDrop'
 import { log } from 'async';
 
 export default {
   name: 'BubbleChart',
   components: {
     bubbleChart: D3BubbleChart,
-    pwaHeader: PwaHeader
   },
-  mixins: [StyleTogglerMixin, Messaging, Windowing, DragAndDrop, Filtering],
+  mixins: [StyleTogglerMixin, Messaging, Windowing, Filtering],
   data() {
     return {
-      compTitle: "Ticket Severity by Date",
       gridInstance: false
     };
   },
@@ -174,25 +167,10 @@ export default {
 </script>
 
 <style>
-.container {
-  width: 90%;
-  padding: 0 5%;
-  height: 80vh;
-}
 
 .current-context {
   font-size: 1.1rem;
   margin: 0 0.6rem;
-}
-
-.header {
-  font-size: 1.2rem;
-  padding: 0.5rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 10vh;
-  /* min-height: 60px; */
 }
 
 .select {
