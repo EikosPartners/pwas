@@ -1,6 +1,4 @@
 <template>
- <div class="container" @drop="handleDrop" @dragenter="handleDragEnter" @dragover="handleDragOver">
-    <pwa-header :title="compTitle" :availableContexts="availableContexts" />
     <bar-chart
       @jsc_click="handleFilter"
       :dataModel='barDataProject'
@@ -8,43 +6,30 @@
       yaxisLabel="Number of Tickets"
       :xAxisAngle='45'
     ></bar-chart>
-  </div>
 </template>
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex';
 import { D3BarChart, StyleTogglerMixin } from 'jscatalyst';
 import jslinq from 'jslinq';
-import PwaHeader from '@/components/PwaHeader.vue'
 import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
 import Filtering from '@/mixins/Filtering';
-import DragAndDrop from '@/mixins/DragAndDrop'
 
 export default {
   name: 'BarChart',
   components: {
     barChart: D3BarChart,
-    pwaHeader: PwaHeader
   },
-  mixins: [StyleTogglerMixin, Messaging, Windowing, DragAndDrop, Filtering],
+  mixins: [StyleTogglerMixin, Messaging, Windowing, Filtering],
   data() {
     return {
-      compTitle: "Number of Tickets by Month",
       gridInstance: false
     };
   },
   computed: {
     ...mapGetters(['data', 'themeColors', 'filterOnGridID', 'contextFilter']),
     ...mapState(['color', 'belongsToGrid', 'lighting', 'selected']),
-    availableContexts() {
-      let availableContexts = [];
-      window.glue.contexts.all().forEach(context => {
-        if (context.includes('filteredGrid') && context !== 'filteredGrid') {
-          availableContexts.push(context);
-        }
-      });
-      return availableContexts;
-    },
+    
     prettyData() {
       let barData = [];
       let sorted = this.sortData(this.data);
@@ -199,25 +184,10 @@ export default {
 };
 </script>
 <style>
-.container {
-  width: 90%;
-  padding: 0 5%;
-  height: 80vh;
-}
 
 .current-context {
   font-size: 1.1rem;
   margin: 0 0.6rem;
-}
-
-.header {
-  font-size: 1.2rem;
-  padding: 0.5rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 10vh;
-  /* min-height: 60px; */
 }
 
 .select {

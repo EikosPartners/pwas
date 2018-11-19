@@ -1,6 +1,9 @@
 <template>
   <v-app id="app">
-    <router-view></router-view>
+    <div class="container" @drop="handleDrop" @dragenter="handleDragEnter" @dragover="handleDragOver">
+      <pwa-header/>
+      <bar-chart/>
+    </div>
   </v-app>
 </template>
 
@@ -8,10 +11,17 @@
 import { mapActions, mapMutations } from 'vuex';
 import Windowing from '@/mixins/Windowing';
 import Messaging from '@/mixins/Messaging';
+import DragAndDrop from './mixins/DragAndDrop'
+import BarChart from './components/BarChart'
+import PwaHeader from './components/PwaHeader'
 
 export default {
-  mixins: [Windowing, Messaging],
   name: 'app',
+  mixins: [Windowing, Messaging, DragAndDrop],
+  components:{
+    barChart: BarChart,
+    pwaHeader: PwaHeader
+  },
   methods: {
     ...mapActions(['fetchData', 'fetchColor']),
     ...mapMutations(['initializeData', 'setBelongsToGrid', 'setSelected', 'setColor', 'setLighting'])
@@ -68,6 +78,12 @@ body {
 
 :root {
   font-size: calc(0.3em + 1vw);
+}
+
+.container {
+  width: 90%;
+  padding: 0 5%;
+  height: 80vh;
 }
 
 .theme--dark {
