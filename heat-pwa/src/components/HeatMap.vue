@@ -1,6 +1,4 @@
 <template>
-  <div class="container" @drop="handleDrop" @dragenter="handleDragEnter" @dragover="handleDragOver">
-    <pwa-header :title="compTitle" />
     <heat-map
       v-if="themeColorsComp && themeColorsComp.length > 0"
       @jsc_click="handleFilter"
@@ -8,15 +6,12 @@
       xaxis-label="date"
       yaxis-label="volume"
     ></heat-map>
-  </div>
 </template>
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex';
 import { D3HeatMap, StyleTogglerMixin } from '@/../node_modules/jscatalyst/dist/jscatalyst.js';
-import PwaHeader from '@/components/PwaHeader.vue'
 import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
-import DragAndDrop from '@/mixins/DragAndDrop';
 import Filtering from '@/mixins/Filtering'
 import Stream from '@/mixins/Stream'
 import Notifications from '@/mixins/Notifications'
@@ -26,9 +21,8 @@ export default {
   name: 'HeatMap',
   components: {
     heatMap: D3HeatMap,
-    pwaHeader: PwaHeader
   },
-  mixins: [StyleTogglerMixin, Messaging, Windowing, DragAndDrop, Filtering, Stream, Notifications ],
+  mixins: [StyleTogglerMixin, Messaging, Windowing , Filtering, Stream, Notifications ],
   data() {
     return {
       gridInstance: false
@@ -183,25 +177,10 @@ export default {
 };
 </script>
 <style>
-.container {
-  width: 90%;
-  padding: 0 5%;
-  height: 80vh;
-}
 
 .current-context {
   font-size: 1.1rem;
   margin: 0 0.6rem;
-}
-
-.header {
-  font-size: 1.2rem;
-  padding: 0.5rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 10vh;
-  /* min-height: 60px; */
 }
 
 .select {
