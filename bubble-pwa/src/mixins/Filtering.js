@@ -1,4 +1,9 @@
 export default {
+    data(){
+      return {
+        temporaryWindow: null
+      }
+    },
     methods: {
 
         handleShiftClick(click){
@@ -8,11 +13,17 @@ export default {
             return false
         },
         handleFilterOnGrid(){
+          if (window.glue) {
+            
             if(this.verifyNewContextID()){
               const uniqueID = Date.now()
               const contextID = 'filterOnGrid'+ uniqueID
               this.setFilterOnGridID(contextID)
             }
+          } else {
+            this.temporaryWindow = window.open('', '_blank')
+            this.$socket.emit('appManager', 'JSCDataGrid') 
+          }
         },
         verifyNewContextID(){
             if(this.filterOnGridID === null){
@@ -56,7 +67,10 @@ export default {
                 this.gridInstance = true;
 
               }
-            }
-          },
+          }
+      },
+    },
+    sockets: {
+     
     }
 }

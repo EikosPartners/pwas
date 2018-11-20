@@ -63,7 +63,7 @@ io.sockets.on('connection', function(socket) {
     let requestedApp = applications.filter(function(appJson){
       return appJson.name == data
     })[0]
-    
+    console.log(requestedApp)
     let context = Date.now()
         socket.on(context + "dataToServer", function(data2) {
           console.log(context)

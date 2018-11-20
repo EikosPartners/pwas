@@ -25,7 +25,7 @@ var myMixin = {
       }
       else {
         console.log('WEBSockets: Filtering message ' + filter);
-        this.$socket.emit('filterByMonth', filter);
+        // this.$socket.emit('filterByMonth', filter);
       }
     }
   }

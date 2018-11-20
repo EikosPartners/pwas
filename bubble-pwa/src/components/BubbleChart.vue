@@ -86,7 +86,20 @@ export default {
         console.log('refresh!');
         this.updateData();
       }
-    }
+    },
+    getNewChartInfo(data){
+      console.log('chart info received')
+        let localThis = this
+        this.temporaryWindow.location.href = data.url + '?' + data.context
+        this.temporaryWindow = null
+        this.setFilterOnGridID(data.context)
+        this.$socket.on(data.context + "sendData", (event) => {
+          debugger
+          console.log('sendData received')
+          localThis.$socket.emit(data.context + "dataToServer", JSON.stringify(localThis.contextFilter.data))
+        })
+  
+      }
   },
   methods: {
     ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID', 'setContextFilterData']),
@@ -99,7 +112,7 @@ export default {
 
       const filteredData = this.filterByDateAndSeverity(data)
       this.setContextFilterData(filteredData)
-
+      
       if(this.handleShiftClick(clickEvent)){
         this.gridInstance = false
         this.manageContextWindow(this.contextFilter, "StandAloneGrid")
