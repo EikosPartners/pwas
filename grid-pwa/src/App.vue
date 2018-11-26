@@ -40,7 +40,22 @@ export default {
         window.glue.contexts.set(uniqueName, {});
       }
     } else { 
+      if (window.context) {
+
+        let localThis = this
+             
+             this.$socket.on(window.context + "dataToChild", function (data){
+               console.log('dataToChild received')
+               localThis.$store.commit('initializeData', JSON.parse(data))
+             })
+             this.$socket.emit("appManaged", window.context)
+             this.$socket.emit(window.context + "childReady", 'ready')
+            //  this.$store.commit('setBelongsToGrid')
+   
+      } else {
+
         this.fetchData();
+      }
     }
 
   },

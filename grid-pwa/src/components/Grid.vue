@@ -4,7 +4,7 @@
     <span>Grid</span>
      <span class="current-context" @dragstart="handleDragStart" @dragend="handleDragEnd" draggable="true">Id: {{contextId}}</span>
     <span class="current-filter">{{currentFilter}}</span>
-    <button class="header-button" @click="removeFilter" :disabled="currentFilter === 'No Filter'">Clear Filter</button>
+    <button class="header-button" @click="removeFilter" :disabled="currentFilter === 'No Filter' || isContext">Clear Filter</button>
     <select class="select" v-model="selected">
       <option disabled value="">Select chart</option>
       <option value="JSCBar">BarChart</option>
@@ -13,7 +13,7 @@
       <option value="JSCLine">Line Chart</option>
       <option value="JSCPie">Pie Chart</option>
     </select>
-     <button class="header-button" @click="openNewChart" :disabled="selected === ''">Open</button>
+     <button class="header-button" @click="openNewChart" :disabled="selected === '' || isContext">Open</button>
   </div>
     <ag-grid-vue
       id='Grid'
@@ -97,7 +97,8 @@ export default {
       selected: "",
       isGlu: window.glue,
       temporaryWindow: null,
-      temporaryData: null
+      temporaryData: null,
+      isContext: window.context
     };
   },
   sockets: {
@@ -186,6 +187,7 @@ export default {
       this.updateData();
     },
     getNewChartInfo(data){
+      debugger
       console.log('chart info received')
       let localThis = this
       this.temporaryWindow.location.href = data.url + '?' + data.context
@@ -312,9 +314,7 @@ export default {
       this.temporaryData = this.getFilteredData()
       if (!window.glue) {
         this.temporaryWindow = window.open('', '_blank')
-        this.$socket.emit('appManager', this.selected) 
-        // this.$socket.emit(this.selected, 'foobar')
-        
+        this.$socket.emit('appManager', {to: this.selected, from: 'JSCDataGrid'})         
       } else {
         const newChart = glue.appManager.application(this.selected);
         const localWindow = window.glue.windows.my();
@@ -330,8 +330,6 @@ export default {
             contextName: uniqueName,
             filter: filter
           };
-          // debugger
-          // console.log(JSON.stringify(appContext))
           newChart.start(appContext);
       }
       

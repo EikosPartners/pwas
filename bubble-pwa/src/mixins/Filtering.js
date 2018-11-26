@@ -22,7 +22,7 @@ export default {
             }
           } else {
             this.temporaryWindow = window.open('', '_blank')
-            this.$socket.emit('appManager', 'JSCDataGrid') 
+            this.$socket.emit('appManager', {to: 'JSCDataGrid', from: 'JSCBubbleChart'}) 
           }
         },
         verifyNewContextID(){
