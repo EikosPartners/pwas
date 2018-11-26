@@ -61,21 +61,21 @@ export default {
       "childContexts"
     ]),
     prettyData() {
-      return this.data.map(item => {
-        if (item.date) {
-          //formats our data
-          let prettyItem = {};
-          prettyItem.date = this.parseDate(item.date);
-          prettyItem.project = item.project;
-          prettyItem.raisedBy = item.raisedBy;
-          prettyItem.severity = item.severity;
-          prettyItem.id = item.id;
-          return prettyItem;
-        } else {
-          // if the data is not as expected
-          return item
-        }
-      });
+        return this.data.map(item => {
+          if (item.date) {
+            //formats our data
+            let prettyItem = {};
+            prettyItem.date = this.parseDate(item.date);
+            prettyItem.project = item.project;
+            prettyItem.raisedBy = item.raisedBy;
+            prettyItem.severity = item.severity;
+            prettyItem.id = item.id;
+            return prettyItem;
+          } else {
+            // if the data is not as expected
+            return item
+          }
+        });
     },
     styleObject() {
       if (this.lighting === "dark") {
@@ -236,8 +236,8 @@ export default {
         });
       } else{
         this.temporaryData = this.getFilteredData()
+        let localThis = this
         this.childContexts.forEach(context=>{
-          let localThis = this
           this.$socket.emit(context + "dataToServer", JSON.stringify(localThis.temporaryData.data))
         })
       }
@@ -430,7 +430,7 @@ export default {
 }
 
 .current-context {
-  font-size: 1.1rem;
+  font-size: 0.8rem;
   margin: 0 0.6rem;
 }
 

@@ -60,7 +60,6 @@ export default {
     } else {
       if (window.context) {
            let localThis = this
-           
            this.$socket.on(window.context + "dataToChild", function (data){
              console.log('dataToChild received')
              localThis.$store.commit('initializeData', JSON.parse(data))

@@ -95,7 +95,6 @@ export default {
         this.temporaryWindow = null
         this.setFilterOnGridID(data.context)
         this.$socket.on(data.context + "sendData", (event) => {
-          // debugger
           console.log('sendData received')
           localThis.$socket.emit(data.context + 'parentNameToServer', data.filter)
           localThis.$socket.emit(data.context + "dataToServer", JSON.stringify(localThis.contextFilter.data))
@@ -119,7 +118,7 @@ export default {
         this.gridInstance = false
         this.manageContextWindow(this.contextFilter, "StandAloneGrid")
       }else{
-        this.handleFilterOnGrid()
+        this.handleFilterOnGrid(this.contextFilter.data)
         this.filter(this.contextFilter, this.filterOnGridID);
         this.manageContextWindow(this.contextFilter, this.filterOnGridID)
       }

@@ -12,7 +12,7 @@ export default {
             }
             return false
         },
-        handleFilterOnGrid(){
+        handleFilterOnGrid(data){
           if (window.glue) {
             
             if(this.verifyNewContextID()){
@@ -21,8 +21,13 @@ export default {
               this.setFilterOnGridID(contextID)
             }
           } else {
-            this.temporaryWindow = window.open('', '_blank')
-            this.$socket.emit('appManager', {to: 'JSCDataGrid', from: 'JSCBubbleChart'}) 
+            if (!this.$store.state.filterOnGridID) {
+              this.temporaryWindow = window.open('', '_blank')
+              this.$socket.emit('appManager', {to: 'JSCDataGrid', from: 'JSCBubbleChart'}) 
+              this.gridInstance = true
+            } else {
+              this.$socket.emit(this.$store.state.filterOnGridID + 'dataToServer', JSON.stringify(data))
+            }
           }
         },
         verifyNewContextID(){
@@ -70,6 +75,9 @@ export default {
           }
       },
     },
+    // computed: {
+
+    // },
     sockets: {
      
     }
