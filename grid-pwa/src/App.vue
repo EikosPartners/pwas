@@ -41,17 +41,21 @@ export default {
       }
     } else { 
       if (window.context) {
-
+        // this.$store.commit('setContextId', window.context)
         let localThis = this
-             
              this.$socket.on(window.context + "dataToChild", function (data){
                console.log('dataToChild received')
-               localThis.$store.commit('initializeData', JSON.parse(data))
+               console.log(data)
+               debugger
+               localThis.$store.dispatch('initializeData', JSON.parse(data))
              })
+              this.$socket.on(window.context + "parentNameToChild", function(data){
+                console.log('parent name received')
+                debugger
+                localThis.$store.commit('setCurrentFilter', data)
+              })
              this.$socket.emit("appManaged", window.context)
              this.$socket.emit(window.context + "childReady", 'ready')
-            //  this.$store.commit('setBelongsToGrid')
-   
       } else {
 
         this.fetchData();

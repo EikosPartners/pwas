@@ -88,14 +88,16 @@ export default {
       }
     },
     getNewChartInfo(data){
-      console.log('chart info received')
+      // for children of Bubble
+        console.log('chart info received')
         let localThis = this
         this.temporaryWindow.location.href = data.url + '?' + data.context
         this.temporaryWindow = null
         this.setFilterOnGridID(data.context)
         this.$socket.on(data.context + "sendData", (event) => {
-          debugger
+          // debugger
           console.log('sendData received')
+          localThis.$socket.emit(data.context + 'parentNameToServer', data.filter)
           localThis.$socket.emit(data.context + "dataToServer", JSON.stringify(localThis.contextFilter.data))
         })
   

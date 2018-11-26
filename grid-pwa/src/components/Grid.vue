@@ -1,5 +1,5 @@
 <template>
-<div class="container">
+<div class="container" >
   <div :class="['header']" :style="styleObject">
     <span>Grid</span>
      <span class="current-context" @dragstart="handleDragStart" @dragend="handleDragEnd" draggable="true">Id: {{contextId}}</span>
@@ -15,7 +15,7 @@
     </select>
      <button class="header-button" @click="openNewChart" :disabled="selected === '' || isContext">Open</button>
   </div>
-    <ag-grid-vue
+    <ag-grid-vue v-if="prettyData"
       id='Grid'
       class="grid ag-theme-material"
       :columnDefs='columns'
@@ -187,7 +187,7 @@ export default {
       this.updateData();
     },
     getNewChartInfo(data){
-      debugger
+      // for children of grid 
       console.log('chart info received')
       let localThis = this
       this.temporaryWindow.location.href = data.url + '?' + data.context

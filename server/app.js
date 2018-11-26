@@ -76,17 +76,29 @@ io.sockets.on('connection', function(socket) {
           io.emit(context + "sendData", data3)
         })
     console.log('app manager received')
-    io.emit('getNewChartInfo', {...requestedApp, context, from: data.from})
+    io.emit('getNewChartInfo', {...requestedApp, context, filter: data.from})
   
+    socket.on(context + "parentNameToServer", function(parent) {
+      console.log(parent)
+      io.emit(context + 'parentNameToChild', parent)
+    })
+
+
   })
 
   socket.on('appManaged', function(data) {
     // child window setting up listeners for its context with parent 
     // data will be the context (Date.now) established above
+    // console.log
     
+
+    socket.on(data + "parentNameToServer", function(parent) {
+      console.log(parent)
+      io.emit(data + 'parentNameToChild', parent)
+    })
+
     socket.on(data + "dataToServer", function(data2) {
       console.log('dataToServer received')
-      console.log(data)
       io.emit(data + "dataToChild", data2)
     })
 
