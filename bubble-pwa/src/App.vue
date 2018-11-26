@@ -3,6 +3,9 @@
     <div class="container" @drop="handleDrop" @dragenter="handleDragEnter" @dragover="handleDragOver">
       <pwa-header/>
       <bubble-chart/>
+      <!-- <div>
+        <button @click="debuggerButton">Debugger</button>
+      </div> -->
     </div>
   </v-app>
 </template>
@@ -25,7 +28,9 @@ export default {
   methods: {
     ...mapActions(['fetchData', 'fetchColor']),
     ...mapMutations(['initializeData', 'setBelongsToGrid', 'setSelected', 'setColor', 'setLighting']),
-   
+  //   debuggerButton(){
+  //    debugger
+  //  }
   },
   created() {
     this.fetchColor();

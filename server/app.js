@@ -61,10 +61,10 @@ io.sockets.on('connection', function(socket) {
     // parent window getting information about child window and setting up listeners for its context 
     // data should be the name of the child application ala JSCBubble 
     let requestedApp = applications.filter(function(appJson){
-      return appJson.name == data
+      return appJson.name == data.to
     })[0]
-    
-    let context = Date.now()
+    console.log(requestedApp)
+    let context = Date.now() 
         socket.on(context + "dataToServer", function(data2) {
           console.log(context)
           console.log('dataToServer received')
@@ -76,18 +76,29 @@ io.sockets.on('connection', function(socket) {
           io.emit(context + "sendData", data3)
         })
     console.log('app manager received')
-    io.emit('getNewChartInfo', {...requestedApp, context})
+    io.emit('getNewChartInfo', {...requestedApp, context, filter: data.from})
   
+    socket.on(context + "parentNameToServer", function(parent) {
+      console.log(parent)
+      io.emit(context + 'parentNameToChild', parent)
+    })
+
+
   })
 
   socket.on('appManaged', function(data) {
     // child window setting up listeners for its context with parent 
     // data will be the context (Date.now) established above
+    // console.log
     
+
+    socket.on(data + "parentNameToServer", function(parent) {
+      console.log(parent)
+      io.emit(data + 'parentNameToChild', parent)
+    })
+
     socket.on(data + "dataToServer", function(data2) {
-      // console.log('data2', data2)
       console.log('dataToServer received')
-      console.log(data)
       io.emit(data + "dataToChild", data2)
     })
 

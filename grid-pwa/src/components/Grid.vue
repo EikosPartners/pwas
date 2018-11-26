@@ -1,10 +1,10 @@
 <template>
-<div class="container">
+<div class="container" >
   <div :class="['header']" :style="styleObject">
     <span>Grid</span>
      <span class="current-context" @dragstart="handleDragStart" @dragend="handleDragEnd" draggable="true">Id: {{contextId}}</span>
     <span class="current-filter">{{currentFilter}}</span>
-    <button class="header-button" @click="removeFilter" :disabled="currentFilter === 'No Filter'">Clear Filter</button>
+    <button class="header-button" @click="removeFilter" :disabled="currentFilter === 'No Filter' || isContext">Clear Filter</button>
     <select class="select" v-model="selected">
       <option disabled value="">Select chart</option>
       <option value="JSCBar">BarChart</option>
@@ -13,9 +13,9 @@
       <option value="JSCLine">Line Chart</option>
       <option value="JSCPie">Pie Chart</option>
     </select>
-     <button class="header-button" @click="openNewChart" :disabled="selected === ''">Open</button>
+     <button class="header-button" @click="openNewChart" :disabled="selected === '' || isContext">Open</button>
   </div>
-    <ag-grid-vue
+    <ag-grid-vue v-if="prettyData"
       id='Grid'
       class="grid ag-theme-material"
       :columnDefs='columns'
@@ -61,21 +61,21 @@ export default {
       "childContexts"
     ]),
     prettyData() {
-      return this.data.map(item => {
-        if (item.date) {
-          //formats our data
-          let prettyItem = {};
-          prettyItem.date = this.parseDate(item.date);
-          prettyItem.project = item.project;
-          prettyItem.raisedBy = item.raisedBy;
-          prettyItem.severity = item.severity;
-          prettyItem.id = item.id;
-          return prettyItem;
-        } else {
-          // if the data is not as expected
-          return item
-        }
-      });
+        return this.data.map(item => {
+          if (item.date) {
+            //formats our data
+            let prettyItem = {};
+            prettyItem.date = this.parseDate(item.date);
+            prettyItem.project = item.project;
+            prettyItem.raisedBy = item.raisedBy;
+            prettyItem.severity = item.severity;
+            prettyItem.id = item.id;
+            return prettyItem;
+          } else {
+            // if the data is not as expected
+            return item
+          }
+        });
     },
     styleObject() {
       if (this.lighting === "dark") {
@@ -97,7 +97,8 @@ export default {
       selected: "",
       isGlu: window.glue,
       temporaryWindow: null,
-      temporaryData: null
+      temporaryData: null,
+      isContext: window.context
     };
   },
   sockets: {
@@ -186,6 +187,7 @@ export default {
       this.updateData();
     },
     getNewChartInfo(data){
+      // for children of grid 
       console.log('chart info received')
       let localThis = this
       this.temporaryWindow.location.href = data.url + '?' + data.context
@@ -234,8 +236,8 @@ export default {
         });
       } else{
         this.temporaryData = this.getFilteredData()
+        let localThis = this
         this.childContexts.forEach(context=>{
-          let localThis = this
           this.$socket.emit(context + "dataToServer", JSON.stringify(localThis.temporaryData.data))
         })
       }
@@ -312,9 +314,7 @@ export default {
       this.temporaryData = this.getFilteredData()
       if (!window.glue) {
         this.temporaryWindow = window.open('', '_blank')
-        this.$socket.emit('appManager', this.selected) 
-        // this.$socket.emit(this.selected, 'foobar')
-        
+        this.$socket.emit('appManager', {to: this.selected, from: 'JSCDataGrid'})         
       } else {
         const newChart = glue.appManager.application(this.selected);
         const localWindow = window.glue.windows.my();
@@ -330,8 +330,6 @@ export default {
             contextName: uniqueName,
             filter: filter
           };
-          // debugger
-          // console.log(JSON.stringify(appContext))
           newChart.start(appContext);
       }
       
@@ -432,7 +430,7 @@ export default {
 }
 
 .current-context {
-  font-size: 1.1rem;
+  font-size: 0.8rem;
   margin: 0 0.6rem;
 }
 

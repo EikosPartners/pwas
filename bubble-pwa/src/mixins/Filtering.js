@@ -1,4 +1,9 @@
 export default {
+    data(){
+      return {
+        temporaryWindow: null
+      }
+    },
     methods: {
 
         handleShiftClick(click){
@@ -7,12 +12,23 @@ export default {
             }
             return false
         },
-        handleFilterOnGrid(){
+        handleFilterOnGrid(data){
+          if (window.glue) {
+            
             if(this.verifyNewContextID()){
               const uniqueID = Date.now()
               const contextID = 'filterOnGrid'+ uniqueID
               this.setFilterOnGridID(contextID)
             }
+          } else {
+            if (!this.$store.state.filterOnGridID) {
+              this.temporaryWindow = window.open('', '_blank')
+              this.$socket.emit('appManager', {to: 'JSCDataGrid', from: 'JSCBubbleChart'}) 
+              this.gridInstance = true
+            } else {
+              this.$socket.emit(this.$store.state.filterOnGridID + 'dataToServer', JSON.stringify(data))
+            }
+          }
         },
         verifyNewContextID(){
             if(this.filterOnGridID === null){
@@ -56,7 +72,13 @@ export default {
                 this.gridInstance = true;
 
               }
-            }
-          },
+          }
+      },
+    },
+    // computed: {
+
+    // },
+    sockets: {
+     
     }
 }
