@@ -100,6 +100,19 @@ export default {
           localThis.$socket.emit(data.context + "dataToServer", JSON.stringify(localThis.contextFilter.data))
         })
   
+      },
+      getNewChartInfoShift(data){
+        console.log('chart info received')
+        let localThis = this
+        this.temporaryWindow.location.href = data.url + '?' + data.context
+        this.temporaryWindow = null
+        // this.setFilterOnGridID(data.context)
+        this.$socket.on(data.context + "sendData", (event) => {
+          console.log('sendData received')
+          localThis.$socket.emit(data.context + 'parentNameToServer', data.filter)
+          localThis.$socket.emit(data.context + "dataToServer", JSON.stringify(localThis.contextFilter.data))
+        })
+
       }
   },
   methods: {
@@ -116,8 +129,13 @@ export default {
       
       if(this.handleShiftClick(clickEvent)){
         this.gridInstance = false
-        this.manageContextWindow(this.contextFilter, "StandAloneGrid")
-      }else{
+        if (window.glue) {
+          this.manageContextWindow(this.contextFilter, "StandAloneGrid")
+        } else {
+          this.temporaryWindow = window.open('', '_blank')
+          this.$socket.emit('appManager', {to: 'JSCDataGrid', from: 'JSCBubbleChart', shift: true}) 
+        }
+      } else {
         this.handleFilterOnGrid(this.contextFilter.data)
         this.filter(this.contextFilter, this.filterOnGridID);
         this.manageContextWindow(this.contextFilter, this.filterOnGridID)
