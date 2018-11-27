@@ -5,7 +5,6 @@ export default {
       }
     },
     methods: {
-
         handleShiftClick(click){
             if (click.shiftKey){
                 return true
@@ -14,7 +13,6 @@ export default {
         },
         handleFilterOnGrid(data){
           if (window.glue) {
-            
             if(this.verifyNewContextID()){
               const uniqueID = Date.now()
               const contextID = 'filterOnGrid'+ uniqueID
@@ -22,13 +20,20 @@ export default {
             }
           } else {
             if (!this.$store.state.filterOnGridID) {
+              // if no child grid / context opened yet, open one
               this.temporaryWindow = window.open('', '_blank')
               this.$socket.emit('appManager', {to: 'JSCDataGrid', from: 'JSCBubbleChart'}) 
               this.gridInstance = true
             } else {
+              // if there is a child grid / context open, send the updated data 
               this.$socket.emit(this.$store.state.filterOnGridID + 'dataToServer', JSON.stringify(data))
             }
           }
+        },
+        handleStandAloneGrid(){
+          // opens a new grid / context for a standalone (shift clicked) instance  
+          this.temporaryWindow = window.open('', '_blank')
+          this.$socket.emit('appManager', {to: 'JSCDataGrid', from: 'JSCBubbleChart', shift: true}) 
         },
         verifyNewContextID(){
             if(this.filterOnGridID === null){

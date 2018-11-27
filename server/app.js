@@ -78,7 +78,7 @@ io.sockets.on('connection', function(socket) {
     console.log('app manager received')
 
     if (data.shift) {
-      io.emit('getNewChartInfoShift', {...requestedApp, context, filter: data.from})
+      io.emit('getNewChartInfo', {...requestedApp, context, filter: data.from, shift: true})
     } else {
       io.emit('getNewChartInfo', {...requestedApp, context, filter: data.from})
     }
