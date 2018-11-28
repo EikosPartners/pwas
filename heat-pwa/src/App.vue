@@ -10,12 +10,12 @@
 <script>
 import { mapActions, mapMutations } from 'vuex';
 import Windowing from '@/mixins/Windowing';
-import Messaging from '@/mixins/Messaging';
+import ContextMixin from '@/mixins/ContextMixin';
 import DragAndDrop from './mixins/DragAndDrop'
 import HeatMap from './components/HeatMap'
 import PwaHeader from './components/PwaHeader'
 export default {
-  mixins: [Windowing, Messaging, DragAndDrop],
+  mixins: [Windowing, ContextMixin, DragAndDrop],
   name: 'app',
   components:{
     heatMap:HeatMap,

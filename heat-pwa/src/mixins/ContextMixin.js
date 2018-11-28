@@ -1,8 +1,9 @@
-var myMixin = {
-  created: function () {},
-  methods: {
+let contextMixin = {
+
+methods: {
     // Subscribe to the named event passed in
     subscribe: function (name, subscriber) {
+      console.log("Subscribe")
       if (name === undefined) return
       window.glue.contexts.subscribe(name, (context, delta, removed) => {
         if (subscriber !== undefined) {
@@ -11,6 +12,6 @@ var myMixin = {
       })
     },
   }
-};
+}
 
-export default myMixin;
+export default contextMixin

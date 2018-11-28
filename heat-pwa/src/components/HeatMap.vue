@@ -10,7 +10,7 @@
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex';
 import { D3HeatMap, StyleTogglerMixin } from '@/../node_modules/jscatalyst/dist/jscatalyst.js';
-import Messaging from '@/mixins/Messaging';
+import ContextMixin from '@/mixins/ContextMixin';
 import Windowing from '@/mixins/Windowing';
 import Filtering from '@/mixins/Filtering'
 import Stream from '@/mixins/Stream'
@@ -22,7 +22,7 @@ export default {
   components: {
     heatMap: D3HeatMap,
   },
-  mixins: [StyleTogglerMixin, Messaging, Windowing , Filtering, Stream, Notifications ],
+  mixins: [StyleTogglerMixin, ContextMixin, Windowing , Filtering, Stream, Notifications ],
   data() {
     return {
       gridInstance: false
