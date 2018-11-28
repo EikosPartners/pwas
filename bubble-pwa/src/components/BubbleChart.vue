@@ -121,10 +121,10 @@ export default {
           this.manageContextWindow(this.contextFilter, "StandAloneGrid")
         } else {
           this.handleStandAloneGrid()
-        }
+        } 
       } else {
         this.handleFilterOnGrid(this.contextFilter.data)
-        // this.filter(this.contextFilter, this.filterOnGridID);
+        this.filter(this.contextFilter, this.filterOnGridID);
         this.manageContextWindow(this.contextFilter, this.filterOnGridID)
       }
     },
