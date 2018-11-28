@@ -18,7 +18,6 @@ export default {
   },
   mixins: [StyleTogglerMixin, Messaging, Windowing],
   created() {
-    
     this.fetchColor();
     if (window.glue) {
       this.subscribe('globalTheme', (context, delta, removed) => {

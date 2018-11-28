@@ -7,7 +7,8 @@ import './registerServiceWorker';
 import VueSocketio from 'vue-socket.io';
 import Vuetify from 'vuetify';
 import linqjs from 'linqjs';
-
+import GlueFiltering from './plugins/GlueFiltering'
+import SocketFiltering from './plugins/SocketFiltering'
 import "../node_modules/vuetify/dist/vuetify.min.css";
 import 'jscatalyst/dist/jscatalyst.min.css';
 import "typeface-roboto";
@@ -27,7 +28,7 @@ Vue.use(ThemePlugin, {
 Glue({})
   .then(glue => {
     window.glue = glue;
-
+    Vue.use(GlueFiltering)
     new Vue({
       router,
       store,
@@ -35,6 +36,7 @@ Glue({})
     }).$mount('#app');
   })
   .catch(err => {
+    Vue.use(SocketFiltering)
     new Vue({
       router,
       store,

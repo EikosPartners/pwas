@@ -35,6 +35,9 @@ export default {
           this.temporaryWindow = window.open('', '_blank')
           this.$socket.emit('appManager', {to: 'JSCDataGrid', from: 'JSCBubbleChart', shift: true}) 
         },
+        handleChildGrid(){
+          
+        },
         verifyNewContextID(){
             if(this.filterOnGridID === null){
               return true
