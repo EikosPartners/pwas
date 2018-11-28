@@ -1,11 +1,29 @@
 let FilterMixin = {
     methods: {
-      filter(filter, name) {
+      filter(filterPkg) {
+        let {clickEvent, filterObj, contextID} = filterPkg
+        if(this.handleShiftClick(clickEvent)){
+          // Case: Shift Click
+          this.gridInstance = false
+          this.manageContextWindow(filterObj, "StandAloneGrid") // Filtering Mixin
+        }else{
+        // Case: Default Click (no 'Shift')
+          const context = this.handleFilterOnGrid(contextID)
+          this.applyFilterToContext(filterObj, context); 
+          this.manageContextWindow(filterObj, context)  
+          return context
+        }
+  
+        
+      },
 
+      // Apply Filter to provided context ID
+      // Formerly the filter() function in legacy messaging mixin
+      applyFilterToContext(filter, contextID){
         if (window.glue != undefined) {
-          console.log('GLUE42: Filtering message ', filter, name);
-          if (name !== undefined) {
-            window.glue.contexts.set(name, filter);
+          console.log('GLUE42: Filtering message ', filter, contextID);
+          if (contextID !== undefined) {
+            window.glue.contexts.set(contextID, filter);
           } else {
             window.glue.contexts.set('filter', filter);
           }
@@ -21,22 +39,24 @@ let FilterMixin = {
           }
           return false
       },
-      handleFilterOnGrid(){
-          if(this.verifyNewContextID()){
+      handleFilterOnGrid(contextID){
+          if(this.verifyNewContextID(contextID)){
               const uniqueID = Date.now()
-              const contextID = 'filterOnGrid' + uniqueID
-              this.setFilterOnGridID(contextID)
+              const newContext = 'filterOnGrid' + uniqueID
+              return newContext
+              // this.setFilterOnGridID(newContext)
           }
+          return contextID
       },
 
       // Should we set a new FilterOnGridID? 
       // True => set FilterOnGridID
       // False => Do not
-      verifyNewContextID(){
-          if(this.filterOnGridID === null){
+      verifyNewContextID(contextID){
+          if(contextID === null){
             return true
           }
-          let context = this.filterOnGridID
+          let context = contextID
           const windowsList = glue.windows.list()
           let window = windowsList.find(w=>{
             return w.context.eventName === context

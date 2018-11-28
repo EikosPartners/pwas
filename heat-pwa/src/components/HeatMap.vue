@@ -81,16 +81,29 @@ export default {
       // Modify the filter in $store 
       this.setContextFilterData(filteredData)   
 
-      if(this.handleShiftClick(clickEvent)){
-        // Case: Shift Click
-        this.gridInstance = false
-        this.manageContextWindow(this.contextFilter, "StandAloneGrid") // Filtering Mixin
-      }else{
-      // Case: Default Click (no 'Shift')
-        this.handleFilterOnGrid()  // Filtering Mixin
-        this.filter(this.contextFilter, this.filterOnGridID); //Messaging Mixin
-        this.manageContextWindow(this.contextFilter, this.filterOnGridID)  //Filtering Mixin
+
+      // Object to be passed to filter mixin
+      let filterPkg = {
+        clickEvent,
+        filterObj: this.contextFilter,
+        contextID: this.filterOnGridID
       }
+
+      let contextID = this.filter(filterPkg)
+      if(contextID !== undefined){
+        this.setFilterOnGridID(contextID)
+      }
+
+      // if(this.handleShiftClick(clickEvent)){
+      //   // Case: Shift Click
+      //   this.gridInstance = false
+      //   this.manageContextWindow(this.contextFilter, "StandAloneGrid") // Filtering Mixin
+      // }else{
+      // // Case: Default Click (no 'Shift')
+      //   this.handleFilterOnGrid()  // Filtering Mixin
+      //   this.filter(this.contextFilter, this.filterOnGridID); //Filtering Mixin
+      //   this.manageContextWindow(this.contextFilter, this.filterOnGridID)  //Filtering Mixin
+      // }
 
       // this.testerMethod()
    
