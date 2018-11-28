@@ -76,7 +76,12 @@ io.sockets.on('connection', function(socket) {
           io.emit(context + "sendData", data3)
         })
     console.log('app manager received')
-    io.emit('getNewChartInfo', {...requestedApp, context, filter: data.from})
+
+    if (data.shift) {
+      io.emit('getNewChartInfo', {...requestedApp, context, filter: data.from, shift: true})
+    } else {
+      io.emit('getNewChartInfo', {...requestedApp, context, filter: data.from})
+    }
   
     socket.on(context + "parentNameToServer", function(parent) {
       console.log(parent)
