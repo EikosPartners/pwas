@@ -20,65 +20,17 @@ import BubbleChart from './components/BubbleChart'
 
 export default {
   name: 'app',
-  mixins: [Windowing, Messaging, DragAndDrop],
+  // mixins: [Windowing, Messaging, DragAndDrop],
   components:{
     bubbleChart: BubbleChart,
     pwaHeader: PwaHeader
   },
   methods: {
-    ...mapActions(['fetchData', 'fetchColor']),
-    ...mapMutations(['initializeData', 'setBelongsToGrid', 'setSelected', 'setColor', 'setLighting']),
-  //   debuggerButton(){
-  //    debugger
-  //  }
+    ...mapActions(['fetchColor']),
   },
   created() {
     this.fetchColor();
-    if (window.glue) {
-      this.subscribe('globalTheme', (context, delta, removed) => {
-        console.log("global theme context", context)
-        this.setColor(context.color)
-        this.setLighting(context.lighting)
-      })
-      const localWindow = window.glue.windows.my();
-      const ctx = localWindow.context;
-      const contextName = ctx.contextName;
-        //this is the grid specific local context it opens with
-
-      if (contextName !== undefined) {
-        this.$store.commit('setBelongsToGrid'); //disables socket refresh
-        this.$store.commit('setSelected', contextName)
-        this.subscribe(contextName, (context, delta, removed) => {
-          this.$store.commit('initializeData', context.filter.data);
-        });
-      }
-      if (ctx.filter) {
-        this.$store.commit('initializeData', ctx.filter.data);
-      } else {
-        this.fetchData();
-      }
-    } else {
-      if (window.context) {
-           let localThis = this
-           this.$socket.on(window.context + "dataToChild", function (data){
-             console.log('dataToChild received')
-             localThis.$store.commit('initializeData', JSON.parse(data))
-           })
-           this.$socket.emit("appManaged", window.context)
-           this.$socket.emit(window.context + "childReady", 'ready')
-           this.$store.commit('setBelongsToGrid')
- 
-         } else {
-           this.fetchData();
-         }
-    }
   },
-  sockets: {
-    connect(){
-      console.log('connected')      
-    }
-  }
-
 };
 </script>
 

@@ -32,7 +32,11 @@ Glue({})
     new Vue({
       router,
       store,
-      render: h => h(App)
+      render: h => h(App),
+      created() {
+        this.initializeTheme()
+        this.initializeGlueContext()
+      },
     }).$mount('#app');
   })
   .catch(err => {
@@ -40,12 +44,10 @@ Glue({})
     new Vue({
       router,
       store,
-      beforeCreate() {
-        if (window.location.href.includes("?")) {
-          window.context = window.location.href.split('?')[1]
-          history.pushState(window.location.href, null, (window.location.href.split('?')[0]))
-        }
-      },
-      render: h => h(App)
+      render: h => h(App),
+      created(){
+        this.initializeSocketContext()
+        this.initializeDataStream()
+      }
     }).$mount('#app');
   });
