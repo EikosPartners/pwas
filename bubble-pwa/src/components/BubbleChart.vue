@@ -12,9 +12,9 @@
 import { D3BubbleChart, StyleTogglerMixin } from 'jscatalyst';
 import { mapGetters, mapState, mapActions } from 'vuex';
 import jslinq from 'jslinq';
-import Messaging from '@/mixins/Messaging';
+// import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
-import Filtering from '@/mixins/Filtering'
+// import Filtering from '@/mixins/Filtering'
 import { log } from 'async';
 
 export default {
@@ -22,7 +22,7 @@ export default {
   components: {
     bubbleChart: D3BubbleChart,
   },
-  mixins: [StyleTogglerMixin, Messaging, Windowing, Filtering],
+  mixins: [StyleTogglerMixin, Windowing],
   data() {
     return {
       gridInstance: false
@@ -105,6 +105,12 @@ export default {
   },
   methods: {
     ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID', 'setContextFilterData']),
+    handleShiftClick(click){
+        if (click.shiftKey){
+            return true
+        }
+        return false
+    },
     handleFilter(message) {
 
       // Preparation for JSC_Click update
@@ -117,13 +123,9 @@ export default {
       
       if(this.handleShiftClick(clickEvent)){
         this.gridInstance = false
-        if (window.glue) {
-          this.manageContextWindow(this.contextFilter, "StandAloneGrid")
-        } else {
-          this.handleStandAloneGrid()
-        } 
+        this.handleStandAloneGrid()
       } else {
-        this.handleFilterOnGrid(this.contextFilter.data)
+        this.handleFilterOnGrid()
         this.filter(this.contextFilter, this.filterOnGridID);
         this.manageContextWindow(this.contextFilter, this.filterOnGridID)
       }

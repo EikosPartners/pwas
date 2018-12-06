@@ -4,6 +4,12 @@ var plugin = {
     install(Vue, options) {
         
         Vue.mixin({
+            data(){
+                return {
+                    gridInstance: false,
+                    temporaryWindow: null
+                }
+            },
             methods: {
                 // from App.vue
                 initializeSocketContext() {
@@ -27,7 +33,30 @@ var plugin = {
                       } else {
                         this.$store.dispatch('fetchData');
                       }
-                }
+                },
+                // from Filtering mixin 
+                handleStandAloneGrid(contextFilter = null){
+                    // opens a new grid / context for a standalone (shift clicked) instance  
+                    this.temporaryWindow = window.open('', '_blank')
+                    this.$socket.emit('appManager', {to: 'JSCDataGrid', from: 'JSCBubbleChart', shift: true}) 
+                },
+                handleFilterOnGrid(data){
+                    if (!this.$store.state.filterOnGridID) {
+                        // if no child grid / context opened yet, open one
+                        this.temporaryWindow = window.open('', '_blank')
+                        this.$socket.emit('appManager', {to: 'JSCDataGrid', from: 'JSCBubbleChart'}) 
+                        this.gridInstance = true
+                      }
+                },
+                manageContextWindow(contextFilter, filterOnGridId){
+                    this.$socket.emit(filterOnGridId + 'dataToServer', JSON.stringify(contextFilter.data))
+                },
+                // from Messaging mixin
+                filter: function(filter, name) {
+                      console.log('WEBSockets: Filtering message ' + filter);
+                },
+            },
+            sockets: {
 
             }
             
