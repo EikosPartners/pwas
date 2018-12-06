@@ -106,10 +106,10 @@ export default {
   methods: {
     ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID', 'setContextFilterData']),
     handleShiftClick(click){
-        if (click.shiftKey){
-            return true
-        }
-        return false
+          if (click.shiftKey){
+              return true
+          }
+          return false
     },
     handleFilter(message) {
 
@@ -123,7 +123,7 @@ export default {
       
       if(this.handleShiftClick(clickEvent)){
         this.gridInstance = false
-        this.handleStandAloneGrid()
+        this.handleStandAloneGrid(this.contextFilter)
       } else {
         this.handleFilterOnGrid()
         this.filter(this.contextFilter, this.filterOnGridID);

@@ -55,11 +55,7 @@ var plugin = {
                 filter: function(filter, name) {
                       console.log('WEBSockets: Filtering message ' + filter);
                 },
-            },
-            sockets: {
-
-            }
-            
+            }            
        })
 
 
