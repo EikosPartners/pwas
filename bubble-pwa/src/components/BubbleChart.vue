@@ -112,8 +112,6 @@ export default {
           return false
     },
     handleFilter(message) {
-
-      // Preparation for JSC_Click update
       console.log(message)
       const data = message.data
       const clickEvent = message.event

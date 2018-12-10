@@ -1,6 +1,6 @@
 import Vue from 'vue'
 
-export default {
+let plugin = {
     install(Vue, options) {
         Vue.mixin({
             data(){
@@ -114,3 +114,5 @@ export default {
         })
     }
 }
+
+export default plugin
