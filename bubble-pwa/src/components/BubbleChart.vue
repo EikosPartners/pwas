@@ -123,7 +123,7 @@ export default {
       
       if(this.handleShiftClick(clickEvent)){
         this.gridInstance = false
-        this.handleStandAloneGrid()
+        this.handleStandAloneGrid(this.contextFilter)
       } else {
         this.handleFilterOnGrid()
         this.filter(this.contextFilter, this.filterOnGridID);
