@@ -106,10 +106,10 @@ export default {
   methods: {
     ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID', 'setContextFilterData']),
     handleShiftClick(click){
-        if (click.shiftKey){
-            return true
-        }
-        return false
+          if (click.shiftKey){
+              return true
+          }
+          return false
     },
     handleFilter(message) {
 
