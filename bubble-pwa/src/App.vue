@@ -13,7 +13,7 @@
 <script>
 import { mapActions, mapMutations } from 'vuex';
 import Windowing from '@/mixins/Windowing';
-import Messaging from '@/mixins/Messaging';
+// import Messaging from '@/mixins/Messaging';
 import DragAndDrop from './mixins/DragAndDrop'
 import PwaHeader from './components/PwaHeader'
 import BubbleChart from './components/BubbleChart'

@@ -61,6 +61,8 @@ export default {
       "childContexts"
     ]),
     prettyData() {
+      if (this.data) {
+        debugger
         return this.data.map(item => {
           if (item.date) {
             //formats our data
@@ -76,6 +78,7 @@ export default {
             return item
           }
         });
+      }
     },
     styleObject() {
       if (this.lighting === "dark") {

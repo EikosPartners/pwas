@@ -34,6 +34,20 @@ var plugin = {
                         this.$store.dispatch('fetchData');
                       }
                 },
+                // from BubbleChart.vue
+                handleNewChartInfo(data){
+                    let localThis = this
+                    this.temporaryWindow.location.href = data.url + '?' + data.context
+                    this.temporaryWindow = null
+                    if (!data.shift) {
+                      this.setFilterOnGridID(data.context)
+                    }
+                    this.$socket.on(data.context + "sendData", (event) => {
+                      console.log('sendData received')
+                      localThis.$socket.emit(data.context + 'parentNameToServer', data.filter)
+                      localThis.$socket.emit(data.context + "dataToServer", JSON.stringify(localThis.contextFilter.data))
+                    })
+                },
                 // from Filtering mixin 
                 handleStandAloneGrid(contextFilter = null){
                     // opens a new grid / context for a standalone (shift clicked) instance  

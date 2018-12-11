@@ -82,7 +82,6 @@ var plugin = {
                     return true
                 },
                 manageContextWindow(filter, eventName){
-        
                     if (this.gridInstance === true) {
                       // Can we pass the instance an updated context here?
                     } else {
