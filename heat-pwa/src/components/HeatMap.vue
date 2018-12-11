@@ -68,6 +68,12 @@ export default {
   },
   methods: {
     ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID', 'setContextFilterData', "setStream" ]),
+    handleShiftClick(click){
+          if (click.shiftKey){
+              return true
+          }
+          return false
+    },
     handleFilter(message) {
       /* Handle Filtering
        * @param {Object} message - Data recieved by clicking on a cell 
@@ -144,17 +150,7 @@ export default {
     }
     
   },
-  created() {
-    console.log(window.glue.contexts.all())
-    // this.handleStream()
-    // this.lifecycleTester()
-  },
-  beforeDestroy(){
-    // Setup to test onClose lifecycle
-
-    // this.removeFromStreamsCtx("TestStream")
-    // this.stream.close()
-  },
+  
   watch: {
     color(newData) {
       if (newData) {
