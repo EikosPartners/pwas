@@ -7,60 +7,16 @@
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex';
 import { StyleTogglerMixin } from 'jscatalyst';
-import Messaging from "@/mixins/Messaging";
 import Windowing from "@/mixins/Windowing"
 
 export default {
   name: 'app',
   methods: {
-    ...mapActions(['fetchData', 'fetchColor', 'initializeData']),
-    ...mapMutations(['setContextId', 'setColor', 'setLighting'])
+    ...mapActions(['fetchColor']),
   },
-  mixins: [StyleTogglerMixin, Messaging, Windowing],
+  mixins: [StyleTogglerMixin, Windowing],
   created() {
     this.fetchColor();
-    if (window.glue) {
-      this.subscribe('globalTheme', (context, delta, removed) => {
-        console.log("global theme context", context)
-        this.setColor(context.color)
-        this.setLighting(context.lighting)
-      })
-      console.log("in not undefined", window.glue)
-      if (window.glue.windows.my().context.eventName !== undefined){
-        let ctx = window.glue.windows.my().context
-        console.log("ctx",ctx)
-        this.initializeData(ctx.filter.data)
-      }
-      else{
-        this.fetchData();
-        const IdNumber = Date.now();
-        this.$store.commit('setContextId', `${IdNumber}`);
-        const uniqueName = 'filteredGrid' + IdNumber;
-        window.glue.contexts.set(uniqueName, {});
-      }
-    } else { 
-      if (window.context) {
-        this.$store.commit('setContextId', window.context)
-        let localThis = this
-             this.$socket.on(window.context + "dataToChild", function (data){
-               console.log('dataToChild received')
-               console.log(data)
-               debugger
-               localThis.initializeData(JSON.parse(data))
-             })
-              this.$socket.on(window.context + "parentNameToChild", function(data){
-                console.log('parent name received')
-                debugger
-                localThis.$store.commit('setCurrentFilter', data)
-              })
-             this.$socket.emit("appManaged", window.context)
-             this.$socket.emit(window.context + "childReady", 'ready')
-      } else {
-
-        this.fetchData();
-      }
-    }
-
   },
   computed: {
     ...mapState(['lighting']),

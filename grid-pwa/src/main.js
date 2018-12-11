@@ -8,6 +8,8 @@ import store from './store';
 import './registerServiceWorker';
 import VueSocketio from 'vue-socket.io';
 import Vuetify from 'vuetify';
+import GlueFiltering from './plugins/GlueFiltering'
+import SocketFiltering from './plugins/SocketFiltering'
 
 import 'jscatalyst/dist/jscatalyst.min.css';
 import '../node_modules/vuetify/dist/vuetify.min.css';
@@ -27,22 +29,25 @@ Vue.use(ThemePlugin, {
 Glue({})
   .then(glue => {
     window.glue = glue;
-
+    Vue.use(GlueFiltering)
     new Vue({
       router,
       store,
+      created(){
+        this.initializeTheme()
+        this.initializeGlueContext()
+      },
       render: h => h(App)
     }).$mount('#app');
   })
   .catch(err => {
+    Vue.use(SocketFiltering)
     new Vue({
       router,
       store,
-      beforeCreate() {
-        if (window.location.href.includes("?")) {
-          window.context = window.location.href.split('?')[1]
-          history.pushState(window.location.href, null, (window.location.href.split('?')[0]))
-        }
+      created(){
+        this.initializeSocketContext()
+        this.initializeDataStream()
       },
       render: h => h(App)
     }).$mount('#app');
