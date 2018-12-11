@@ -4,28 +4,19 @@ var myMixin = {
       
   //   })
   // },
-  methods: {
-    subscribe: function(name, subscriber) {
-      if ( name === undefined ) return
-      window.glue.contexts.subscribe(name, (context, delta, removed) => {
-        if ( subscriber !== undefined ) {
-          subscriber(context, delta, removed)
-        }
-      })
-    },
+  // methods: {
+    
 
-    filter: function(filter) {
+  //   filter: function(filter) {
 
-      if ( window.glue != undefined ) {
-        alert('GLUE42: Filtering message ' + filter);
-        window.glue.contexts.update('filter', filter);
-      }
-      else {
-        alert('WEBSockets: Filtering message ' + filter);
-        this.$socket.emit('filterByDate', filter);
-      }
-    }
-  }
+  //     if ( window.glue != undefined ) {
+  //     }
+  //     else {
+  //       alert('WEBSockets: Filtering message ' + filter);
+  //       // this.$socket.emit('filterByDate', filter);
+  //     }
+  //   }
+  // }
 };
 
 export default myMixin;

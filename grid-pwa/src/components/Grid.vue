@@ -34,7 +34,7 @@
 import { mapState, mapMutations, mapActions } from "vuex";
 import { AgGridVue } from "ag-grid-vue";
 import { D3PieChart, StyleTogglerMixin } from 'jscatalyst';
-import Messaging from "@/mixins/Messaging";
+// import Messaging from "@/mixins/Messaging";
 import Windowing from "@/mixins/Windowing";
 import DragAndDrop from "@/mixins/DragAndDrop"
 import Stream from "@/mixins/Stream"
@@ -46,7 +46,7 @@ export default {
     AgGridVue,
     pieChart: D3PieChart
   },
-  mixins: [Messaging, Windowing, StyleTogglerMixin, DragAndDrop, Stream],
+  mixins: [Windowing, StyleTogglerMixin, DragAndDrop, Stream],
   created(){
     this.subscribeToStream()
   },
@@ -99,7 +99,7 @@ export default {
       trueVar: true,
       selected: "",
       isGlu: window.glue,
-      temporaryWindow: null,
+      // temporaryWindow: null,
       temporaryData: null,
       isContext: window.context
     };
@@ -107,73 +107,6 @@ export default {
   sockets: {
     connect: function() {
       console.log("socket connected");
-    },
-    filterByDate(filter) {
-      console.log("filter", filter);
-      this.removeFilter();
-      this.setQuickFilter(filter.data);
-      let source = this.formatSource(filter.source);
-      this.setCurrentFilter(source);
-    },
-    filterByProject(filter) {
-      console.log("filter", filter);
-      this.removeFilter();
-      this.setQuickFilter(filter.data);
-      let source = this.formatSource(filter.source);
-      this.setCurrentFilter(source);
-    },
-    filterBySeverity(filter) {
-      console.log("filter", filter);
-      this.removeFilter();
-      this.setQuickFilter(filter.data);
-      let source = this.formatSource(filter.source);
-      this.setCurrentFilter(source);
-    },
-    filterByRaisedBy(filter) {
-      console.log("filter", filter);
-      this.removeFilter();
-      this.setQuickFilter(filter.data);
-      let source = this.formatSource(filter.source);
-      this.setCurrentFilter(source);
-    },
-    filterByDateAndSeverity(filter) {
-      console.log("filter", filter);
-      this.removeFilter();
-      let filterObject = {
-        date: {
-          type: "contains",
-          filter: `${filter.data.date}`
-        },
-        severity: {
-          type: "contains",
-          filter: `${filter.data.severity}`
-        }
-      };
-      this.gridApi.setFilterModel(filterObject);
-      let source = this.formatSource(filter.source);
-      this.setCurrentFilter(source);
-    },
-    filterByMonth(filter) {
-      console.log("filter", filter);
-      let month = filter.data.split("/")[0] + "-";
-      let year = "-" + filter.data.split("/")[1];
-      this.removeFilter();
-      let filterObject = {
-        date: {
-          condition1: {
-            type: "startsWith",
-            filter: month
-          },
-          condition2: {
-            type: "contains",
-            filter: year
-          },
-          operator: "AND"
-        }
-      };
-      this.gridApi.setFilterModel(filterObject);
-      let source = this.formatSource(filter.source);
-      this.setCurrentFilter(source);
     },
     themeColor: function(data) {
       if (!window.glue) {
@@ -191,16 +124,7 @@ export default {
     },
     getNewChartInfo(data){
       // for children of grid 
-      console.log('chart info received')
-      let localThis = this
-      this.temporaryWindow.location.href = data.url + '?' + data.context
-      this.temporaryWindow = null
-      this.$store.commit('addChildContext', data.context)
-      this.$socket.on(data.context + "sendData", (event) => {
-        console.log('sendData received')
-        localThis.$socket.emit(data.context + "dataToServer", JSON.stringify(localThis.temporaryData.data))
-      })
-
+      this.handleNewChartInfo(data)
     }
   },
   methods: {
@@ -220,30 +144,7 @@ export default {
       }
     },
     updateChildren() {
-      if (window.glue) {
-        if (window.glue.windows.my().context === null) {
-          return;
-        }
-  
-        if (window.glue.windows.my().context.eventName === "filterOnGrid") {
-          console.log("filteredGrid");
-          return;
-        }
-  
-        let filter = this.getFilteredData()
-  
-        const uniqueName = "filteredGrid" + this.contextId;
-        window.glue.contexts.set(uniqueName, {
-          filter: filter,
-          name: uniqueName
-        });
-      } else{
-        this.temporaryData = this.getFilteredData()
-        let localThis = this
-        this.childContexts.forEach(context=>{
-          this.$socket.emit(context + "dataToServer", JSON.stringify(localThis.temporaryData.data))
-        })
-      }
+      this.handleUpdateChildren()
     },
     onGridReady(params) {
       this.gridApi = params.api;
@@ -252,52 +153,8 @@ export default {
       window.addEventListener("resize", () => {
         this.gridApi.sizeColumnsToFit();
       });
-
-      if (window.glue) {
-
-          const localWindow = window.glue.windows.my();
-          const ctx = localWindow.context;
-          console.log("onGridReady",ctx)
-          if (ctx.eventName !== undefined) {
-            this.subscribe(ctx.eventName, (context, delta, removed) => {
-              this.removeFilter();
-              console.log("subscribe context", context);
-              let source = this.formatSource(context.source);
-              this.setCurrentFilter(source);
-              this.initializeData(context.data)
-              if (context.source === "BubbleChart") {
-                console.log("bubble chart", context);
-                // let filterObject = {
-                //   date: {
-                //     type: "contains",
-                //     filter: `${context.data.date}`
-                //   },
-                //   severity: {
-                //     type: "contains",
-                //     filter: `${context.data.severity}`
-                //   }
-                // };
-                // this.gridApi.setFilterModel(filterObject);
-              } else if (context.source === "BarChart") {
-                console.log("bar chart", context);
-                let month = context.data.split("/")[0] + "-";
-                let year = "-" + context.data.split("/")[1];
-    
-                let filterObject = {
-                  date: {
-                    condition1: { type: "startsWith", filter: month },
-                    condition2: { type: "contains", filter: year },
-                    operator: "AND"
-                  }
-                };
-    
-                this.gridApi.setFilterModel(filterObject);
-              } else {
-                this.setQuickFilter(context.data);
-              }
-            });
-      }
-      }
+      this.handleGridReadyContext()
+  
     },
     setQuickFilter(data) {
       if (this.gridApi) {
@@ -313,28 +170,9 @@ export default {
     },
     openNewChart() {
       // Get the data set from this component
-      let filter = this.getFilteredData(); 
+      // let filter = this.getFilteredData(); 
       this.temporaryData = this.getFilteredData()
-      if (!window.glue) {
-        this.temporaryWindow = window.open('', '_blank')
-        this.$socket.emit('appManager', {to: this.selected, from: 'JSCDataGrid'})         
-      } else {
-        const newChart = glue.appManager.application(this.selected);
-        const localWindow = window.glue.windows.my();
-        const ctx = localWindow.context;
-        const uniqueName = "filteredGrid" + this.contextId;
-          window.glue.contexts.set(uniqueName, {
-            filter: filter,
-            name: uniqueName
-          });
-          console.log("",window.glue.windows.my().context)
-          let appContext = {
-            localContext: ctx,
-            contextName: uniqueName,
-            filter: filter
-          };
-          newChart.start(appContext);
-      }
+      this.initializeNewChart()
       
     },
     parseDate(date) {
