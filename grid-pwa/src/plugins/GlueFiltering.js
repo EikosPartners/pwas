@@ -22,10 +22,10 @@ var plugin = {
                     if (window.glue.windows.my().context.eventName !== undefined){
                         let ctx = window.glue.windows.my().context
                         console.log("ctx",ctx)
-                        this.initializeData(ctx.filter.data)
+                        this.$store.dispatch('initializeData', ctx.filter.data)
                     }
                     else{
-                        this.fetchData();
+                        this.$store.dispatch('fetchData');
                         const IdNumber = Date.now();
                         this.$store.commit('setContextId', `${IdNumber}`);
                         const uniqueName = 'filteredGrid' + IdNumber;
@@ -36,7 +36,7 @@ var plugin = {
                     if ( name === undefined ) return
                     window.glue.contexts.subscribe(name, (context, delta, removed) => {
                         if ( subscriber !== undefined ) {
-                        subscriber(context, delta, removed)
+                            subscriber(context, delta, removed)
                         }
                     })
                 },
@@ -72,20 +72,9 @@ var plugin = {
                         console.log("subscribe context", context);
                         let source = this.formatSource(context.source);
                         this.setCurrentFilter(source);
-                        this.initializeData(context.data)
+                        this.$store.dispatch('initializeData', context.data)
                         if (context.source === "BubbleChart") {
                             console.log("bubble chart", context);
-                            let filterObject = {
-                            date: {
-                                type: "contains",
-                                filter: `${context.data.date}`
-                            },
-                            severity: {
-                                type: "contains",
-                                filter: `${context.data.severity}`
-                            }
-                            };
-                            this.gridApi.setFilterModel(filterObject);
                         } else if (context.source === "BarChart") {
                             console.log("bar chart", context);
                             let month = context.data.split("/")[0] + "-";
