@@ -22,7 +22,7 @@ export default {
   components: {
     heatMap: D3HeatMap,
   },
-  mixins: [StyleTogglerMixin, ContextMixin, Windowing , Filtering, Stream, Notifications ],
+  mixins: [StyleTogglerMixin, ContextMixin, Windowing , Stream, Notifications ],
   data() {
     return {
       gridInstance: false
@@ -68,12 +68,7 @@ export default {
   },
   methods: {
     ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID', 'setContextFilterData', "setStream" ]),
-    handleShiftClick(click){
-          if (click.shiftKey){
-              return true
-          }
-          return false
-    },
+   
     handleFilter(message) {
       /* Handle Filtering
        * @param {Object} message - Data recieved by clicking on a cell 

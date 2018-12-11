@@ -19,23 +19,58 @@ let plugin = {
                          }
                     })
                 },
-                filter: function(filter, name) {
-                    console.log('GLUE42: Filtering message ', filter);
-                    if ( name !== undefined ) {
-                    window.glue.contexts.set(name, filter);
+                // filter: function(filter, name) {
+                //     console.log('GLUE42: Filtering message ', filter);
+                //     if ( name !== undefined ) {
+                //     window.glue.contexts.set(name, filter);
+                //     }
+                //     else {
+                //     window.glue.contexts.set('filter', filter);
+                //     }              
+                //   },
+
+                filter(filterPkg) {
+                    let {clickEvent, filterObj, contextID} = filterPkg
+                    if(this.handleShiftClick(clickEvent)){
+                      // Case: Shift Click
+                      this.gridInstance = false
+                      this.manageContextWindow(filterObj, "StandAloneGrid") // Filtering Mixin
+                    }else{
+                    // Case: Default Click (no 'Shift')
+                      const context = this.handleFilterOnGrid(contextID)
+                      this.applyFilterToContext(filterObj, context); 
+                      this.manageContextWindow(filterObj, context)  
+                      return context
                     }
-                    else {
-                    window.glue.contexts.set('filter', filter);
-                    }              
+              
+                    
                   },
-                // from App.vue
-                initializeTheme(){
-                    this.subscribe('globalTheme', (context, delta, removed) => {
-                        console.log("global theme context", context)
-                        this.setColor(context.color)
-                        this.setLighting(context.lighting)
-                    })
+            
+                  // Apply Filter to provided context ID
+                  // Formerly the filter() function in legacy messaging mixin
+                applyFilterToContext(filter, contextID){
+                    if (window.glue != undefined) {
+                        console.log('GLUE42: Filtering plugin message ', filter, contextID);
+                        if (contextID !== undefined) {
+                        window.glue.contexts.set(contextID, filter);
+                        } else {
+                        window.glue.contexts.set('filter', filter);
+                        }
+                    } else {
+                        console.log('WEBSockets: Filtering message ', filter);
+                        this.$socket.emit('filterByDate', filter);
+                    }
                 },
+
+                handleShiftClick(click){
+                    console.log(click.shiftKey)
+                    if (click.shiftKey){
+                        return true
+                    }
+                    return false
+                },
+                // from App.vue
+                
                 // from App.vue
                 initializeGlueContext(){
                     const localWindow = window.glue.windows.my();
@@ -56,60 +91,111 @@ let plugin = {
                         this.$store.dispatch('fetchData');
                     }
                 },
-                handleFilterOnGrid(data){
-                    if(this.verifyNewContextID()){
-                      const uniqueID = Date.now()
-                      const contextID = 'filterOnGrid'+ uniqueID
-                      this.setFilterOnGridID(contextID)
+                // handleFilterOnGrid(data){
+                //     if(this.verifyNewContextID()){
+                //       const uniqueID = Date.now()
+                //       const contextID = 'filterOnGrid'+ uniqueID
+                //       this.setFilterOnGridID(contextID)
+                //     }
+                // },
+
+                handleFilterOnGrid(contextID){
+                    if(this.verifyNewContextID(contextID)){
+                        const uniqueID = Date.now()
+                        const newContext = 'filterOnGrid' + uniqueID
+                        return newContext
+                        // this.setFilterOnGridID(newContext)
                     }
+                    return contextID
                 },
-                verifyNewContextID(){
-                    if(this.filterOnGridID === null){
+          
+                // verifyNewContextID(){
+                //     if(this.filterOnGridID === null){
+                //       return true
+                //     }
+                //     let context = this.filterOnGridID
+                //     const windowsList = glue.windows.list()
+                //     let window = windowsList.find(w=>{
+                //       return w.context.eventName === context
+                //     })
+                //     if (window){
+                      
+                //       return false
+                //     }
+                //     this.gridInstance = false
+                //     return true
+                // },
+                verifyNewContextID(contextID){
+                    if(contextID === null){
                       return true
                     }
-                    let context = this.filterOnGridID
+                    let context = contextID
                     const windowsList = glue.windows.list()
                     let window = windowsList.find(w=>{
                       return w.context.eventName === context
                     })
                     if (window){
-                      
                       return false
                     }
                     this.gridInstance = false
                     return true
                 },
-                manageContextWindow(filter, eventName){
+                // manageContextWindow(filter, eventName){
         
+                //     if (this.gridInstance === true) {
+                //       // Can we pass the instance an updated context here?
+                //     } else {
+                //         if (window.glue) {
+                //             let app = window.glue.appManager.application('JSCDataGrid');
+                //             const localWindow = window.glue.windows.my();
+                //             let windowConfig = {
+                //             relativeTo: localWindow.id,
+                //             relativePosition: 'right'
+                //             };                            
+                //             app
+                //             .start({ filter, eventName }, windowConfig)
+                //             .then(instance => {
+                //                 //localThis.gridInstance = instance
+                            
+                //             });
+                            
+                //             this.gridInstance = true;
+            
+                //         }
+                //     }
+                // },
+                manageContextWindow(filter, eventName){
                     if (this.gridInstance === true) {
                       // Can we pass the instance an updated context here?
                     } else {
-                        if (window.glue) {
-                            let app = window.glue.appManager.application('JSCDataGrid');
-                            const localWindow = window.glue.windows.my();
-                            const localThis = this;
-                            let windowConfig = {
-                            relativeTo: localWindow.id,
-                            relativePosition: 'right'
-                            };
-                    
-                            console.log(this.filterOnGridID)
-                            
-                            app
-                            .start({ filter, eventName }, windowConfig)
-                            .then(instance => {
-                                //localThis.gridInstance = instance
-                            
-                            });
-                            
-                            this.gridInstance = true;
-            
-                        }
+                      let app = window.glue.appManager.application('JSCDataGrid');
+                      const localWindow = window.glue.windows.my();
+                      let windowConfig = {
+                        relativeTo: localWindow.id,
+                        relativePosition: 'right'
+                      };
+                      app
+                        .start({ filter, eventName }, windowConfig)
+                        .then(instance => {
+                          //localThis.gridInstance = instance
+                          
+                        });
+                      
+                      this.gridInstance = true;
                     }
                 },
+
                 handleStandAloneGrid(contextFilter){
                     this.manageContextWindow(contextFilter, "StandAloneGrid")
-                }
+                },
+
+                initializeTheme(){
+                    this.subscribe('globalTheme', (context, delta, removed) => {
+                        console.log("global theme context", context)
+                        this.setColor(context.color)
+                        this.setLighting(context.lighting)
+                    })
+                },
             }
         })
     }
