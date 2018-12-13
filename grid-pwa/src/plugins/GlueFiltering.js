@@ -72,28 +72,8 @@ var plugin = {
                         console.log("subscribe context", context);
                         let source = this.formatSource(context.source);
                         this.setCurrentFilter(source);
-                        this.$store.dispatch('initializeData', context.data)
-                        if (context.source === "BubbleChart") {
-                            console.log("bubble chart", context);
-                        } else if (context.source === "BarChart") {
-                            console.log("bar chart", context);
-                            let month = context.data.split("/")[0] + "-";
-                            let year = "-" + context.data.split("/")[1];
-                
-                            let filterObject = {
-                            date: {
-                                condition1: { type: "startsWith", filter: month },
-                                condition2: { type: "contains", filter: year },
-                                operator: "AND"
-                            }
-                            };
-                
-                            this.gridApi.setFilterModel(filterObject);
-                        } else {
-                            this.setQuickFilter(context.data);
-                        }
-                        });
-                
+                        this.$store.dispatch('initializeData', context.data)    
+                    });
                 }
             },
             initializeNewChart(){
