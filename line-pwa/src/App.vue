@@ -10,14 +10,13 @@
 <script>
 import { mapActions, mapMutations } from 'vuex';
 import Windowing from '@/mixins/Windowing';
-import Messaging from '@/mixins/Messaging';
 import DragAndDrop from './mixins/DragAndDrop'
 import LineChart from './components/LineChart'
 import PwaHeader from './components/PwaHeader'
 
 export default {
   name: 'app',
-  mixins: [Windowing, Messaging, DragAndDrop],
+  mixins: [Windowing, DragAndDrop],
   components:{
     lineChart: LineChart,
     pwaHeader: PwaHeader
