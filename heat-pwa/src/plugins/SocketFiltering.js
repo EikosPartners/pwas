@@ -13,6 +13,7 @@ var plugin = {
             methods: {
                 // from App.vue
                 initializeSocketContext() {
+                    console.log("Initialize Context Socket")
                     if (window.location.href.includes("?")) {
                         window.context = window.location.href.split('?')[1]
                         history.pushState(window.location.href, null, (window.location.href.split('?')[0]))
@@ -20,7 +21,9 @@ var plugin = {
                 },
                 // from App.vue
                 initializeDataStream(){
+
                     if (window.context) {
+                        console.log("Data stream")
                         let localThis = this
                         this.$socket.on(window.context + "dataToChild", function (data){
                           console.log('dataToChild received')
@@ -52,13 +55,13 @@ var plugin = {
                 handleStandAloneGrid(contextFilter = null){
                     // opens a new grid / context for a standalone (shift clicked) instance  
                     this.temporaryWindow = window.open('', '_blank')
-                    this.$socket.emit('appManager', {to: 'JSCDataGrid', from: 'JSCBubbleChart', shift: true}) 
+                    this.$socket.emit('appManager', {to: 'JSCDataGrid', from: 'JSCHeatMap', shift: true}) 
                 },
                 handleFilterOnGrid(data){
                     if (!this.$store.state.filterOnGridID) {
                         // if no child grid / context opened yet, open one
                         this.temporaryWindow = window.open('', '_blank')
-                        this.$socket.emit('appManager', {to: 'JSCDataGrid', from: 'JSCBubbleChart'}) 
+                        this.$socket.emit('appManager', {to: 'JSCDataGrid', from: 'JSCHeatMap'}) 
                         this.gridInstance = true
                       }
                 },

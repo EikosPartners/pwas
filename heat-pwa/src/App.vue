@@ -1,7 +1,7 @@
 <template>
   <v-app id="app">
     <div class="container" @drop="handleDrop" @dragenter="handleDragEnter" @dragover="handleDragOver">
-      <pwa-header/>
+      <!-- <pwa-header/> -->
       <heat-map/>
     </div>
   </v-app>

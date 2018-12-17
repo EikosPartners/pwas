@@ -7,7 +7,7 @@ import './registerServiceWorker';
 import VueSocketio from 'vue-socket.io';
 import Vuetify from 'vuetify';
 import GlueFiltering from "./plugins/GlueFiltering"
-
+import SocketFiltering from './plugins/SocketFiltering'
 import "../node_modules/vuetify/dist/vuetify.min.css";
 import 'jscatalyst/dist/jscatalyst.min.css';
 import "typeface-roboto";
@@ -40,9 +40,15 @@ Glue({})
     }).$mount('#app');
   })
   .catch(err => {
+    Vue.use(SocketFiltering)
     new Vue({
       router,
       store,
-      render: h => h(GlueNotAvailable)
+      render: h => h(App),
+      created(){
+        console.log("In initialize")
+        this.initializeSocketContext()
+        this.initializeDataStream()
+      }
     }).$mount('#app');
   });
