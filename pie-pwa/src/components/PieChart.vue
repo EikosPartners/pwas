@@ -9,16 +9,14 @@
 import { mapGetters, mapState, mapActions } from 'vuex';
 import { D3PieChart, StyleTogglerMixin } from 'jscatalyst';
 import jslinq from 'jslinq';
-import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
-import Filtering from '@/mixins/Filtering'
 
 export default {
   name: 'PieChart',
   components: {
     pieChart: D3PieChart,
   },
-  mixins: [StyleTogglerMixin, Messaging, Windowing, Filtering],
+  mixins: [StyleTogglerMixin, Windowing],
   data() {
     return {
       gridInstance: false,
@@ -84,15 +82,17 @@ export default {
       const filteredData = this.filterByProject(data)
 
       this.setContextFilterData(filteredData)
-      if(this.handleShiftClick(clickEvent)){
-        this.gridInstance = false
-        this.manageContextWindow(this.contextFilter, 'StandAloneGrid')
-      }else{
-        this.handleFilterOnGrid()
-        this.filter(this.contextFilter, this.filterOnGridID);
-        this.manageContextWindow(this.contextFilter, this.filterOnGridID)
+
+       const filterPkg = {
+        clickEvent,
+        filterObj: this.contextFilter,
+        contextID: this.filterOnGridID
       }
-      
+
+      const contextID = this.filter(filterPkg)
+      if(contextID !== undefined){
+        this.setFilterOnGridID(contextID)
+      }
     },
     
     filterByProject(data){
