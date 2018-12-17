@@ -63,17 +63,19 @@ io.sockets.on('connection', function(socket) {
     let requestedApp = applications.filter(function(appJson){
       return appJson.name == data.to
     })[0]
-    console.log(requestedApp)
+    console.log('requested app', requestedApp)
     let context = Date.now() 
         socket.on(context + "dataToServer", function(data2) {
           console.log(context)
           console.log('dataToServer received')
+          console.log(context + "dataToChild")
           io.emit(context + "dataToChild", data2)
         })
     
         socket.on(context + "childReady", function(data3) {
-          console.log('childReady received')
-          io.emit(context + "sendData", data3)
+          console.log('childReady received manager')
+          console.log(data3)
+              io.emit(context + "sendData", data3)
         })
     console.log('app manager received')
 
@@ -95,7 +97,7 @@ io.sockets.on('connection', function(socket) {
     // child window setting up listeners for its context with parent 
     // data will be the context (Date.now) established above
     // console.log
-    
+    console.log('context', data)
 
     socket.on(data + "parentNameToServer", function(parent) {
       console.log(parent)
@@ -104,11 +106,13 @@ io.sockets.on('connection', function(socket) {
 
     socket.on(data + "dataToServer", function(data2) {
       console.log('dataToServer received')
+      console.log(data + "dataToChild")
       io.emit(data + "dataToChild", data2)
     })
 
     socket.on(data + "childReady", function(data3) {
-      console.log('childReady received')
+      console.log('childReady received managed')
+      console.log(data3)
       io.emit(data + "sendData", data3)
     })
 
@@ -117,6 +121,7 @@ io.sockets.on('connection', function(socket) {
   socket.on('why', function(data) {
     // available to ensure events have been registered - for debugging  
     console.log(socket.eventNames())
+    io.emit('why', 'oh')
   })
 
   socket.on('themeColor', function(data) {

@@ -29,6 +29,7 @@ export const getters = {
 
 export const mutations = {
   initializeData(state, data) {
+    console.log('initialize data', data)
     state.data = data;
   },
   setColor(state, color) {

@@ -23,7 +23,7 @@ var plugin = {
                     if (window.context) {
                         let localThis = this
                         this.$socket.on(window.context + "dataToChild", function (data){
-                          console.log('dataToChild received')
+                          console.log('dataToChild received', data)
                           localThis.$store.commit('initializeData', JSON.parse(data))
                         })
                         this.$socket.emit("appManaged", window.context)

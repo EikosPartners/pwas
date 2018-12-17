@@ -21,13 +21,13 @@ var plugin = {
                 },
                 // from App.vue
                 initializeDataStream(){
-
                     if (window.context) {
                         console.log("Data stream")
                         let localThis = this
+                        console.log(window.context + "dataToChild")
                         this.$socket.on(window.context + "dataToChild", function (data){
-                          console.log('dataToChild received')
-                          localThis.$store.commit('initializeData', JSON.parse(data))
+                            console.log('dataToChild received', data)
+                            localThis.$store.commit('initializeData', JSON.parse(data))
                         })
                         this.$socket.emit("appManaged", window.context)
                         this.$socket.emit(window.context + "childReady", 'ready')
