@@ -12,6 +12,8 @@ import '../node_modules/material-design-icons-iconfont/dist/material-design-icon
 import "typeface-roboto";
 import './registerServiceWorker';
 
+import GlueFiltering from './plugins/GlueFiltering'
+
 Vue.config.productionTip = false;
 
 Vue.use(VueSocketio, 'http://localhost:9000');
@@ -26,11 +28,15 @@ Vue.use(ThemePlugin, {
 Glue({})
   .then(glue => {
     window.glue = glue;
-
+    Vue.use(GlueFiltering)
     new Vue({
       router,
       store,
-      render: h => h(App)
+      render: h => h(App),
+      created(){
+        this.initializeTheme()
+        this.initializeGlueContext()
+      }
     }).$mount('#app');
   })
   .catch(err => {

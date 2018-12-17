@@ -9,7 +9,6 @@
 import { mapGetters, mapState, mapActions } from 'vuex';
 import { D3LineChart, StyleTogglerMixin } from 'jscatalyst';
 import PwaHeader from '@/components/PwaHeader.vue'
-import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
 import Filtering from '@/mixins/Filtering';
 import DragAndDrop from '@/mixins/DragAndDrop'
@@ -20,7 +19,7 @@ export default {
     lineChart: D3LineChart,
     pwaHeader: PwaHeader
   },
-  mixins: [StyleTogglerMixin, Messaging, Windowing, DragAndDrop, Filtering],
+  mixins: [StyleTogglerMixin, Windowing, DragAndDrop],
   data() {
     return {
       gridInstance: false
@@ -71,14 +70,26 @@ export default {
       const clickEvent = message.event
       const filteredData = this.filterByDate(data)
       this.setContextFilterData(filteredData)
-      if(this.handleShiftClick(clickEvent)){
-        this.gridInstance = false
-        this.manageContextWindow(this.contextFilter, "StandAloneGrid")
-      }else{
-        this.handleFilterOnGrid()
-        this.filter(this.contextFilter, this.filterOnGridID);
-        this.manageContextWindow(this.contextFilter, this.filterOnGridID)
+
+      const filterPkg = {
+        clickEvent,
+        filterObj: this.contextFilter,
+        contextID: this.filterOnGridID
       }
+      debugger
+      const contextID = this.filter(filterPkg)
+        if(contextID !== undefined){
+          this.setFilterOnGridID(contextID)
+        }
+      
+      // if(this.handleShiftClick(clickEvent)){
+      //   this.gridInstance = false
+      //   this.manageContextWindow(this.contextFilter, "StandAloneGrid")
+      // }else{
+      //   this.handleFilterOnGrid()
+      //   this.filter(this.contextFilter, this.filterOnGridID);
+      //   this.manageContextWindow(this.contextFilter, this.filterOnGridID)
+      // }
     },
     filterByDate(data){
       let date = this.formatDate(data.date).split("-")

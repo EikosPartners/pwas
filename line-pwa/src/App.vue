@@ -27,34 +27,34 @@ export default {
   },
   created() {
     this.fetchColor();
-    if (window.glue) {
-      this.subscribe('globalTheme', (context, delta, removed) => {
-        console.log("global theme context", context)
-        this.setColor(context.color)
-        this.setLighting(context.lighting)
-      })
-    }
-    //this is the grid specific local context it opens with
-    const localWindow = window.glue.windows.my();
-    const ctx = localWindow.context;
-    const contextName = ctx.contextName;
+    // if (window.glue) {
+    //   this.subscribe('globalTheme', (context, delta, removed) => {
+    //     console.log("global theme context", context)
+    //     this.setColor(context.color)
+    //     this.setLighting(context.lighting)
+    //   })
+    // }
+    // //this is the grid specific local context it opens with
+    // const localWindow = window.glue.windows.my();
+    // const ctx = localWindow.context;
+    // const contextName = ctx.contextName;
 
-    if (contextName !== undefined) {
-      this.$store.commit('setBelongsToGrid'); //disables socket refresh
-      this.$store.commit('setSelected', contextName)
-      this.subscribe(contextName, (context, delta, removed) => {
-        this.$store.commit('initializeData', context.filter.data);
-      });
-    }
+    // if (contextName !== undefined) {
+    //   this.$store.commit('setBelongsToGrid'); //disables socket refresh
+    //   this.$store.commit('setSelected', contextName)
+    //   this.subscribe(contextName, (context, delta, removed) => {
+    //     this.$store.commit('initializeData', context.filter.data);
+    //   });
+    // }
 
-    if (ctx.filter) {
-      this.$store.commit('initializeData', ctx.filter.data)
-      localWindow.onContextUpdated((context, win) => console.log('update context:', context))
-    }
-    else {
-      console.log("fetching")
-      this.fetchData();
-    }
+    // if (ctx.filter) {
+    //   this.$store.commit('initializeData', ctx.filter.data)
+    //   localWindow.onContextUpdated((context, win) => console.log('update context:', context))
+    // }
+    // else {
+    //   console.log("fetching")
+    //   this.fetchData();
+    // }
   }
 };
 </script>
