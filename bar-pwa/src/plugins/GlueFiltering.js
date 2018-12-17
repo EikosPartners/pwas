@@ -22,6 +22,7 @@ let plugin = {
                
 
                 filter(filterPkg) {
+                    console.log("Filter", filterPkg)
                     let {clickEvent, filterObj, contextID} = filterPkg
                     if(this.handleShiftClick(clickEvent)){
                       // Case: Shift Click
@@ -80,6 +81,7 @@ let plugin = {
                     } else {
                         this.$store.dispatch('fetchData');
                     }
+                    console.log("initialize glue contexts")
                 },
             
                 handleFilterOnGrid(contextID){

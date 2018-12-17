@@ -11,7 +11,6 @@
 import { mapGetters, mapState, mapActions } from 'vuex';
 import { D3BarChart, StyleTogglerMixin } from 'jscatalyst';
 import jslinq from 'jslinq';
-import Messaging from '@/mixins/Messaging';
 import Windowing from '@/mixins/Windowing';
 import Filtering from '@/mixins/Filtering';
 
@@ -20,7 +19,7 @@ export default {
   components: {
     barChart: D3BarChart,
   },
-  mixins: [StyleTogglerMixin, Messaging, Windowing, Filtering],
+  mixins: [StyleTogglerMixin, Windowing ],
   data() {
     return {
       gridInstance: false
@@ -107,15 +106,26 @@ export default {
       const filteredData = this.filterByProject(data)
       this.setContextFilterData(filteredData)
 
-      if(this.handleShiftClick(clickEvent)){
-        this.gridInstance= false
-        this.manageContextWindow(this.contextFilter, "StandAlongGrid")
+      const filterPkg = {
+        clickEvent,
+        filterObj: this.contextFilter,
+        contextID: this.filterOnGridID
       }
-      else{
-        this.handleFilterOnGrid()
-        this.filter(this.contextFilter, this.filterOnGridID);
-        this.manageContextWindow(this.contextFilter , this.filterOnGridID)
+    
+      const contextID = this.filter(filterPkg)
+      if(contextID !== undefined){
+        this.setFilterOnGridID(contextID)
       }
+
+      // if(this.handleShiftClick(clickEvent)){
+      //   this.gridInstance= false
+      //   this.manageContextWindow(this.contextFilter, "StandAlongGrid")
+      // }
+      // else{
+      //   this.handleFilterOnGrid()
+      //   this.filter(this.contextFilter, this.filterOnGridID);
+      //   this.manageContextWindow(this.contextFilter , this.filterOnGridID)
+      // }
     
     },
     filterByProject(data){

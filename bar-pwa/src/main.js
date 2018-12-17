@@ -6,6 +6,7 @@ import store from './store';
 import './registerServiceWorker';
 import VueSocketio from 'vue-socket.io';
 import Vuetify from 'vuetify';
+import GlueFiltering from './plugins/GlueFiltering'
 
 import 'jscatalyst/dist/jscatalyst.min.css';
 import '../node_modules/vuetify/dist/vuetify.min.css';
@@ -27,11 +28,16 @@ Vue.use(ThemePlugin, {
 Glue({})
   .then(glue => {
     window.glue = glue;
-
+    Vue.use(GlueFiltering)
     new Vue({
       router,
       store,
-      render: h => h(App)
+      render: h => h(App),
+      created(){
+        console.log("here", this)
+        this.initializeTheme()
+        this.initializeGlueContext()
+      }
     }).$mount('#app');
   })
   .catch(err => {
