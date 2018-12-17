@@ -34,7 +34,6 @@ Glue({})
       store,
       render: h => h(App),
       created(){
-        console.log("here", this)
         this.initializeTheme()
         this.initializeGlueContext()
       }
