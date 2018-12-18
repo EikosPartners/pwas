@@ -7,6 +7,7 @@ import './registerServiceWorker';
 import VueSocketio from 'vue-socket.io';
 import Vuetify from 'vuetify';
 import GlueFiltering from './plugins/GlueFiltering'
+import SocketFiltering from './plugins/SocketFiltering'
 
 import 'jscatalyst/dist/jscatalyst.min.css';
 import '../node_modules/vuetify/dist/vuetify.min.css';
@@ -40,9 +41,14 @@ Glue({})
     }).$mount('#app');
   })
   .catch(err => {
+    Vue.use(SocketFiltering)
     new Vue({
       router,
       store,
-      render: h => h(GlueNotAvailable)
+      render: h => h(App),
+      created(){
+        this.initializeSocketContext()
+        this.initializeDataStream()
+      }
     }).$mount('#app');
   });

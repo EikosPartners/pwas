@@ -13,6 +13,7 @@ import "typeface-roboto";
 import { ThemePlugin } from 'jscatalyst';
 
 import GlueFiltering from './plugins/GlueFiltering'
+import SocketFiltering from './plugins/SocketFiltering'
 
 Vue.use(Vuetify);
 Vue.config.productionTip = false;
@@ -39,9 +40,14 @@ Glue({})
     }).$mount('#app');
   })
   .catch(err => {
+    Vue.use(SocketFiltering)
     new Vue({
       router,
       store,
-      render: h => h(App)
+      render: h => h(App),
+      created(){
+        this.initializeSocketContext()
+        this.initializeDataStream()
+      }
     }).$mount('#app');
   });

@@ -13,6 +13,7 @@ import "typeface-roboto";
 import './registerServiceWorker';
 
 import GlueFiltering from './plugins/GlueFiltering'
+import SocketFiltering from './plugins/SocketFiltering'
 
 Vue.config.productionTip = false;
 
@@ -40,9 +41,14 @@ Glue({})
     }).$mount('#app');
   })
   .catch(err => {
+    Vue.use(SocketFiltering)
     new Vue({
       router,
       store,
-      render: h => h(GlueNotAvailable)
+      render: h => h(App),
+      created(){
+        this.initializeSocketContext()
+        this.initializeDataStream()
+      }
     }).$mount('#app');
   });

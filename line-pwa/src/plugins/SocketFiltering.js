@@ -52,13 +52,13 @@ var plugin = {
                 handleStandAloneGrid(contextFilter = null){
                     // opens a new grid / context for a standalone (shift clicked) instance  
                     this.temporaryWindow = window.open('', '_blank')
-                    this.$socket.emit('appManager', {to: 'JSCDataGrid', from: 'JSCBubbleChart', shift: true}) 
+                    this.$socket.emit('appManager', {to: 'JSCDataGrid', from: 'JSCLine', shift: true}) 
                 },
                 handleFilterOnGrid(data){
                     if (!this.$store.state.filterOnGridID) {
                         // if no child grid / context opened yet, open one
                         this.temporaryWindow = window.open('', '_blank')
-                        this.$socket.emit('appManager', {to: 'JSCDataGrid', from: 'JSCBubbleChart'}) 
+                        this.$socket.emit('appManager', {to: 'JSCDataGrid', from: 'JSCLine'}) 
                         this.gridInstance = true
                       }
                 },
