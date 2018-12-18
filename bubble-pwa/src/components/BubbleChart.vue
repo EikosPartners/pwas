@@ -113,6 +113,7 @@ export default {
         this.gridInstance = false
         this.handleStandAloneGrid(this.contextFilter)
       } else {
+        this.handleFilterOnGrid()
         this.filter(this.contextFilter, this.filterOnGridID);
       }
     },

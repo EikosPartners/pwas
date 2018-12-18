@@ -22,13 +22,12 @@ var plugin = {
                     })
                 },
                 filter: function(filter, name) {
-                      this.handleFilterOnGrid()
                       console.log('GLUE42: Filtering message ', filter);
                       if ( name !== undefined ) {
                         window.glue.contexts.set(name, filter);
                       }
                       else {
-                        window.glue.contexts.set('filter', filter);
+                        window.glue.contexts.set(name, filter);
                       }                      
                       this.manageContextWindow(filter, name)
              

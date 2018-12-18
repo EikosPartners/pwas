@@ -67,7 +67,6 @@ var plugin = {
                 },
                 // from Messaging mixin
                 filter: function(filter, name) {
-                      this.handleFilterOnGrid()
                       this.manageContextWindow(filter, name)
                       console.log('WEBSockets: Filtering message ' + filter);
                 },
