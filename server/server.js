@@ -96,7 +96,6 @@ io.sockets.on('connection', function(socket) {
   socket.on('appManaged', function(data) {
     // child window setting up listeners for its context with parent 
     // data will be the context (Date.now) established above
-    // console.log
     console.log('context', data)
 
     socket.on(data + "parentNameToServer", function(parent) {

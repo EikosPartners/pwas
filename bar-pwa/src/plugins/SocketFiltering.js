@@ -56,18 +56,28 @@ var plugin = {
                 },
                 handleFilterOnGrid(data){
                     if (!this.$store.state.filterOnGridID) {
+                        // let context = Date.now()
                         // if no child grid / context opened yet, open one
                         this.temporaryWindow = window.open('', '_blank')
-                        this.$socket.emit('appManager', {to: 'JSCDataGrid', from: 'JSCBar'}) 
+                        this.$socket.emit('appManager', {to: 'JSCDataGrid', from: 'JSCBar'}) //, context: context 
                         this.gridInstance = true
+                        // this.setFilterOnGridID(context)
                       }
                 },
                 manageContextWindow(contextFilter, filterOnGridId){
                     this.$socket.emit(filterOnGridId + 'dataToServer', JSON.stringify(contextFilter.data))
                 },
                 // from Messaging mixin
-                filter: function(filter, name) {
-                      console.log('WEBSockets: Filtering message ' + filter);
+                filter: function(filterPkg) {
+                    if(this.handleShiftClick(filterPkg.clickEvent)){
+                        this.gridInstance= false
+                        this.manageContextWindow(this.contextFilter, "StandAlongGrid")
+                      }
+                      else{
+                        this.handleFilterOnGrid()
+                        this.manageContextWindow(this.contextFilter , this.filterOnGridID)
+                      }
+                    //   console.log('WEBSockets: Filtering message ' + filter);
                 },
             }            
        })

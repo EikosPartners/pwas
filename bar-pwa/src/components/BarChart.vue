@@ -95,10 +95,22 @@ export default {
         console.log('refresh!');
         this.updateData();
       }
-    }
+    },
+     getNewChartInfo(data){
+      // for children of Bubble
+        console.log('chart info received')
+        this.handleNewChartInfo(data)
+      },
   },
   methods: {
     ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID', 'setContextFilterData']),
+    handleShiftClick(click){
+        console.log(click.shiftKey)
+        if (click.shiftKey){
+            return true
+        }
+        return false
+    },
     handleFilter(message) {
       console.log(message)
       const data = message.data // Prep for JSC_click update
@@ -111,11 +123,12 @@ export default {
         filterObj: this.contextFilter,
         contextID: this.filterOnGridID
       }
-    
-      const contextID = this.filter(filterPkg)
-      if(contextID !== undefined){
-        this.setFilterOnGridID(contextID)
-      }
+      // console.log(filterPkg)
+      // const contextID = 
+      this.filter(filterPkg)
+      // if(contextID !== undefined){
+      //   this.setFilterOnGridID(contextID)
+      // }
 
       // if(this.handleShiftClick(clickEvent)){
       //   this.gridInstance= false

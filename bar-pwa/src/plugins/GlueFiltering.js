@@ -53,15 +53,6 @@ let plugin = {
                         this.$socket.emit('filterByDate', filter);
                     }
                 },
-
-                handleShiftClick(click){
-                    console.log(click.shiftKey)
-                    if (click.shiftKey){
-                        return true
-                    }
-                    return false
-                },
-                
                 // from App.vue
                 initializeGlueContext(){
                     const localWindow = window.glue.windows.my();
@@ -89,7 +80,7 @@ let plugin = {
                         const uniqueID = Date.now()
                         const newContext = 'filterOnGrid' + uniqueID
                         return newContext
-                        // this.setFilterOnGridID(newContext)
+                        this.setFilterOnGridID(newContext)
                     }
                     return contextID
                 },
