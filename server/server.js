@@ -65,6 +65,7 @@ io.sockets.on('connection', function(socket) {
     })[0]
     console.log('requested app', requestedApp)
     let context = Date.now() 
+
         socket.on(context + "dataToServer", function(data2) {
           console.log(context)
           console.log('dataToServer received')
@@ -77,6 +78,7 @@ io.sockets.on('connection', function(socket) {
           console.log(data3)
               io.emit(context + "sendData", data3)
         })
+
     console.log('app manager received')
 
     if (data.shift) {
@@ -97,22 +99,23 @@ io.sockets.on('connection', function(socket) {
     // child window setting up listeners for its context with parent 
     // data will be the context (Date.now) established above
     console.log('context', data)
+    let context = data
 
-    socket.on(data + "parentNameToServer", function(parent) {
+    socket.on(context + "parentNameToServer", function(parent) {
       console.log(parent)
-      io.emit(data + 'parentNameToChild', parent)
+      io.emit(context + 'parentNameToChild', parent)
     })
 
-    socket.on(data + "dataToServer", function(data2) {
+    socket.on(context + "dataToServer", function(data2) {
       console.log('dataToServer received')
-      console.log(data + "dataToChild")
-      io.emit(data + "dataToChild", data2)
+      console.log(context + "dataToChild")
+      io.emit(context + "dataToChild", data2)
     })
 
-    socket.on(data + "childReady", function(data3) {
+    socket.on(context + "childReady", function(ready) {
       console.log('childReady received managed')
-      console.log(data3)
-      io.emit(data + "sendData", data3)
+      console.log(ready)
+      io.emit(context + "sendData", ready)
     })
 
   })

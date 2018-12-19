@@ -1,7 +1,7 @@
 <template>
   <v-app id="app">
     <div class="container" @drop="handleDrop" @dragenter="handleDragEnter" @dragover="handleDragOver">
-      <pwa-header/>
+      <!-- <pwa-header/> -->
       <bubble-chart/>
       <!-- <div>
         <button @click="debuggerButton">Debugger</button>
@@ -20,7 +20,7 @@ import BubbleChart from './components/BubbleChart'
 
 export default {
   name: 'app',
-  // mixins: [Windowing, Messaging, DragAndDrop],
+  mixins: [Windowing, DragAndDrop],
   components:{
     bubbleChart: BubbleChart,
     pwaHeader: PwaHeader
