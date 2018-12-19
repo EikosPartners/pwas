@@ -31,31 +31,6 @@ io.sockets.on('connection', function(socket) {
   console.log(colorObj);
   connectCount++;
   console.log('Connection Established:', connectCount);
-  socket.on('filterByDate', function(data) {
-    console.log(data);
-    io.emit('filterByDate', data);
-  });
-  socket.on('filterByProject', function(data) {
-    console.log(data);
-    io.emit('filterByProject', data);
-  });
-  socket.on('filterBySeverity', function(data) {
-    console.log(data);
-    io.emit('filterBySeverity', data);
-  });
-  socket.on('filterByRaisedBy', function(data) {
-    console.log(data);
-    io.emit('filterByRaisedBy', data);
-  });
-  socket.on('filterByDateAndSeverity', function(data) {
-    console.log(data);
-    io.emit('filterByDateAndSeverity', data);
-  });
-  socket.on('filterByMonth', function(data) {
-    console.log(data);
-    io.emit('filterByMonth', data);
-  });
-
 
   socket.on('appManager', function(data){
     // parent window getting information about child window and setting up listeners for its context 
@@ -68,15 +43,9 @@ io.sockets.on('connection', function(socket) {
 
         socket.on(context + "dataToServer", function(data2) {
           console.log(context)
-          console.log('dataToServer received')
+          console.log('dataToServer received manager')
           console.log(context + "dataToChild")
           io.emit(context + "dataToChild", data2)
-        })
-    
-        socket.on(context + "childReady", function(data3) {
-          console.log('childReady received manager')
-          console.log(data3)
-              io.emit(context + "sendData", data3)
         })
 
     console.log('app manager received')
@@ -92,7 +61,6 @@ io.sockets.on('connection', function(socket) {
       io.emit(context + 'parentNameToChild', parent)
     })
 
-
   })
 
   socket.on('appManaged', function(data) {
@@ -100,17 +68,6 @@ io.sockets.on('connection', function(socket) {
     // data will be the context (Date.now) established above
     console.log('context', data)
     let context = data
-
-    socket.on(context + "parentNameToServer", function(parent) {
-      console.log(parent)
-      io.emit(context + 'parentNameToChild', parent)
-    })
-
-    socket.on(context + "dataToServer", function(data2) {
-      console.log('dataToServer received')
-      console.log(context + "dataToChild")
-      io.emit(context + "dataToChild", data2)
-    })
 
     socket.on(context + "childReady", function(ready) {
       console.log('childReady received managed')
@@ -132,6 +89,7 @@ io.sockets.on('connection', function(socket) {
     console.log('Send to all listeners ' + data.name);
     io.emit('themeColor', data);
   });
+  
   socket.on('themeLighting', function(data) {
     colorObj.lighting = data;
     io.emit('themeLighting', data);
