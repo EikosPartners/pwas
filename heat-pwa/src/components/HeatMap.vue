@@ -63,11 +63,22 @@ export default {
         console.log('refresh!');
         this.updateData();
       }
-    }
+    },
+    getNewChartInfo(data){
+    // for children of Bubble
+      console.log('chart info received')
+      this.handleNewChartInfo(data)
+    },
+
   },
   methods: {
     ...mapActions(['updateData', 'changeTheme', 'setFilterOnGridID', 'setContextFilterData', "setStream" ]),
-   
+    handleShiftClick(click){
+          if (click.shiftKey){
+              return true
+          }
+          return false
+    },
     handleFilter(message) {
       /* Handle Filtering
        * @param {Object} message - Data recieved by clicking on a cell 
@@ -82,16 +93,23 @@ export default {
       this.setContextFilterData(filteredData)   
 
       // Object to be passed to filter mixin
-      const filterPkg = {
-        clickEvent,
-        filterObj: this.contextFilter,
-        contextID: this.filterOnGridID
-      }
+      // const filterPkg = {
+      //   clickEvent,
+      //   filterObj: this.contextFilter,
+      //   contextID: this.filterOnGridID
+      // }
 
       // Execute Filter -- see filtering.js
-      const contextID = this.filter(filterPkg)
-      if(contextID !== undefined){
-        this.setFilterOnGridID(contextID)
+      // const contextID = this.filter(filterPkg)
+      // if(contextID !== undefined){
+      //   this.setFilterOnGridID(contextID)
+      // }
+      if(this.handleShiftClick(clickEvent)){
+        this.gridInstance = false
+        this.handleStandAloneGrid(this.contextFilter)
+      } else {
+        this.handleFilterOnGrid()
+        this.filter(this.contextFilter, this.filterOnGridID);
       }
       // this.testerMethod()
     },

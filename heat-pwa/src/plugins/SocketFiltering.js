@@ -53,6 +53,7 @@ var plugin = {
                 },
                 // from Filtering mixin 
                 handleStandAloneGrid(contextFilter = null){
+                    debugger
                     // opens a new grid / context for a standalone (shift clicked) instance  
                     this.temporaryWindow = window.open('', '_blank')
                     this.$socket.emit('appManager', {to: 'JSCDataGrid', from: 'JSCHeatMap', shift: true}) 

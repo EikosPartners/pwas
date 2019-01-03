@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     ...mapActions(['fetchColor']),
-  },
+b  },
   created() {
     this.fetchColor();
   },
